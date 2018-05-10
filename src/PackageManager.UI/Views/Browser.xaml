@@ -5,6 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dd="clr-namespace:PackageManager.Views.DesignData"
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Browser}}" Background="White">
+    <UserControl.Resources>
+
+        <Style TargetType="Label">
+            <Setter Property="Padding" Value="2" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="4" />
+        </Style>
+
+    </UserControl.Resources>
     <DockPanel>
         <Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
@@ -12,24 +22,19 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel>
-                <Label Content="Search" />
+            <StackPanel Margin="8,8,4,8">
+                <Label Content="Search:" />
                 <TextBox x:Name="tbxSearch" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="tbxSearch_PreviewKeyDown" />
             </StackPanel>
 
-            <StackPanel Grid.Column="1">
-                <Label Content="Package Source" />
+            <StackPanel Margin="4,8,8,8" Grid.Column="1">
+                <Label Content="Package Source:" />
                 <TextBox Text="{Binding Source}" />
             </StackPanel>
         </Grid>
 
         <Grid>
-            <ListView ItemsSource="{Binding Packages}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    </Style>
-                </ListView.ItemContainerStyle>
+            <ListView ItemsSource="{Binding Packages}" HorizontalContentAlignment="Stretch" Margin="8,4,8,8" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Border Padding="8">
