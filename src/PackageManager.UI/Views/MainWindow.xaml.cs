@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Neptuo;
+using PackageManager.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,8 +19,11 @@ namespace PackageManager.Views
 {
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(MainViewModel viewModel)
         {
+            Ensure.NotNull(viewModel, "viewModel");
+            DataContext = viewModel;
+
             InitializeComponent();
         }
     }

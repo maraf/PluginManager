@@ -1,4 +1,6 @@
-﻿using PackageManager.Views;
+﻿using PackageManager.Services;
+using PackageManager.ViewModels;
+using PackageManager.Views;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -15,7 +17,10 @@ namespace PackageManager
         {
             base.OnStartup(e);
 
-            MainWindow wnd = new MainWindow();
+            MainViewModel viewModel = new MainViewModel(new NuGetSearchService());
+            viewModel.Browser.Source = "https://api.nuget.org/v3/index.json";
+
+            MainWindow wnd = new MainWindow(viewModel);
             wnd.Show();
         }
     }

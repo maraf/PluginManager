@@ -1,9 +1,15 @@
-﻿using Neptuo.Observables;
+﻿using Neptuo;
+using Neptuo.Observables;
+using Neptuo.Observables.Collections;
+using Neptuo.Observables.Commands;
+using PackageManager.Models;
+using PackageManager.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace PackageManager.ViewModels
 {
@@ -37,5 +43,13 @@ namespace PackageManager.ViewModels
             }
         }
 
+        public ObservableCollection<IPackage> Packages { get; }
+        public ICommand Search { get; }
+
+        public BrowserViewModel(ISearchService search)
+        {
+            Packages = new ObservableCollection<IPackage>();
+            Search = new SearchCommand(this, search);
+        }
     }
 }

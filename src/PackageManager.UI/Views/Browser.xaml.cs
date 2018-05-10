@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PackageManager.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,14 +16,25 @@ using System.Windows.Shapes;
 
 namespace PackageManager.Views
 {
-    /// <summary>
-    /// Interaction logic for Browser.xaml
-    /// </summary>
     public partial class Browser : UserControl
     {
+        public BrowserViewModel ViewModel
+        {
+            get => (BrowserViewModel)DataContext;
+        }
+
         public Browser()
         {
             InitializeComponent();
+        }
+
+        private void tbxSearch_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (ViewModel.Search.CanExecute(null))
+                    ViewModel.Search.Execute(null);
+            }
         }
     }
 }

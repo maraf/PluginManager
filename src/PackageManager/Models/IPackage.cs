@@ -10,6 +10,8 @@ namespace PackageManager.Models
     {
         string Id { get; }
         string Version { get; }
+        string Description { get; }
+        Uri IconUrl { get; }
 
         IReadOnlyCollection<IPackage> Dependecies { get; }
 

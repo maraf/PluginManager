@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackageManager.UI", "src\Pa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackageManager", "src\PackageManager\PackageManager.csproj", "{3B5E3720-B3CB-4A12-B2D4-6BCB6BE78FF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackageManager.NuGet", "src\PackageManager.NuGet\PackageManager.NuGet.csproj", "{B302D166-37CE-439D-8AE1-0CCB80BAD332}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3B5E3720-B3CB-4A12-B2D4-6BCB6BE78FF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B5E3720-B3CB-4A12-B2D4-6BCB6BE78FF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B5E3720-B3CB-4A12-B2D4-6BCB6BE78FF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B302D166-37CE-439D-8AE1-0CCB80BAD332}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B302D166-37CE-439D-8AE1-0CCB80BAD332}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B302D166-37CE-439D-8AE1-0CCB80BAD332}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B302D166-37CE-439D-8AE1-0CCB80BAD332}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

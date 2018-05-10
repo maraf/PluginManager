@@ -17,11 +17,12 @@ namespace PackageManager.Views.DesignData
             {
                 if (browser == null)
                 {
-                    browser = new BrowserViewModel()
+                    browser = new BrowserViewModel(new MockSearchService())
                     {
                         SearchText = "GitExtensions",
-                        Source = "https://api.nuget.org/v3/index.json"
+                        Source = "https://api.nuget.org/v3/index.json",
                     };
+                    browser.Search.Execute(null);
                 }
 
                 return browser;

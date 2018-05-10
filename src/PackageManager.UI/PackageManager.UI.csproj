@@ -69,6 +69,8 @@
     <Compile Include="Views\Browser.xaml.cs">
       <DependentUpon>Browser.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\DesignData\MockPackage.cs" />
+    <Compile Include="Views\DesignData\MockSearchService.cs" />
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -102,6 +104,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PackageManager.NuGet\PackageManager.NuGet.csproj">
+      <Project>{b302d166-37ce-439d-8ae1-0ccb80bad332}</Project>
+      <Name>PackageManager.NuGet</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PackageManager\PackageManager.csproj">
       <Project>{3b5e3720-b3cb-4a12-b2d4-6bcb6be78ff1}</Project>
       <Name>PackageManager</Name>

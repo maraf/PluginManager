@@ -14,7 +14,7 @@
 
             <StackPanel>
                 <Label Content="Search" />
-                <TextBox Text="{Binding SearchText}" />
+                <TextBox x:Name="tbxSearch" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="tbxSearch_PreviewKeyDown" />
             </StackPanel>
 
             <StackPanel Grid.Column="1">
@@ -24,7 +24,29 @@
         </Grid>
 
         <Grid>
-            <ListView />
+            <ListView ItemsSource="{Binding Packages}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="8">
+                            <DockPanel>
+                                <Image Source="{Binding IconUrl}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
+                                <StackPanel>
+                                    <Grid>
+                                        <TextBlock Text="{Binding Id}" FontWeight="Bold" />
+                                        <TextBlock Text="{Binding Version}" HorizontalAlignment="Right" />
+                                    </Grid>
+                                    <TextBlock Text="{Binding Description}" Margin="0,8,0,0" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
     </DockPanel>
 </UserControl>
