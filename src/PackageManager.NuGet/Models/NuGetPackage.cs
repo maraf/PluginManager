@@ -24,8 +24,6 @@ namespace PackageManager.Models
         public Uri ProjectUrl => source.ProjectUrl;
         public Uri LicenseUrl => source.LicenseUrl;
 
-        public IReadOnlyCollection<IPackage> Dependecies => throw new NotImplementedException();
-
         public NuGetPackage(IPackageSearchMetadata source)
         {
             Ensure.NotNull(source, "source");

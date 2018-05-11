@@ -20,8 +20,6 @@ namespace PackageManager.Models
         Uri ProjectUrl { get; }
         Uri LicenseUrl { get; }
 
-        IReadOnlyCollection<IPackage> Dependecies { get; }
-
         // TODO: Download and Extract.
     }
 }
