@@ -9,6 +9,7 @@
     <UserControl.Resources>
         <converters:NullConverter x:Key="NullToDefaultIconConverter" TrueValue="{StaticResource DefaultPackageIcon}" />
         <converters:DropNewLineConverter x:Key="DropNewLineConverter" />
+        <converters:NullConverter x:Key="NullToCollapsedConverter" TrueValue="Collapsed" FalseValue="Visible" />
 
 
         <Style TargetType="Label">
@@ -38,7 +39,12 @@
         </Grid>
 
         <Grid>
-            <ListView ItemsSource="{Binding Packages}" HorizontalContentAlignment="Stretch" Margin="8,4,8,8" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <ListView x:Name="lvwPackages" ItemsSource="{Binding Packages}" HorizontalContentAlignment="Stretch" Margin="8,4,4,8" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Border Padding="8">
@@ -59,6 +65,74 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <Border BorderThickness="1" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" Margin="4,4,8,8" Grid.Column="1">
+                <StackPanel Margin="8" DataContext="{Binding SelectedItem, ElementName=lvwPackages}" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Package}}" Visibility="{Binding Converter={StaticResource NullToCollapsedConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
+                        <TextBlock Text="{Binding Id}" FontSize="20" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBlock Text="{Binding Description}" Margin="0,8,0,0" TextWrapping="Wrap" />
+
+                    <Grid Margin="0,16,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Version -->
+                        <Label Grid.Row="0" Grid.Column="0" Content="Version:" />
+                        <TextBlock Grid.Row="0" Grid.Column="1">
+                            <Run Text="v" /><Run Text="{Binding Version, Mode=OneWay}" />
+                        </TextBlock>
+
+                        <!-- Authors -->
+                        <Label Grid.Row="1" Grid.Column="0" Content="Authors:" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Authors, Mode=OneWay}" />
+
+                        <!-- License URL -->
+                        <Label Grid.Row="2" Grid.Column="0" Content="License URL:" />
+                        <TextBlock Grid.Row="2" Grid.Column="1">
+                            <Hyperlink NavigateUri="{Binding LicenseUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
+                                <Run Text="{Binding LicenseUrl, Mode=OneWay}"/>
+                            </Hyperlink>
+                        </TextBlock>
+
+                        <!-- Published Date -->
+                        <Label Grid.Row="3" Grid.Column="0" Content="Published Date:" />
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Published, Mode=OneWay}"  />
+
+                        <!-- Project URL -->
+                        <Label Grid.Row="4" Grid.Column="0" Content="Project URL:" />
+                        <TextBlock Grid.Row="4" Grid.Column="1">
+                            <Hyperlink NavigateUri="{Binding ProjectUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
+                                <Run Text="{Binding ProjectUrl, Mode=OneWay}"/>
+                            </Hyperlink>
+                        </TextBlock>
+
+                        <!-- Report Abuse URL -->
+                        <Label Grid.Row="5" Grid.Column="0" Content="Report Abuse URL:" />
+                        <TextBlock Grid.Row="5" Grid.Column="1">
+                            <Hyperlink NavigateUri="{Binding ReportAbuseUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
+                                <Run Text="{Binding ReportAbuseUrl, Mode=OneWay}" />
+                            </Hyperlink>
+                        </TextBlock>
+
+                        <!-- Tags -->
+                        <Label Grid.Row="6" Grid.Column="0" Content="Tags:" />
+                        <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Tags, Mode=OneWay}" />
+                    </Grid>
+                </StackPanel>
+            </Border>
         </Grid>
     </DockPanel>
 </UserControl>

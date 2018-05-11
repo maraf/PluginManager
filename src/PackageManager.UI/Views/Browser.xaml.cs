@@ -1,6 +1,7 @@
 ﻿using PackageManager.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,12 @@ namespace PackageManager.Views
                 if (ViewModel.Search.CanExecute(null))
                     ViewModel.Search.Execute(null);
             }
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(e.Uri.AbsoluteUri);
+            e.Handled = true;
         }
     }
 }

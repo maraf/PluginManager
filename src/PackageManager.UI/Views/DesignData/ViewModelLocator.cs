@@ -1,4 +1,5 @@
-﻿using PackageManager.ViewModels;
+﻿using PackageManager.Models;
+using PackageManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace PackageManager.Views.DesignData
     public static class ViewModelLocator
     {
         private static BrowserViewModel browser;
+        private static IPackage package;
 
         public static BrowserViewModel Browser
         {
@@ -26,6 +28,25 @@ namespace PackageManager.Views.DesignData
                 }
 
                 return browser;
+            }
+        }
+
+        public static IPackage Package
+        {
+            get
+            {
+                if (package == null)
+                {
+                    package = new MockPackage()
+                    {
+                        Id = "GitExtensions.BundleBackuper",
+                        Version = "1.0.0",
+                        Description = $"Branch backuping plugin for GitExtensions. {Environment.NewLine}GIT bundles is a great way to create backups of local branches. This extension for GitExtensions creates item in top menu containg all bundles at specified path. Clicking bundle item maps this bundle as remote. Beside this restore operation, it also contains button to create bundle/backup between current branch head and last commit pushed commit.",
+                        Dependecies = new List<IPackage>()
+                    };
+                }
+
+                return package;
             }
         }
     }
