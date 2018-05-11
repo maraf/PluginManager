@@ -86,7 +86,6 @@
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
-                            <RowDefinition/>
                         </Grid.RowDefinitions>
 
                         <!-- Version -->
@@ -102,7 +101,7 @@
                         <!-- License URL -->
                         <Label Grid.Row="2" Grid.Column="0" Content="License URL:" />
                         <TextBlock Grid.Row="2" Grid.Column="1">
-                            <Hyperlink NavigateUri="{Binding LicenseUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
+                            <Hyperlink NavigateUri="{Binding LicenseUrl, Mode=OneWay}" ToolTip="{Binding LicenseUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
                                 <Run Text="{Binding LicenseUrl, Mode=OneWay}"/>
                             </Hyperlink>
                         </TextBlock>
@@ -114,21 +113,13 @@
                         <!-- Project URL -->
                         <Label Grid.Row="4" Grid.Column="0" Content="Project URL:" />
                         <TextBlock Grid.Row="4" Grid.Column="1">
-                            <Hyperlink NavigateUri="{Binding ProjectUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
+                            <Hyperlink NavigateUri="{Binding ProjectUrl, Mode=OneWay}" ToolTip="{Binding ProjectUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
                                 <Run Text="{Binding ProjectUrl, Mode=OneWay}"/>
                             </Hyperlink>
                         </TextBlock>
 
-                        <!-- Report Abuse URL -->
-                        <Label Grid.Row="5" Grid.Column="0" Content="Report Abuse URL:" />
-                        <TextBlock Grid.Row="5" Grid.Column="1">
-                            <Hyperlink NavigateUri="{Binding ReportAbuseUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
-                                <Run Text="{Binding ReportAbuseUrl, Mode=OneWay}" />
-                            </Hyperlink>
-                        </TextBlock>
-
                         <!-- Tags -->
-                        <Label Grid.Row="6" Grid.Column="0" Content="Tags:" />
+                        <Label Grid.Row="5" Grid.Column="0" Content="Tags:" />
                         <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Tags, Mode=OneWay}" />
                     </Grid>
                 </StackPanel>

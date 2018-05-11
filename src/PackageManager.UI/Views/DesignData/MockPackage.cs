@@ -12,7 +12,16 @@ namespace PackageManager.Views.DesignData
         public string Id { get; set; }
         public string Version { get; set; }
         public string Description { get; set; }
+
+        public string Authors { get; set; }
+        public DateTime? Published { get; set; }
+        public string Tags { get; set; }
+
         public Uri IconUrl { get; set; }
+        public Uri ProjectUrl { get; set; }
+        public Uri LicenseUrl { get; set; }
+
         public IReadOnlyCollection<IPackage> Dependecies { get; set; }
+
     }
 }

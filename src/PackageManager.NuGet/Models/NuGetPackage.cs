@@ -15,7 +15,14 @@ namespace PackageManager.Models
         public string Id => source.Identity.Id;
         public string Version => source.Identity.Version.ToFullString();
         public string Description => source.Description;
+
+        public string Authors => source.Authors;
+        public DateTime? Published => source.Published?.DateTime;
+        public string Tags => source.Tags;
+
         public Uri IconUrl => source.IconUrl;
+        public Uri ProjectUrl => source.ProjectUrl;
+        public Uri LicenseUrl => source.LicenseUrl;
 
         public IReadOnlyCollection<IPackage> Dependecies => throw new NotImplementedException();
 
