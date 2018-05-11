@@ -11,12 +11,14 @@
         <converters:DropNewLineConverter x:Key="DropNewLineConverter" />
         <converters:NullConverter x:Key="NullToCollapsedConverter" TrueValue="Collapsed" FalseValue="Visible" />
 
-
         <Style TargetType="Label">
             <Setter Property="Padding" Value="2" />
         </Style>
         <Style TargetType="TextBox">
             <Setter Property="Padding" Value="4" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="8,4" />
         </Style>
 
     </UserControl.Resources>
@@ -72,9 +74,14 @@
                         <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
                         <TextBlock Text="{Binding Id}" FontSize="20" VerticalAlignment="Center" />
                     </StackPanel>
-                    <TextBlock Text="{Binding Description}" Margin="0,8,0,0" TextWrapping="Wrap" />
 
-                    <Grid Margin="0,16,0,0">
+                    <StackPanel Margin="0,8" Orientation="Horizontal">
+                        <Button Content="Install" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Install}" CommandParameter="{Binding}" />
+                    </StackPanel>
+                    
+                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
+
+                    <Grid Margin="0,8,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition/>

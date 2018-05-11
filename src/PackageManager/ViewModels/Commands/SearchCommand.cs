@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PackageManager.ViewModels
+namespace PackageManager.ViewModels.Commands
 {
     public class SearchCommand : AsyncCommand
     {
