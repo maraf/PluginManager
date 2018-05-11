@@ -69,6 +69,10 @@
     <Compile Include="Views\Browser.xaml.cs">
       <DependentUpon>Browser.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Converters\BoolConverter.cs" />
+    <Compile Include="Views\Converters\CuttingConverter.cs" />
+    <Compile Include="Views\Converters\FormatConverter.cs" />
+    <Compile Include="Views\Converters\NullConverter.cs" />
     <Compile Include="Views\DesignData\MockPackage.cs" />
     <Compile Include="Views\DesignData\MockSearchService.cs" />
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
@@ -117,6 +121,9 @@
     <PackageReference Include="Neptuo.Observables">
       <Version>1.2.1</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\default-package-icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
