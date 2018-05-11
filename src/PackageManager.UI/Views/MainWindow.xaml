@@ -9,7 +9,7 @@
     <Grid>
         <TabControl>
             <TabItem Header="Browse" Padding="8,4">
-                <views:Browser DataContext="{Binding Browser}" />
+                <views:Browser x:Name="Browser" DataContext="{Binding Browser}" />
             </TabItem>
             <TabItem Header="Installed">
                 

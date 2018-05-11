@@ -26,5 +26,11 @@ namespace PackageManager.Views
 
             InitializeComponent();
         }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            Browser.Focus();
+        }
     }
 }

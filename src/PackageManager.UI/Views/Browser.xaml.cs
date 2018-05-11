@@ -29,6 +29,9 @@ namespace PackageManager.Views
             InitializeComponent();
         }
 
+        public new void Focus()
+            => tbxSearch.Focus();
+
         private void tbxSearch_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
