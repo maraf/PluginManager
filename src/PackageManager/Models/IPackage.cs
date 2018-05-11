@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PackageManager.Models
@@ -20,6 +21,6 @@ namespace PackageManager.Models
         Uri ProjectUrl { get; }
         Uri LicenseUrl { get; }
 
-        Task<IPackageContent> DownloadAsync();
+        Task<IPackageContent> DownloadAsync(CancellationToken cancellationToken);
     }
 }

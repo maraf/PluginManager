@@ -39,7 +39,7 @@ namespace PackageManager.Services
 
             var result = await search.SearchAsync(searchText, new SearchFilter(false), options.PageIndex * options.PageSize, options.PageSize, NullLogger.Instance, default);
 
-            return result.Select(p => new NuGetPackage(p));
+            return result.Select(p => new NuGetPackage(p, repository));
         }
     }
 }

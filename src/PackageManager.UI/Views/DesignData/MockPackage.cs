@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PackageManager.Views.DesignData
@@ -21,7 +22,7 @@ namespace PackageManager.Views.DesignData
         public Uri ProjectUrl { get; set; }
         public Uri LicenseUrl { get; set; }
 
-        public Task<IPackageContent> DownloadAsync()
+        public Task<IPackageContent> DownloadAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

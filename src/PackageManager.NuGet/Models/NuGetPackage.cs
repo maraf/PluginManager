@@ -1,12 +1,12 @@
 ﻿using Neptuo;
 using NuGet.Common;
-using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PackageManager.Models
@@ -14,6 +14,7 @@ namespace PackageManager.Models
     public class NuGetPackage : IPackage
     {
         private readonly IPackageSearchMetadata source;
+        private readonly SourceRepository repository;
 
         public string Id => source.Identity.Id;
         public string Version => source.Identity.Version.ToFullString();
@@ -27,26 +28,24 @@ namespace PackageManager.Models
         public Uri ProjectUrl => source.ProjectUrl;
         public Uri LicenseUrl => source.LicenseUrl;
 
-        public NuGetPackage(IPackageSearchMetadata source)
+        public NuGetPackage(IPackageSearchMetadata source, SourceRepository repository)
         {
             Ensure.NotNull(source, "source");
+            Ensure.NotNull(repository, "repository");
             this.source = source;
+            this.repository = repository;
         }
 
-        public async Task<IPackageContent> DownloadAsync()
+        public async Task<IPackageContent> DownloadAsync(CancellationToken cancellationToken)
         {
-            // TODO: Refactor repository creation.
-            var providers = Repository.Provider.GetCoreV3();
-            var repository = Repository.CreateSource(providers, "https://www.nuget.org/api/v2/");
-
             DownloadResource download = await repository.GetResourceAsync<DownloadResource>();
             if (download == null)
                 throw Ensure.Exception.InvalidOperation($"Unnable to resolve '{nameof(DownloadResource)}'.");
 
-            using (var sourceCacheContext = new SourceCacheContext() { NoCache = true })
+            using (var sourceCacheContext = new SourceCacheContext())
             {
                 var context = new PackageDownloadContext(sourceCacheContext, Path.GetTempPath(), true);
-                var result = await download.GetDownloadResourceResultAsync(source.Identity, context, String.Empty, NullLogger.Instance, default);
+                var result = await download.GetDownloadResourceResultAsync(source.Identity, context, String.Empty, NullLogger.Instance, cancellationToken);
                 if (result.Status == DownloadResourceResultStatus.Cancelled)
                     throw new OperationCanceledException();
                 else if (result.Status == DownloadResourceResultStatus.NotFound)
