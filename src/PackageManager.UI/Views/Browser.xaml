@@ -43,7 +43,10 @@
                                 <StackPanel>
                                     <Grid>
                                         <TextBlock Text="{Binding Id}" FontWeight="Bold" />
-                                        <TextBlock Text="{Binding Version}" HorizontalAlignment="Right" />
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <TextBlock Text="v" />
+                                            <TextBlock Text="{Binding Version}" />
+                                        </StackPanel>
                                     </Grid>
                                     <TextBlock Text="{Binding Description}" Margin="0,8,0,0" TextWrapping="Wrap" />
                                 </StackPanel>
