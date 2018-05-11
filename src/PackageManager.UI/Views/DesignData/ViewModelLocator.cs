@@ -19,7 +19,7 @@ namespace PackageManager.Views.DesignData
             {
                 if (browser == null)
                 {
-                    browser = new BrowserViewModel(new MockSearchService())
+                    browser = new BrowserViewModel(new MockSearchService(), new MockInstallService())
                     {
                         SearchText = "GitExtensions",
                         Source = "https://api.nuget.org/v3/index.json",

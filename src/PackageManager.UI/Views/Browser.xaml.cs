@@ -46,5 +46,8 @@ namespace PackageManager.Views
             Process.Start(e.Uri.AbsoluteUri);
             e.Handled = true;
         }
+
+        private void lvwPackages_SelectionChanged(object sender, SelectionChangedEventArgs e)
+            => ViewModel.Install.RaiseCanExecuteChanged();
     }
 }

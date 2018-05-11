@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PackageManager.Views.DesignData
 {
-    public class MockSearchService : ISearchService
+    internal class MockSearchService : ISearchService
     {
         public Task<IEnumerable<IPackage>> SearchAsync(string packageSourceUrl, string searchText, SearchOptions options = null)
         {

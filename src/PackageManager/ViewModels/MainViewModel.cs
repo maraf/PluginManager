@@ -11,9 +11,9 @@ namespace PackageManager.ViewModels
     {
         public BrowserViewModel Browser { get; }
 
-        public MainViewModel(ISearchService search)
+        public MainViewModel(ISearchService search, IInstallService install)
         {
-            Browser = new BrowserViewModel(search);
+            Browser = new BrowserViewModel(search, install);
         }
     }
 }

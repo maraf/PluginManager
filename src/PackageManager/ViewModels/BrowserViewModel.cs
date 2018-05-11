@@ -1,7 +1,5 @@
-﻿using Neptuo;
-using Neptuo.Observables;
+﻿using Neptuo.Observables;
 using Neptuo.Observables.Collections;
-using Neptuo.Observables.Commands;
 using PackageManager.Models;
 using PackageManager.Services;
 using PackageManager.ViewModels.Commands;
@@ -46,13 +44,13 @@ namespace PackageManager.ViewModels
 
         public ObservableCollection<IPackage> Packages { get; }
         public ICommand Search { get; }
-        public ICommand Install { get; }
+        public InstallCommand Install { get; }
 
-        public BrowserViewModel(ISearchService search)
+        public BrowserViewModel(ISearchService search, IInstallService install)
         {
             Packages = new ObservableCollection<IPackage>();
             Search = new SearchCommand(this, search);
-            Install = new InstallCommand();
+            Install = new InstallCommand(install);
         }
     }
 }

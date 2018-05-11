@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PackageManager.Views.DesignData
 {
-    public class MockPackage : IPackage
+    internal class MockPackage : IPackage
     {
         public string Id { get; set; }
         public string Version { get; set; }
