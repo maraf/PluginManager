@@ -74,6 +74,7 @@
     <Compile Include="Views\Converters\DropNewLineConverter.cs" />
     <Compile Include="Views\Converters\FormatConverter.cs" />
     <Compile Include="Views\Converters\NullConverter.cs" />
+    <Compile Include="Views\Converters\NullValueConverter.cs" />
     <Compile Include="Views\DesignData\MockPackage.cs" />
     <Compile Include="Views\DesignData\MockSearchService.cs" />
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
