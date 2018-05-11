@@ -20,6 +20,6 @@ namespace PackageManager.Models
         Uri ProjectUrl { get; }
         Uri LicenseUrl { get; }
 
-        // TODO: Download and Extract.
+        Task<IPackageContent> DownloadAsync();
     }
 }

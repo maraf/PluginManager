@@ -20,5 +20,10 @@ namespace PackageManager.Views.DesignData
         public Uri IconUrl { get; set; }
         public Uri ProjectUrl { get; set; }
         public Uri LicenseUrl { get; set; }
+
+        public Task<IPackageContent> DownloadAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
