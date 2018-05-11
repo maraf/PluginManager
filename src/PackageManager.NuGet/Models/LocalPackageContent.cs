@@ -31,7 +31,7 @@ namespace PackageManager.Models
                     {
                         // TODO: Supported target framework monikers.
                         if (entry.FullName.StartsWith("lib/net45") || entry.FullName.StartsWith("lib/net46") || entry.FullName.StartsWith("lib/netstandard2.0"))
-                            entry.ExtractToFile(Path.Combine(path, entry.Name));
+                            entry.ExtractToFile(Path.Combine(path, entry.Name), true);
                     }
                 }
             });

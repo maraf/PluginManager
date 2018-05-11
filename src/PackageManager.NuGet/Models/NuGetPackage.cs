@@ -35,15 +35,13 @@ namespace PackageManager.Models
 
         public async Task<IPackageContent> DownloadAsync()
         {
+            // TODO: Refactor repository creation.
             var providers = Repository.Provider.GetCoreV3();
             var repository = Repository.CreateSource(providers, "https://www.nuget.org/api/v2/");
 
-            DownloadResource download = repository.GetResource<DownloadResource>();
+            DownloadResource download = await repository.GetResourceAsync<DownloadResource>();
             if (download == null)
-            {
-                Console.WriteLine($"Unnable to resolve '{nameof(DownloadResource)}'.");
-                return null;
-            }
+                throw Ensure.Exception.InvalidOperation($"Unnable to resolve '{nameof(DownloadResource)}'.");
 
             using (var sourceCacheContext = new SourceCacheContext() { NoCache = true })
             {

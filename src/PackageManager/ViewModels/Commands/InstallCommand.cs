@@ -24,9 +24,10 @@ namespace PackageManager.ViewModels.Commands
         protected override bool CanExecuteOverride(IPackage package)
             => package != null && !service.IsInstalled(package);
 
-        protected override Task ExecuteAsync(IPackage package, CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(IPackage package, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            IPackageContent packageContent = await package.DownloadAsync();
+            await packageContent.ExtractToAsync("C:/Temp/NuGet");
         }
 
         public new void RaiseCanExecuteChanged()
