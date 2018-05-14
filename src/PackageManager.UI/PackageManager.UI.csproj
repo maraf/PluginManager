@@ -66,6 +66,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Args.cs" />
     <Compile Include="Views\Browser.xaml.cs">
       <DependentUpon>Browser.xaml</DependentUpon>
     </Compile>
