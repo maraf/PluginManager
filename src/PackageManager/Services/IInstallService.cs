@@ -15,5 +15,7 @@ namespace PackageManager.Services
 
         void Install(IPackage package);
         void Uninstall(IPackage package);
+
+        IReadOnlyCollection<IPackage> GetInstalled();
     }
 }

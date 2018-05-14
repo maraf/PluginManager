@@ -20,5 +20,13 @@ namespace PackageManager.Views.DesignData
 
         public void Uninstall(IPackage package)
         { }
+
+        public IReadOnlyCollection<IPackage> GetInstalled()
+        {
+            return new List<IPackage>()
+            {
+                ViewModelLocator.Package
+            };
+        }
     }
 }

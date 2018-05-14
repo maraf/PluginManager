@@ -55,5 +55,22 @@ namespace PackageManager.Services
             using (PackagesConfigWriter writer = new PackagesConfigWriter(ConfigFilePath, !File.Exists(ConfigFilePath)))
                 writer.RemovePackageEntry(package.Id, new NuGetVersion(package.Version), new NuGetFramework(FrameworkMoniker));
         }
+
+        public IReadOnlyCollection<IPackage> GetInstalled()
+        {
+            if (!File.Exists(ConfigFilePath))
+                return new List<IPackage>(0);
+
+            using (Stream fileContent = new FileStream(ConfigFilePath, FileMode.Open))
+            {
+                List<IPackage> result = new List<IPackage>();
+
+                PackagesConfigReader reader = new PackagesConfigReader(fileContent);
+                foreach (PackageReference package in reader.GetPackages())
+                    result.Add(new ReferencePackage(package));
+
+                return result;
+            }
+        }
     }
 }
