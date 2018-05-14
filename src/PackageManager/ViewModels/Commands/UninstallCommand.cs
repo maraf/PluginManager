@@ -15,6 +15,8 @@ namespace PackageManager.ViewModels.Commands
     {
         private readonly IInstallService service;
 
+        public event Action Completed;
+
         public UninstallCommand(IInstallService service)
         {
             Ensure.NotNull(service, "service");
@@ -28,6 +30,7 @@ namespace PackageManager.ViewModels.Commands
         {
             // TODO: Remove content of package.
             service.Uninstall(package);
+            Completed?.Invoke();
         }
 
         public new void RaiseCanExecuteChanged()

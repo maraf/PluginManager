@@ -15,6 +15,8 @@ namespace PackageManager.ViewModels.Commands
     {
         private readonly IInstallService service;
 
+        public event Action Completed;
+
         public InstallCommand(IInstallService service)
         {
             Ensure.NotNull(service, "service");
@@ -30,6 +32,7 @@ namespace PackageManager.ViewModels.Commands
             await packageContent.ExtractToAsync(service.Path, cancellationToken);
 
             service.Install(package);
+            Completed?.Invoke();
         }
 
         public new void RaiseCanExecuteChanged()

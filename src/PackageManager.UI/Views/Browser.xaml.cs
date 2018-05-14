@@ -21,12 +21,43 @@ namespace PackageManager.Views
     {
         public BrowserViewModel ViewModel
         {
-            get => (BrowserViewModel)DataContext;
+            get { return (BrowserViewModel)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(
+            "ViewModel",
+            typeof(BrowserViewModel),
+            typeof(Browser),
+            new PropertyMetadata(null, OnViewModelChanged)
+        );
+
+        private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Browser view = (Browser)d;
+            view.OnViewModelChanged((BrowserViewModel)e.OldValue, (BrowserViewModel)e.NewValue);
         }
 
         public Browser()
         {
             InitializeComponent();
+        }
+
+        private void OnViewModelChanged(BrowserViewModel oldValue, BrowserViewModel newValue)
+        {
+            if (oldValue != null)
+            {
+                oldValue.Install.Completed -= RaiseCanExecuteChangedOnCommands;
+                oldValue.Uninstall.Completed -= RaiseCanExecuteChangedOnCommands;
+            }
+
+            MainPanel.DataContext = newValue;
+
+            if (newValue != null)
+            {
+                newValue.Install.Completed += RaiseCanExecuteChangedOnCommands;
+                newValue.Uninstall.Completed += RaiseCanExecuteChangedOnCommands;
+            }
         }
 
         public new void Focus()
@@ -48,7 +79,10 @@ namespace PackageManager.Views
         }
 
         private void lvwPackages_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        { 
+            => RaiseCanExecuteChangedOnCommands();
+
+        private void RaiseCanExecuteChangedOnCommands()
+        {
             ViewModel.Install.RaiseCanExecuteChanged();
             ViewModel.Uninstall.RaiseCanExecuteChanged();
         }
