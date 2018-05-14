@@ -10,5 +10,6 @@ namespace PackageManager.Models
     public interface IPackageContent
     {
         Task ExtractToAsync(string path, CancellationToken cancellationToken);
+        Task RemoveFromAsync(string path, CancellationToken cancellationToken);
     }
 }

@@ -40,5 +40,25 @@ namespace PackageManager.Models
                 cancellationToken
             );
         }
+
+        public Task RemoveFromAsync(string path, CancellationToken cancellationToken)
+        {
+            return Task.Run(
+                () =>
+                {
+                    using (var fileStream = new FileStream(filePath, FileMode.Open))
+                    using (var zip = new ZipArchive(fileStream))
+                    {
+                        foreach (ZipArchiveEntry entry in zip.Entries)
+                        {
+                            string filePath = Path.Combine(path, entry.Name);
+                            if (File.Exists(filePath))
+                                File.Delete(filePath);
+                        }
+                    }
+                },
+                cancellationToken
+            );
+        }
     }
 }
