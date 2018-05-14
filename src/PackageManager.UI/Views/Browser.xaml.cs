@@ -48,6 +48,9 @@ namespace PackageManager.Views
         }
 
         private void lvwPackages_SelectionChanged(object sender, SelectionChangedEventArgs e)
-            => ViewModel.Install.RaiseCanExecuteChanged();
+        { 
+            ViewModel.Install.RaiseCanExecuteChanged();
+            ViewModel.Uninstall.RaiseCanExecuteChanged();
+        }
     }
 }

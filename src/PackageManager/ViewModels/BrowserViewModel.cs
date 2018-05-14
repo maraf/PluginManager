@@ -45,12 +45,14 @@ namespace PackageManager.ViewModels
         public ObservableCollection<IPackage> Packages { get; }
         public ICommand Search { get; }
         public InstallCommand Install { get; }
+        public UninstallCommand Uninstall { get; }
 
         public BrowserViewModel(ISearchService search, IInstallService install)
         {
             Packages = new ObservableCollection<IPackage>();
             Search = new SearchCommand(this, search);
             Install = new InstallCommand(install);
+            Uninstall = new UninstallCommand(install);
         }
     }
 }
