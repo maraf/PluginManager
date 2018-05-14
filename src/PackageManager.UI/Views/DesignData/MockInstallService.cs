@@ -14,5 +14,11 @@ namespace PackageManager.Views.DesignData
 
         public bool IsInstalled(IPackage package)
             => false;
+
+        public void Install(IPackage package)
+        { }
+
+        public void Uninstall(IPackage package)
+        { }
     }
 }

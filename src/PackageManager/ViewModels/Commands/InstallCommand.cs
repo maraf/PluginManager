@@ -28,6 +28,8 @@ namespace PackageManager.ViewModels.Commands
         {
             IPackageContent packageContent = await package.DownloadAsync(cancellationToken);
             await packageContent.ExtractToAsync(service.Path, cancellationToken);
+
+            service.Install(package);
         }
 
         public new void RaiseCanExecuteChanged()

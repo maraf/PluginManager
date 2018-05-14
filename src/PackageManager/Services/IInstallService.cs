@@ -12,5 +12,8 @@ namespace PackageManager.Services
         string Path { get; }
 
         bool IsInstalled(IPackage package);
+
+        void Install(IPackage package);
+        void Uninstall(IPackage package);
     }
 }

@@ -23,7 +23,7 @@ namespace PackageManager
 
             MainViewModel viewModel = new MainViewModel(
                 new NuGetSearchService(Args.Path), 
-                new Views.DesignData.MockInstallService()
+                new NuGetInstallService(Args.Path, Args.Monikers.First())
             );
             viewModel.Browser.Source = "https://api.nuget.org/v3/index.json";
 
