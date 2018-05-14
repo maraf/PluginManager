@@ -10,6 +10,8 @@ namespace PackageManager.Views.DesignData
 {
     internal class MockInstallService : IInstallService
     {
+        public string Path => @"C:\Temp";
+
         public bool IsInstalled(IPackage package)
             => false;
     }

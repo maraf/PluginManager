@@ -21,7 +21,10 @@ namespace PackageManager
 
             base.OnStartup(e);
 
-            MainViewModel viewModel = new MainViewModel(new NuGetSearchService(), new Views.DesignData.MockInstallService());
+            MainViewModel viewModel = new MainViewModel(
+                new NuGetSearchService(Args.Path), 
+                new Views.DesignData.MockInstallService()
+            );
             viewModel.Browser.Source = "https://api.nuget.org/v3/index.json";
 
             MainWindow wnd = new MainWindow(viewModel);

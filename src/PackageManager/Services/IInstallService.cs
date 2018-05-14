@@ -9,6 +9,8 @@ namespace PackageManager.Services
 {
     public interface IInstallService
     {
+        string Path { get; }
+
         bool IsInstalled(IPackage package);
     }
 }

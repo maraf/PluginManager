@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Neptuo;
 using NuGet.Common;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
@@ -12,6 +13,14 @@ namespace PackageManager.Services
 {
     public class NuGetSearchService : ISearchService
     {
+        public string Path { get; private set; }
+
+        public NuGetSearchService(string path)
+        {
+            Ensure.NotNull(path, "path");
+            Path = path;
+        }
+
         private SearchOptions EnsureOptions(SearchOptions options)
         {
             if (options == null)
