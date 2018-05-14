@@ -17,7 +17,7 @@ namespace PackageManager.ViewModels
     {
         private readonly IInstallService service;
 
-        public ObservableCollection<IPackage> Items { get; }
+        public ObservableCollection<IPackage> Packages { get; }
         public ICommand Refresh { get; }
         public UninstallCommand Uninstall { get; }
 
@@ -26,8 +26,8 @@ namespace PackageManager.ViewModels
             Ensure.NotNull(service, "service");
             this.service = service;
 
-            Items = new ObservableCollection<IPackage>();
-            Refresh = new 
+            Packages = new ObservableCollection<IPackage>();
+            Refresh = new RefreshCommand(this, service);
             Uninstall = new UninstallCommand(service);
         }
     }

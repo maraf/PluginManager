@@ -12,7 +12,7 @@
                 <views:Browser x:Name="Browser" ViewModel="{Binding Browser}" />
             </TabItem>
             <TabItem Header="Installed">
-                
+                <views:Installed x:Name="Installed" ViewModel="{Binding Installed}" />
             </TabItem>
             <TabItem Header="Updates">
                 

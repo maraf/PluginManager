@@ -28,8 +28,8 @@ namespace PackageManager.ViewModels.Commands
 
         public override void Execute()
         {
-            viewModel.Items.Clear();
-            viewModel.Items.AddRange(service.GetInstalled());
+            viewModel.Packages.Clear();
+            viewModel.Packages.AddRange(service.GetInstalled());
         }
     }
 }

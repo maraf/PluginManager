@@ -11,6 +11,7 @@ namespace PackageManager.Views.DesignData
     public static class ViewModelLocator
     {
         private static BrowserViewModel browser;
+        private static InstalledViewModel installed;
         private static IPackage package;
 
         public static BrowserViewModel Browser
@@ -28,6 +29,20 @@ namespace PackageManager.Views.DesignData
                 }
 
                 return browser;
+            }
+        }
+
+        public static InstalledViewModel Installed
+        {
+            get
+            {
+                if (installed == null)
+                {
+                    installed = new InstalledViewModel(new MockInstallService());
+                    installed.Refresh.Execute(null);
+                }
+
+                return installed;
             }
         }
 

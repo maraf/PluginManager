@@ -1,7 +1,12 @@
 ﻿<Application x:Class="PackageManager.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:PackageManager.Views.Converters">
     <Application.Resources>
         <BitmapImage x:Key="DefaultPackageIcon" UriSource="/Views/Assets/default-package-icon.png" />
+
+        <converters:NullValueConverter x:Key="NullToDefaultIconConverter" DefaultValue="{StaticResource DefaultPackageIcon}" />
+        <converters:DropNewLineConverter x:Key="DropNewLineConverter" />
+        <converters:NullConverter x:Key="NullToCollapsedConverter" TrueValue="Collapsed" FalseValue="Visible" />
     </Application.Resources>
 </Application>
