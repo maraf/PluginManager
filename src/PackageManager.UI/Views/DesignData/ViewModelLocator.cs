@@ -25,7 +25,7 @@ namespace PackageManager.Views.DesignData
                         SearchText = "GitExtensions",
                         Source = "https://api.nuget.org/v3/index.json",
                     };
-                    browser.Search.Execute(null);
+                    browser.Search.Execute();
                 }
 
                 return browser;

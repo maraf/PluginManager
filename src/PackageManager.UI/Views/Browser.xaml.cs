@@ -67,8 +67,8 @@ namespace PackageManager.Views
         {
             if (e.Key == Key.Enter)
             {
-                if (ViewModel.Search.CanExecute(null))
-                    ViewModel.Search.Execute(null);
+                if (ViewModel.Search.CanExecute())
+                    ViewModel.Search.Execute();
             }
         }
 

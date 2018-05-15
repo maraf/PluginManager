@@ -18,5 +18,6 @@
                 
             </TabItem>
         </TabControl>
+        <views:Loading CancelCommand="{Binding Cancel}" Visibility="{Binding IsLoading, Converter={StaticResource TrueToVisibleConverter}}" />
     </Grid>
 </Window>

@@ -43,7 +43,7 @@ namespace PackageManager.ViewModels
         }
 
         public ObservableCollection<IPackage> Packages { get; }
-        public ICommand Search { get; }
+        public SearchCommand Search { get; }
         public InstallCommand Install { get; }
         public UninstallCommand Uninstall { get; }
 

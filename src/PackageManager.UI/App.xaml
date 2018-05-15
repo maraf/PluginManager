@@ -8,5 +8,6 @@
         <converters:NullValueConverter x:Key="NullToDefaultIconConverter" DefaultValue="{StaticResource DefaultPackageIcon}" />
         <converters:DropNewLineConverter x:Key="DropNewLineConverter" />
         <converters:NullConverter x:Key="NullToCollapsedConverter" TrueValue="Collapsed" FalseValue="Visible" />
+        <converters:BoolConverter x:Key="TrueToVisibleConverter" TrueValue="Visible" FalseValue="Collapsed" />
     </Application.Resources>
 </Application>
