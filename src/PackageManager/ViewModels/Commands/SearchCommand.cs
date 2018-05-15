@@ -29,7 +29,7 @@ namespace PackageManager.ViewModels.Commands
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            IEnumerable<IPackage> packages = await search.SearchAsync(viewModel.Source, viewModel.SearchText);
+            IEnumerable<IPackage> packages = await search.SearchAsync(viewModel.Source, viewModel.SearchText, cancellationToken: cancellationToken);
             viewModel.Packages.Clear();
             viewModel.Packages.AddRange(packages);
         }

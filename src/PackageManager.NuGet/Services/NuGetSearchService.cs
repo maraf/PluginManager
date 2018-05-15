@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Neptuo;
 using NuGet.Common;
@@ -35,18 +36,18 @@ namespace PackageManager.Services
             return options;
         }
 
-        public async Task<IEnumerable<IPackage>> SearchAsync(string packageSourceUrl, string searchText, SearchOptions options = null)
+        public async Task<IEnumerable<IPackage>> SearchAsync(string packageSourceUrl, string searchText, SearchOptions options = default, CancellationToken cancellationToken = default)
         {
             options = EnsureOptions(options);
 
             var providers = Repository.Provider.GetCoreV3();
             var repository = Repository.CreateSource(providers, packageSourceUrl);
 
-            PackageSearchResource search = await repository.GetResourceAsync<PackageSearchResource>();
+            PackageSearchResource search = await repository.GetResourceAsync<PackageSearchResource>(cancellationToken);
             if (search == null)
                 return Enumerable.Empty<IPackage>();
 
-            var result = await search.SearchAsync(searchText, new SearchFilter(false), options.PageIndex * options.PageSize, options.PageSize, NullLogger.Instance, default);
+            var result = await search.SearchAsync(searchText, new SearchFilter(false), options.PageIndex * options.PageSize, options.PageSize, NullLogger.Instance, cancellationToken);
 
             return result.Select(p => new NuGetPackage(p, repository));
         }
