@@ -18,5 +18,10 @@ namespace PackageManager.Views.DesignData
                 ViewModelLocator.Package
             });
         }
+
+        public Task<IPackage> FindLatestVersionAsync(string packageSourceUrl, IPackage package, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(ViewModelLocator.Package);
+        }
     }
 }

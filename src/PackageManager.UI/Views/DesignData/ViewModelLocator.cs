@@ -12,6 +12,7 @@ namespace PackageManager.Views.DesignData
     {
         private static BrowserViewModel browser;
         private static InstalledViewModel installed;
+        private static UpdatesViewModel updates;
         private static IPackage package;
 
         public static BrowserViewModel Browser
@@ -43,6 +44,20 @@ namespace PackageManager.Views.DesignData
                 }
 
                 return installed;
+            }
+        }
+
+        public static UpdatesViewModel Updates
+        {
+            get
+            {
+                if (updates == null)
+                {
+                    updates = new UpdatesViewModel(new MockInstallService(), new MockSearchService());
+                    updates.Refresh.Execute();
+                }
+
+                return updates;
             }
         }
 

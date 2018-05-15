@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels.Commands
 {
-    public class RefreshCommand : Command
+    public class RefreshInstalledCommand : Command
     {
         private readonly InstalledViewModel viewModel;
         private readonly IInstallService service;
 
-        public RefreshCommand(InstalledViewModel viewModel, IInstallService service)
+        public RefreshInstalledCommand(InstalledViewModel viewModel, IInstallService service)
         {
             Ensure.NotNull(viewModel, "viewModel");
             Ensure.NotNull(service, "service");

@@ -51,5 +51,17 @@ namespace PackageManager.Services
 
             return result.Select(p => new NuGetPackage(p, repository));
         }
+
+        public async Task<IPackage> FindLatestVersionAsync(string packageSourceUrl, IPackage package, CancellationToken cancellationToken = default)
+        {
+            Ensure.NotNull(package, "package");
+
+            IEnumerable<IPackage> packages = await SearchAsync(packageSourceUrl, package.Id, new SearchOptions() { PageSize = 1 }, cancellationToken);
+            IPackage latest = packages.FirstOrDefault();
+            if (latest != null && latest.Id == package.Id)
+                return latest;
+
+            return null;
+        }
     }
 }

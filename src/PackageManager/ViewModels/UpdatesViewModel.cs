@@ -13,22 +13,20 @@ using System.Windows.Input;
 
 namespace PackageManager.ViewModels
 {
-    public class InstalledViewModel : ObservableObject
+    public class UpdatesViewModel : ObservableObject
     {
-        private readonly IInstallService service;
-
         public ObservableCollection<IPackage> Packages { get; }
-        public ICommand Refresh { get; }
-        public UninstallCommand Uninstall { get; }
+        public RefreshUpdatesCommand Refresh { get; }
+        public UpdateCommand Update { get; }
 
-        public InstalledViewModel(IInstallService service)
+        public UpdatesViewModel(IInstallService installService, ISearchService searchService)
         {
-            Ensure.NotNull(service, "service");
-            this.service = service;
+            Ensure.NotNull(installService, "service");
+            Ensure.NotNull(searchService, "searchService");
 
             Packages = new ObservableCollection<IPackage>();
-            Refresh = new RefreshInstalledCommand(this, service);
-            Uninstall = new UninstallCommand(service);
+            Refresh = new RefreshUpdatesCommand(this, installService, searchService);
+            Update = new UpdateCommand(installService);
         }
     }
 }

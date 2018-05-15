@@ -13,6 +13,7 @@ namespace PackageManager.ViewModels
     {
         public BrowserViewModel Browser { get; }
         public InstalledViewModel Installed { get; }
+        public UpdatesViewModel Updates { get; }
 
         public CancelCommand Cancel { get; }
 
@@ -34,12 +35,15 @@ namespace PackageManager.ViewModels
         {
             Browser = new BrowserViewModel(search, install);
             Installed = new InstalledViewModel(install);
+            Updates = new UpdatesViewModel(install, search);
 
             Cancel = new CancelCommand(
                 Browser.Search, 
                 Browser.Install, 
                 Browser.Uninstall,
-                Installed.Uninstall
+                Installed.Uninstall,
+                Updates.Update,
+                Updates.Refresh
             );
             Cancel.CanExecuteChanged += OnCancelCanExecuteChanged;
         }

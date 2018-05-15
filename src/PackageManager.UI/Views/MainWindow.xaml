@@ -15,7 +15,7 @@
                 <views:Installed x:Name="Installed" ViewModel="{Binding Installed}" />
             </TabItem>
             <TabItem Header="Updates">
-                
+                <views:Updates x:Name="Updates" ViewModel="{Binding Updates}" />
             </TabItem>
         </TabControl>
         <views:Loading CancelCommand="{Binding Cancel}" Visibility="{Binding IsLoading, Converter={StaticResource TrueToVisibleConverter}}" />
