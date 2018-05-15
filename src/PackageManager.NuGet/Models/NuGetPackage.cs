@@ -49,7 +49,7 @@ namespace PackageManager.Models
                 if (result.Status == DownloadResourceResultStatus.Cancelled)
                     throw new OperationCanceledException();
                 else if (result.Status == DownloadResourceResultStatus.NotFound)
-                    throw new Exception($"Package '{source.Identity.Id}-v{source.Identity.Version}' not found");
+                    throw Ensure.Exception.InvalidOperation($"Package '{source.Identity.Id}-v{source.Identity.Version}' not found");
 
                 var tempFilePath = $"{Path.GetTempFileName()}.nupkg";
                 using (var fileStream = File.OpenWrite(tempFilePath))
