@@ -5,9 +5,13 @@
         xmlns:dd="clr-namespace:PackageManager.Views.DesignData"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:PackageManager.Views.Controls"
+        xmlns:converters="clr-namespace:PackageManager.Views.Converters"
         xmlns:views="clr-namespace:PackageManager.Views"
         mc:Ignorable="d" d:DataContext="{x:Static dd:ViewModelLocator.Main}"
         Title="Packages" Height="600" Width="800" Icon="{StaticResource DefaultPackageIcon}">
+    <Window.Resources>
+        <converters:ValidUrlToTrueConverter x:Key="ValidUrlToTrueConverter" />
+    </Window.Resources>
     <Grid Background="#eee">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -16,10 +20,10 @@
 
         <StackPanel Margin="8,0,8,8">
             <Label Content="Package Source:" />
-            <TextBox x:Name="PackageSource" Text="{Binding PackageSourceUrl}" />
+            <TextBox x:Name="PackageSource" Text="{Binding PackageSourceUrl, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
-        <TabControl controls:TabControl.IsAutoFocus="True" Grid.Row="1">
+        <TabControl controls:TabControl.IsAutoFocus="True" IsEnabled="{Binding PackageSourceUrl, Converter={StaticResource ValidUrlToTrueConverter}}" Grid.Row="1">
             <TabItem Header="Browse" Padding="8,4">
                 <views:Browser x:Name="Browser" ViewModel="{Binding Browser}" />
             </TabItem>
