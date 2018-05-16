@@ -22,10 +22,10 @@ namespace PackageManager
             base.OnStartup(e);
 
             MainViewModel viewModel = new MainViewModel(
-                new NuGetSearchService(Args.Path), 
+                new NuGetSearchService(Args.Path),
                 new NuGetInstallService(Args.Path, Args.Monikers.First())
             );
-            viewModel.PackageSourceUrl = "https://api.nuget.org/v3/index.json";
+            viewModel.PackageSourceUrl = Args.PackageSourceUrl;
 
             MainWindow wnd = new MainWindow(viewModel);
             wnd.Show();
@@ -38,13 +38,31 @@ namespace PackageManager
             {
                 for (int i = 0; i < args.Length; i += 2)
                 {
-                    if (args[i] == "--path")
-                        Args.Path = args[i + 1];
-                    else if (args[i] == "--monikers")
-                        Args.Monikers = args[i + 1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                    else if (args[i] == "--dependencies")
-                        Args.Dependencies = ParseDependencies(args[i + 1]);
+                    string name = args[i];
+                    string value = args[i + 1];
+                    ParseParameter(name, value);
                 }
+            }
+        }
+
+        private bool ParseParameter(string name, string value)
+        {
+            switch (name)
+            {
+                case "--path":
+                    Args.Path = value;
+                    return true;
+                case "--monikers":
+                    Args.Monikers = value.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    return true;
+                case "--dependencies":
+                    Args.Dependencies = ParseDependencies(value);
+                    return true;
+                case "--packagesource":
+                    Args.PackageSourceUrl = value;
+                    return true;
+                default:
+                    return false;
             }
         }
 

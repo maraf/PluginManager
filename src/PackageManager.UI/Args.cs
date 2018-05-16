@@ -11,6 +11,7 @@ namespace PackageManager
         public string Path { get; set; }
         public string[] Monikers { get; set; }
         public (string id, string version)[] Dependencies { get; set; }
+        public string PackageSourceUrl { get; set; }
 
         public Args()
         {
