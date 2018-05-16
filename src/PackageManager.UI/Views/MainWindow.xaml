@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:dd="clr-namespace:PackageManager.Views.DesignData"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:PackageManager.Views.Controls"
         xmlns:views="clr-namespace:PackageManager.Views"
         mc:Ignorable="d" d:DataContext="{x:Static dd:ViewModelLocator.Main}"
         Title="Packages" Height="600" Width="800" Icon="{StaticResource DefaultPackageIcon}">
@@ -18,7 +19,7 @@
             <TextBox Text="{Binding PackageSourceUrl}" />
         </StackPanel>
 
-        <TabControl x:Name="Tabs" SelectionChanged="Tabs_SelectionChanged" Grid.Row="1">
+        <TabControl controls:TabControl.IsAutoFocus="True" Grid.Row="1">
             <TabItem Header="Browse" Padding="8,4">
                 <views:Browser x:Name="Browser" ViewModel="{Binding Browser}" />
             </TabItem>

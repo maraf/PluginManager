@@ -26,28 +26,5 @@ namespace PackageManager.Views
 
             InitializeComponent();
         }
-
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            base.OnSourceInitialized(e);
-            Browser.Focus();
-        }
-
-        private int lastTabSelectedIndex;
-
-        private void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (lastTabSelectedIndex == Tabs.SelectedIndex)
-                return;
-
-            lastTabSelectedIndex = Tabs.SelectedIndex;
-            TabItem item = (TabItem)Tabs.Items[lastTabSelectedIndex];
-            UIElement element = (UIElement)item.Content;
-
-            if (element is IAutoFocus autoFocus)
-                autoFocus.Focus();
-            else
-                element.Focus();
-        }
     }
 }
