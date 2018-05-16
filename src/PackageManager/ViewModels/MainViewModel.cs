@@ -9,8 +9,24 @@ using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels
 {
-    public class MainViewModel : ObservableObject
+    public class MainViewModel : ObservableObject, IPackageSourceProvider
     {
+        private string packageSourceUrl;
+        public string PackageSourceUrl
+        {
+            get { return packageSourceUrl; }
+            set
+            {
+                if (packageSourceUrl != value)
+                {
+                    packageSourceUrl = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        string IPackageSourceProvider.Url => PackageSourceUrl;
+
         public BrowserViewModel Browser { get; }
         public InstalledViewModel Installed { get; }
         public UpdatesViewModel Updates { get; }
@@ -33,9 +49,9 @@ namespace PackageManager.ViewModels
 
         public MainViewModel(ISearchService search, IInstallService install)
         {
-            Browser = new BrowserViewModel(search, install);
+            Browser = new BrowserViewModel(this, search, install);
             Installed = new InstalledViewModel(install);
-            Updates = new UpdatesViewModel(install, search);
+            Updates = new UpdatesViewModel(this, install, search);
 
             Cancel = new CancelCommand(
                 Browser.Search, 

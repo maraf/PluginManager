@@ -5,36 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dd="clr-namespace:PackageManager.Views.DesignData"
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Browser}}" Background="White">
-    <UserControl.Resources>
-
-        <Style TargetType="Label">
-            <Setter Property="Padding" Value="2" />
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="Padding" Value="4" />
-        </Style>
-        <Style TargetType="Button">
-            <Setter Property="Padding" Value="8,4" />
-        </Style>
-
-    </UserControl.Resources>
     <DockPanel x:Name="MainPanel">
-        <Grid DockPanel.Dock="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <StackPanel Margin="8,8,4,8">
-                <Label Content="Search:" />
-                <TextBox x:Name="tbxSearch" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="tbxSearch_PreviewKeyDown" />
-            </StackPanel>
-
-            <StackPanel Margin="4,8,8,8" Grid.Column="1">
-                <Label Content="Package Source:" />
-                <TextBox Text="{Binding Source}" />
-            </StackPanel>
-        </Grid>
+        <StackPanel Margin="8" DockPanel.Dock="Top">
+            <Label Content="Search:" />
+            <TextBox x:Name="tbxSearch" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="tbxSearch_PreviewKeyDown" />
+        </StackPanel>
 
         <Grid>
             <Grid.ColumnDefinitions>

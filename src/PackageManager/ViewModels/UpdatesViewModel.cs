@@ -19,13 +19,13 @@ namespace PackageManager.ViewModels
         public RefreshUpdatesCommand Refresh { get; }
         public UpdateCommand Update { get; }
 
-        public UpdatesViewModel(IInstallService installService, ISearchService searchService)
+        public UpdatesViewModel(IPackageSourceProvider packageSource, IInstallService installService, ISearchService searchService)
         {
             Ensure.NotNull(installService, "service");
             Ensure.NotNull(searchService, "searchService");
 
             Packages = new ObservableCollection<IPackage>();
-            Refresh = new RefreshUpdatesCommand(this, installService, searchService);
+            Refresh = new RefreshUpdatesCommand(this, packageSource, installService, searchService);
             Update = new UpdateCommand(installService);
         }
     }

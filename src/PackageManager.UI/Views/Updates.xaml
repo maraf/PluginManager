@@ -5,19 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dd="clr-namespace:PackageManager.Views.DesignData"
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Updates}}" Background="White">
-    <UserControl.Resources>
-
-        <Style TargetType="Label">
-            <Setter Property="Padding" Value="2" />
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="Padding" Value="4" />
-        </Style>
-        <Style TargetType="Button">
-            <Setter Property="Padding" Value="8,4" />
-        </Style>
-
-    </UserControl.Resources>
     <DockPanel x:Name="MainPanel">
         <StackPanel Margin="8" Orientation="Horizontal" DockPanel.Dock="Top">
             <Button Content="Refresh" Command="{Binding Refresh}" />

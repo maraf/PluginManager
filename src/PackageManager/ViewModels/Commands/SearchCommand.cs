@@ -14,13 +14,16 @@ namespace PackageManager.ViewModels.Commands
     public class SearchCommand : AsyncCommand
     {
         private readonly BrowserViewModel viewModel;
+        private readonly IPackageSourceProvider packageSource;
         private readonly ISearchService search;
 
-        public SearchCommand(BrowserViewModel viewModel, ISearchService search)
+        public SearchCommand(BrowserViewModel viewModel, IPackageSourceProvider packageSource, ISearchService search)
         {
             Ensure.NotNull(viewModel, "viewModel");
+            Ensure.NotNull(packageSource, "packageSource");
             Ensure.NotNull(search, "search");
             this.viewModel = viewModel;
+            this.packageSource = packageSource;
             this.search = search;
         }
 
@@ -29,7 +32,7 @@ namespace PackageManager.ViewModels.Commands
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            IEnumerable<IPackage> packages = await search.SearchAsync(viewModel.Source, viewModel.SearchText, cancellationToken: cancellationToken);
+            IEnumerable<IPackage> packages = await search.SearchAsync(packageSource.Url, viewModel.SearchText, cancellationToken: cancellationToken);
             viewModel.Packages.Clear();
             viewModel.Packages.AddRange(packages);
         }

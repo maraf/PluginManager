@@ -36,10 +36,9 @@ namespace PackageManager.Views.DesignData
             {
                 if (browser == null)
                 {
-                    browser = new BrowserViewModel(new MockSearchService(), new MockInstallService())
+                    browser = new BrowserViewModel(new MockPackageSourceProvider(), new MockSearchService(), new MockInstallService())
                     {
-                        SearchText = "GitExtensions",
-                        Source = "https://api.nuget.org/v3/index.json",
+                        SearchText = "GitExtensions"
                     };
                     browser.Search.Execute();
                 }
@@ -68,7 +67,7 @@ namespace PackageManager.Views.DesignData
             {
                 if (updates == null)
                 {
-                    updates = new UpdatesViewModel(new MockInstallService(), new MockSearchService());
+                    updates = new UpdatesViewModel(new MockPackageSourceProvider(), new MockInstallService(), new MockSearchService());
                     updates.Refresh.Execute();
                 }
 

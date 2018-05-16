@@ -25,7 +25,7 @@ namespace PackageManager
                 new NuGetSearchService(Args.Path), 
                 new NuGetInstallService(Args.Path, Args.Monikers.First())
             );
-            viewModel.Browser.Source = "https://api.nuget.org/v3/index.json";
+            viewModel.PackageSourceUrl = "https://api.nuget.org/v3/index.json";
 
             MainWindow wnd = new MainWindow(viewModel);
             wnd.Show();

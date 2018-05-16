@@ -8,7 +8,17 @@
         mc:Ignorable="d" d:DataContext="{x:Static dd:ViewModelLocator.Main}"
         Title="Packages" Height="600" Width="800" Icon="{StaticResource DefaultPackageIcon}">
     <Grid>
-        <TabControl>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <StackPanel Margin="8,0,8,8">
+            <Label Content="Package Source:" />
+            <TextBox Text="{Binding PackageSourceUrl}" />
+        </StackPanel>
+        
+        <TabControl Grid.Row="1">
             <TabItem Header="Browse" Padding="8,4">
                 <views:Browser x:Name="Browser" ViewModel="{Binding Browser}" />
             </TabItem>
@@ -19,6 +29,6 @@
                 <views:Updates x:Name="Updates" ViewModel="{Binding Updates}" />
             </TabItem>
         </TabControl>
-        <views:Loading CancelCommand="{Binding Cancel}" Visibility="{Binding IsLoading, Converter={StaticResource TrueToVisibleConverter}}" />
+        <views:Loading CancelCommand="{Binding Cancel}" Visibility="{Binding IsLoading, Converter={StaticResource TrueToVisibleConverter}}" Grid.RowSpan="2" />
     </Grid>
 </Window>

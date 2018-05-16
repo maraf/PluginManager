@@ -14,20 +14,6 @@ namespace PackageManager.ViewModels
 {
     public class BrowserViewModel : ObservableObject
     {
-        private string source;
-        public string Source
-        {
-            get { return source; }
-            set
-            {
-                if (source != value)
-                {
-                    source = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
         private string searchText;
         public string SearchText
         {
@@ -47,10 +33,10 @@ namespace PackageManager.ViewModels
         public InstallCommand Install { get; }
         public UninstallCommand Uninstall { get; }
 
-        public BrowserViewModel(ISearchService search, IInstallService install)
+        public BrowserViewModel(IPackageSourceProvider packageSource, ISearchService search, IInstallService install)
         {
             Packages = new ObservableCollection<IPackage>();
-            Search = new SearchCommand(this, search);
+            Search = new SearchCommand(this, packageSource, search);
             Install = new InstallCommand(install);
             Uninstall = new UninstallCommand(install);
         }

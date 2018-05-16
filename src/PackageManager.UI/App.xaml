@@ -9,5 +9,15 @@
         <converters:DropNewLineConverter x:Key="DropNewLineConverter" />
         <converters:NullConverter x:Key="NullToCollapsedConverter" TrueValue="Collapsed" FalseValue="Visible" />
         <converters:BoolConverter x:Key="TrueToVisibleConverter" TrueValue="Visible" FalseValue="Collapsed" />
+
+        <Style TargetType="Label">
+            <Setter Property="Padding" Value="2" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="4" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="8,4" />
+        </Style>
     </Application.Resources>
 </Application>
