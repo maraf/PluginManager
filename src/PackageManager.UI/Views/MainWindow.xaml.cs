@@ -19,12 +19,23 @@ namespace PackageManager.Views
 {
     public partial class MainWindow : Window
     {
+        public MainViewModel ViewModel
+            => (MainViewModel)DataContext;
+
         public MainWindow(MainViewModel viewModel)
         {
             Ensure.NotNull(viewModel, "viewModel");
             DataContext = viewModel;
 
             InitializeComponent();
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+
+            if (String.IsNullOrEmpty(ViewModel.PackageSourceUrl))
+                PackageSource.Focus();
         }
     }
 }

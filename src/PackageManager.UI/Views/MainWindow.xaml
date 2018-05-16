@@ -16,7 +16,7 @@
 
         <StackPanel Margin="8,0,8,8">
             <Label Content="Package Source:" />
-            <TextBox Text="{Binding PackageSourceUrl}" />
+            <TextBox x:Name="PackageSource" Text="{Binding PackageSourceUrl}" />
         </StackPanel>
 
         <TabControl controls:TabControl.IsAutoFocus="True" Grid.Row="1">
