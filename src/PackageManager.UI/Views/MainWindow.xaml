@@ -18,7 +18,7 @@
             <TextBox Text="{Binding PackageSourceUrl}" />
         </StackPanel>
 
-        <TabControl Grid.Row="1">
+        <TabControl x:Name="Tabs" SelectionChanged="Tabs_SelectionChanged" Grid.Row="1">
             <TabItem Header="Browse" Padding="8,4">
                 <views:Browser x:Name="Browser" ViewModel="{Binding Browser}" />
             </TabItem>

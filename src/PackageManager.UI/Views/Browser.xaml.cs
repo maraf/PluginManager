@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 
 namespace PackageManager.Views
 {
-    public partial class Browser : UserControl
+    public partial class Browser : UserControl, IAutoFocus
     {
         public BrowserViewModel ViewModel
         {
@@ -60,9 +60,6 @@ namespace PackageManager.Views
             }
         }
 
-        public new void Focus()
-            => tbxSearch.Focus();
-
         private void tbxSearch_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -86,5 +83,8 @@ namespace PackageManager.Views
             ViewModel.Install.RaiseCanExecuteChanged();
             ViewModel.Uninstall.RaiseCanExecuteChanged();
         }
+
+        void IAutoFocus.Focus()
+            => tbxSearch.Focus();
     }
 }

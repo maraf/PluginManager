@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 
 namespace PackageManager.Views
 {
-    public partial class Updates : UserControl
+    public partial class Updates : UserControl, IAutoFocus
     {
         public UpdatesViewModel ViewModel
         {
@@ -55,5 +55,11 @@ namespace PackageManager.Views
 
         private void OnRefresh()
             => ViewModel.Refresh.Execute();
+
+        void IAutoFocus.Focus()
+        { 
+            ViewModel.Refresh.Execute();
+            lvwPackages.Focus();
+        }
     }
 }
