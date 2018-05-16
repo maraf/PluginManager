@@ -31,7 +31,7 @@ namespace PackageManager.Models
         public Uri ProjectUrl => null;
         public Uri LicenseUrl => null;
 
-        public Task<IPackageContent> DownloadAsync(CancellationToken cancellationToken)
+        public Task<IPackageContent> GetContentAsync(CancellationToken cancellationToken)
             => throw Ensure.Exception.NotSupported();
     }
 }

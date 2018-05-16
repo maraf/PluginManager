@@ -28,7 +28,7 @@ namespace PackageManager.ViewModels.Commands
 
         protected override async Task ExecuteAsync(IPackage package, CancellationToken cancellationToken)
         {
-            IPackageContent packageContent = await package.DownloadAsync(cancellationToken);
+            IPackageContent packageContent = await package.GetContentAsync(cancellationToken);
             await packageContent.RemoveFromAsync(service.Path, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();

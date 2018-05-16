@@ -21,6 +21,6 @@ namespace PackageManager.Models
         Uri ProjectUrl { get; }
         Uri LicenseUrl { get; }
 
-        Task<IPackageContent> DownloadAsync(CancellationToken cancellationToken);
+        Task<IPackageContent> GetContentAsync(CancellationToken cancellationToken);
     }
 }

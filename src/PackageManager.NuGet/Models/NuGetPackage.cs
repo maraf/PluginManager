@@ -36,7 +36,7 @@ namespace PackageManager.Models
             this.repository = repository;
         }
 
-        public async Task<IPackageContent> DownloadAsync(CancellationToken cancellationToken)
+        public async Task<IPackageContent> GetContentAsync(CancellationToken cancellationToken)
         {
             DownloadResource download = await repository.GetResourceAsync<DownloadResource>();
             if (download == null)

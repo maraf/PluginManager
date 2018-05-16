@@ -22,7 +22,7 @@ namespace PackageManager.Views.DesignData
         public Uri ProjectUrl { get; set; }
         public Uri LicenseUrl { get; set; }
 
-        public Task<IPackageContent> DownloadAsync(CancellationToken cancellationToken)
+        public Task<IPackageContent> GetContentAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
