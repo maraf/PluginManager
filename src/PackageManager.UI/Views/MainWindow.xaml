@@ -7,17 +7,17 @@
         xmlns:views="clr-namespace:PackageManager.Views"
         mc:Ignorable="d" d:DataContext="{x:Static dd:ViewModelLocator.Main}"
         Title="Packages" Height="600" Width="800" Icon="{StaticResource DefaultPackageIcon}">
-    <Grid>
+    <Grid Background="#eee">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        
+
         <StackPanel Margin="8,0,8,8">
             <Label Content="Package Source:" />
             <TextBox Text="{Binding PackageSourceUrl}" />
         </StackPanel>
-        
+
         <TabControl Grid.Row="1">
             <TabItem Header="Browse" Padding="8,4">
                 <views:Browser x:Name="Browser" ViewModel="{Binding Browser}" />
