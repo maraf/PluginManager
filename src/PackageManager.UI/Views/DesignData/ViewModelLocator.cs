@@ -10,10 +10,25 @@ namespace PackageManager.Views.DesignData
 {
     public static class ViewModelLocator
     {
+        private static MainViewModel main;
         private static BrowserViewModel browser;
         private static InstalledViewModel installed;
         private static UpdatesViewModel updates;
         private static IPackage package;
+
+        public static MainViewModel Main
+        {
+            get
+            {
+                if (main == null)
+                {
+                    main = new MainViewModel(new MockSearchService(), new MockInstallService());
+                    main.Browser.Search.Execute();
+                }
+
+                return main;
+            }
+        }
 
         public static BrowserViewModel Browser
         {
