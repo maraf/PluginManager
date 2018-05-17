@@ -37,7 +37,7 @@ namespace PackageManager.ViewModels.Commands
         {
             viewModel.Packages.Clear();
 
-            foreach (IPackage current in installService.GetInstalled())
+            foreach (IPackage current in await installService.GetInstalledAsync(packageSource.Url, cancellationToken))
             {
                 IPackage latest = await searchService.FindLatestVersionAsync(packageSource.Url, current, cancellationToken);
 

@@ -10,26 +10,29 @@ using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels.Commands
 {
-    public class RefreshInstalledCommand : Command
+    public class RefreshInstalledCommand : AsyncCommand
     {
         private readonly InstalledViewModel viewModel;
         private readonly IInstallService service;
+        private readonly IPackageSourceProvider packageSource;
 
-        public RefreshInstalledCommand(InstalledViewModel viewModel, IInstallService service)
+        public RefreshInstalledCommand(InstalledViewModel viewModel, IPackageSourceProvider packageSource, IInstallService service)
         {
             Ensure.NotNull(viewModel, "viewModel");
+            Ensure.NotNull(packageSource, "packageSource");
             Ensure.NotNull(service, "service");
             this.viewModel = viewModel;
+            this.packageSource = packageSource;
             this.service = service;
         }
 
-        public override bool CanExecute()
+        protected override bool CanExecuteOverride()
             => true;
 
-        public override void Execute()
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             viewModel.Packages.Clear();
-            viewModel.Packages.AddRange(service.GetInstalled());
+            viewModel.Packages.AddRange(await service.GetInstalledAsync(packageSource.Url, cancellationToken));
         }
     }
 }

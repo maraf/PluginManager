@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Neptuo;
+using Neptuo.Activators;
 using NuGet.Common;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
@@ -14,12 +15,12 @@ namespace PackageManager.Services
 {
     public class NuGetSearchService : ISearchService
     {
-        public string Path { get; private set; }
+        private readonly IFactory<SourceRepository, string> repositoryFactory;
 
-        public NuGetSearchService(string path)
+        public NuGetSearchService(IFactory<SourceRepository, string> repositoryFactory)
         {
-            Ensure.NotNull(path, "path");
-            Path = path;
+            Ensure.NotNull(repositoryFactory, "repositoryFactory");
+            this.repositoryFactory = repositoryFactory;
         }
 
         private SearchOptions EnsureOptions(SearchOptions options)
@@ -40,9 +41,7 @@ namespace PackageManager.Services
         {
             options = EnsureOptions(options);
 
-            var providers = Repository.Provider.GetCoreV3();
-            var repository = Repository.CreateSource(providers, packageSourceUrl);
-
+            SourceRepository repository = repositoryFactory.Create(packageSourceUrl);
             PackageSearchResource search = await repository.GetResourceAsync<PackageSearchResource>(cancellationToken);
             if (search == null)
                 return Enumerable.Empty<IPackage>();

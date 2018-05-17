@@ -22,8 +22,8 @@ namespace PackageManager
             base.OnStartup(e);
 
             MainViewModel viewModel = new MainViewModel(
-                new NuGetSearchService(Args.Path),
-                new NuGetInstallService(Args.Path, Args.Monikers.First())
+                new NuGetSearchService(new NuGetSourceRepositoryFactory()),
+                new NuGetInstallService(new NuGetSourceRepositoryFactory(), Args.Path)
             );
             viewModel.PackageSourceUrl = Args.PackageSourceUrl;
 

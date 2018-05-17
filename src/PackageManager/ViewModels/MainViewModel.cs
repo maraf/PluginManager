@@ -50,7 +50,7 @@ namespace PackageManager.ViewModels
         public MainViewModel(ISearchService search, IInstallService install)
         {
             Browser = new BrowserViewModel(this, search, install);
-            Installed = new InstalledViewModel(install);
+            Installed = new InstalledViewModel(this, install);
             Updates = new UpdatesViewModel(this, install, search);
 
             Cancel = new CancelCommand(

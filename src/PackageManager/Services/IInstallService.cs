@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PackageManager.Services
@@ -16,6 +17,6 @@ namespace PackageManager.Services
         void Install(IPackage package);
         void Uninstall(IPackage package);
 
-        IReadOnlyCollection<IPackage> GetInstalled();
+        Task<IReadOnlyCollection<IPackage>> GetInstalledAsync(string packageSourceUrl, CancellationToken cancellationToken);
     }
 }

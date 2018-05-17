@@ -21,13 +21,13 @@ namespace PackageManager.ViewModels
         public ICommand Refresh { get; }
         public UninstallCommand Uninstall { get; }
 
-        public InstalledViewModel(IInstallService service)
+        public InstalledViewModel(IPackageSourceProvider packageSource, IInstallService service)
         {
             Ensure.NotNull(service, "service");
             this.service = service;
 
             Packages = new ObservableCollection<IPackage>();
-            Refresh = new RefreshInstalledCommand(this, service);
+            Refresh = new RefreshInstalledCommand(this, packageSource, service);
             Uninstall = new UninstallCommand(service);
         }
     }

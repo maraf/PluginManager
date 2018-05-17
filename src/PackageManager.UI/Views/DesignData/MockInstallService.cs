@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PackageManager.Views.DesignData
@@ -21,12 +22,14 @@ namespace PackageManager.Views.DesignData
         public void Uninstall(IPackage package)
         { }
 
-        public IReadOnlyCollection<IPackage> GetInstalled()
+        public Task<IReadOnlyCollection<IPackage>> GetInstalledAsync(string packageSourceUrl, CancellationToken cancellationToken)
         {
-            return new List<IPackage>()
-            {
-                ViewModelLocator.Package
-            };
+            return Task.FromResult<IReadOnlyCollection<IPackage>>(
+                new List<IPackage>()
+                {
+                    ViewModelLocator.Package
+                }
+            );
         }
     }
 }
