@@ -1,5 +1,6 @@
 ﻿using Neptuo;
 using NuGet.Common;
+using NuGet.Packaging;
 using NuGet.Protocol.Core.Types;
 using System;
 using System.Collections.Generic;
@@ -50,12 +51,8 @@ namespace PackageManager.Models
                     throw new OperationCanceledException();
                 else if (result.Status == DownloadResourceResultStatus.NotFound)
                     throw Ensure.Exception.InvalidOperation($"Package '{source.Identity.Id}-v{source.Identity.Version}' not found");
-
-                var tempFilePath = $"{Path.GetTempFileName()}.nupkg";
-                using (var fileStream = File.OpenWrite(tempFilePath))
-                    await result.PackageStream.CopyToAsync(fileStream);
-
-                return new LocalPackageContent(tempFilePath);
+                
+                return new NuGetPackageContent(new PackageArchiveReader(result.PackageStream));
             }
         }
     }
