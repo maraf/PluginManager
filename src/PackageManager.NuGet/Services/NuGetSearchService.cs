@@ -12,14 +12,20 @@ using PackageManager.Models;
 
 namespace PackageManager.Services
 {
-    public class NuGetSearchService : ISearchService
+    public partial class NuGetSearchService : ISearchService
     {
         private readonly IFactory<SourceRepository, string> repositoryFactory;
+        private readonly IFilter filter;
 
-        public NuGetSearchService(IFactory<SourceRepository, string> repositoryFactory)
+        public NuGetSearchService(IFactory<SourceRepository, string> repositoryFactory, IFilter filter = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
+
+            if (filter == null)
+                filter = new NullFilter();
+
             this.repositoryFactory = repositoryFactory;
+            this.filter = filter;
         }
 
         private SearchOptions EnsureOptions(SearchOptions options)
@@ -36,6 +42,9 @@ namespace PackageManager.Services
             return options;
         }
 
+        private Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(PackageSearchResource search, string searchText, SearchOptions options, CancellationToken cancellationToken)
+            => search.SearchAsync(searchText, new SearchFilter(false), options.PageIndex * options.PageSize, options.PageSize, NullLogger.Instance, cancellationToken);
+
         public async Task<IEnumerable<IPackage>> SearchAsync(string packageSourceUrl, string searchText, SearchOptions options = default, CancellationToken cancellationToken = default)
         {
             options = EnsureOptions(options);
@@ -45,9 +54,34 @@ namespace PackageManager.Services
             if (search == null)
                 return Enumerable.Empty<IPackage>();
 
-            var result = await search.SearchAsync(searchText, new SearchFilter(false), options.PageIndex * options.PageSize, options.PageSize, NullLogger.Instance, cancellationToken);
+            List<IPackage> result = new List<IPackage>();
+            
+            // Try to find N results passing filter (until zero results is returned).
+            int i = 0;
+            while (i < options.PageSize)
+            {
+                bool hasItems = false;
+                foreach (IPackageSearchMetadata package in await SearchAsync(search, searchText, options, cancellationToken))
+                {
+                    hasItems = true;
+                    if (i >= options.PageSize)
+                        break;
 
-            return result.Select(p => new NuGetPackage(p, repository));
+                    if (filter.IsPassed(package))
+                        result.Add(new NuGetPackage(package, repository));
+                }
+
+                if (!hasItems)
+                    break;
+
+                options = new SearchOptions()
+                {
+                    PageIndex = options.PageIndex + 1,
+                    PageSize = options.PageSize
+                };
+            }
+
+            return result;
         }
 
         public async Task<IPackage> FindLatestVersionAsync(string packageSourceUrl, IPackage package, CancellationToken cancellationToken = default)

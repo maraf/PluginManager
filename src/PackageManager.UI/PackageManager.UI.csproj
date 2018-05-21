@@ -81,6 +81,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Args.cs" />
+    <Compile Include="Services\DependencyNuGetSearchFilter.cs" />
     <Compile Include="Views\Browser.xaml.cs">
       <DependentUpon>Browser.xaml</DependentUpon>
     </Compile>

@@ -22,9 +22,12 @@ namespace PackageManager
             base.OnStartup(e);
 
             NuGetSourceRepositoryFactory repositoryFactory = new NuGetSourceRepositoryFactory();
+            NuGetSearchService.IFilter filter = null;
+            if (Args.Dependencies.Any())
+                filter = new DependencyNuGetSearchFilter(Args.Dependencies);
 
             MainViewModel viewModel = new MainViewModel(
-                new NuGetSearchService(repositoryFactory),
+                new NuGetSearchService(repositoryFactory, filter),
                 new NuGetInstallService(repositoryFactory, Args.Path)
             );
             viewModel.PackageSourceUrl = Args.PackageSourceUrl;
