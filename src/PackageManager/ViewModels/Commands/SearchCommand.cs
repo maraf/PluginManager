@@ -28,7 +28,7 @@ namespace PackageManager.ViewModels.Commands
         }
 
         protected override bool CanExecuteOverride()
-            => !String.IsNullOrEmpty(viewModel.SearchText) && !String.IsNullOrWhiteSpace(viewModel.SearchText);
+            => true;
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
