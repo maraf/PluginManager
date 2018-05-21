@@ -84,7 +84,7 @@ namespace PackageManager
                 if (parts.Length == 1)
                     result[i] = (parts[0], null);
                 else
-                    result[i] = (parts[0], parts[1]);
+                    result[i] = (parts[0], parts[1][0] == 'v' ? parts[1].Substring(1) : parts[1]);
             }
 
             return result;
