@@ -11,10 +11,13 @@ namespace PackageManager.Services
 {
     public class NuGetSourceRepositoryFactory : IFactory<SourceRepository, string>
     {
+        private SourceRepository repository;
+
         public SourceRepository Create(string packageSourceUrl)
         {
-            var providers = Repository.Provider.GetCoreV3();
-            var repository = Repository.CreateSource(providers, packageSourceUrl);
+            if (repository == null || repository.PackageSource.Source != packageSourceUrl)
+                repository = Repository.CreateSource(Repository.Provider.GetCoreV3(), packageSourceUrl);
+
             return repository;
         }
     }

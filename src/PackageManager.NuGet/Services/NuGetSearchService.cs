@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Neptuo;
 using Neptuo.Activators;
 using NuGet.Common;
-using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 using PackageManager.Models;
 
