@@ -24,7 +24,7 @@ namespace PackageManager.ViewModels.Commands
         }
 
         protected override bool CanExecuteOverride(PackageUpdateViewModel package)
-            => package != null && !installService.IsInstalled(package.Current);
+            => package != null && installService.IsInstalled(package.Current);
 
         protected override async Task ExecuteAsync(PackageUpdateViewModel package, CancellationToken cancellationToken)
         {
