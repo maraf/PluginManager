@@ -51,7 +51,12 @@ namespace PackageManager.Services
             Ensure.NotNull(package, "package");
 
             using (PackagesConfigWriter writer = new PackagesConfigWriter(ConfigFilePath, !File.Exists(ConfigFilePath)))
+            {
+                if (IsInstalled(package))
+                    writer.RemovePackageEntry(package.Id, new NuGetVersion(package.Version), NuGetFramework.AnyFramework);
+
                 writer.AddPackageEntry(package.Id, new NuGetVersion(package.Version), NuGetFramework.AnyFramework);
+            }
         }
 
         public void Uninstall(IPackage package)

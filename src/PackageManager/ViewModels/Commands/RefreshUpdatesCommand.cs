@@ -43,7 +43,7 @@ namespace PackageManager.ViewModels.Commands
 
                 // TODO: Compare versions.
                 if (latest.Version != current.Version)
-                    viewModel.Packages.Add(latest);
+                    viewModel.Packages.Add(new PackageUpdateViewModel(current, latest));
             }
         }
     }

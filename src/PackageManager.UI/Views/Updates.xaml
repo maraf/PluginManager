@@ -15,18 +15,18 @@
                 <DataTemplate>
                     <Border Padding="8">
                         <DockPanel>
-                            <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
+                            <Image Source="{Binding Latest.IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
                             <Button Content="Update" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.Update}" CommandParameter="{Binding}"
                              VerticalAlignment="Center" Margin="8,0,0,0" DockPanel.Dock="Right" />
                             <StackPanel>
                                 <Grid>
-                                    <TextBlock Text="{Binding Id}" FontWeight="Bold" />
+                                    <TextBlock Text="{Binding Latest.Id}" FontWeight="Bold" />
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <TextBlock Text="v" />
-                                        <TextBlock Text="{Binding Version}" />
+                                        <TextBlock Text="{Binding Latest.Version}" />
                                     </StackPanel>
                                 </Grid>
-                                <TextBlock Text="{Binding Description, Converter={StaticResource DropNewLineConverter}}" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding Latest.Description, Converter={StaticResource DropNewLineConverter}}" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
                             </StackPanel>
                         </DockPanel>
                     </Border>

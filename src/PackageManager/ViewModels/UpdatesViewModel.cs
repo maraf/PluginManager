@@ -15,7 +15,7 @@ namespace PackageManager.ViewModels
 {
     public class UpdatesViewModel : ObservableObject
     {
-        public ObservableCollection<IPackage> Packages { get; }
+        public ObservableCollection<PackageUpdateViewModel> Packages { get; }
         public RefreshUpdatesCommand Refresh { get; }
         public UpdateCommand Update { get; }
 
@@ -24,7 +24,7 @@ namespace PackageManager.ViewModels
             Ensure.NotNull(installService, "service");
             Ensure.NotNull(searchService, "searchService");
 
-            Packages = new ObservableCollection<IPackage>();
+            Packages = new ObservableCollection<PackageUpdateViewModel>();
             Refresh = new RefreshUpdatesCommand(this, packageSource, installService, searchService);
             Update = new UpdateCommand(installService);
         }

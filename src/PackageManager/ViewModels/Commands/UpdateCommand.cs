@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels.Commands
 {
-    public class UpdateCommand : AsyncCommand<IPackage>
+    public class UpdateCommand : AsyncCommand<PackageUpdateViewModel>
     {
         private readonly IInstallService installService;
 
@@ -23,16 +23,19 @@ namespace PackageManager.ViewModels.Commands
             this.installService = installService;
         }
 
-        protected override bool CanExecuteOverride(IPackage package)
-            => package != null && !installService.IsInstalled(package);
+        protected override bool CanExecuteOverride(PackageUpdateViewModel package)
+            => package != null && !installService.IsInstalled(package.Current);
 
-        protected override async Task ExecuteAsync(IPackage package, CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(PackageUpdateViewModel package, CancellationToken cancellationToken)
         {
-            IPackageContent packageContent = await package.GetContentAsync(cancellationToken);
+            IPackageContent packageContent = await package.Current.GetContentAsync(cancellationToken);
             await packageContent.RemoveFromAsync(installService.Path, cancellationToken);
-            await packageContent.ExtractToAsync(installService.Path, cancellationToken);
+            installService.Uninstall(package.Current);
 
-            installService.Install(package);
+            packageContent = await package.Latest.GetContentAsync(cancellationToken);
+            await packageContent.ExtractToAsync(installService.Path, cancellationToken);
+            installService.Install(package.Latest);
+
             Completed?.Invoke();
         }
 
