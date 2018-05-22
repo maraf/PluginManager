@@ -1,4 +1,5 @@
-﻿using PackageManager.Services;
+﻿using NuGet.Frameworks;
+using PackageManager.Services;
 using PackageManager.ViewModels;
 using PackageManager.Views;
 using System;
@@ -24,7 +25,7 @@ namespace PackageManager
             NuGetSourceRepositoryFactory repositoryFactory = new NuGetSourceRepositoryFactory();
             NuGetSearchService.IFilter filter = null;
             if (Args.Dependencies.Any())
-                filter = new DependencyNuGetSearchFilter(Args.Dependencies);
+                filter = new DependencyNuGetSearchFilter(Args.Dependencies, Args.Monikers);
 
             MainViewModel viewModel = new MainViewModel(
                 new NuGetSearchService(repositoryFactory, filter),
@@ -58,7 +59,7 @@ namespace PackageManager
                     Args.Path = value;
                     return true;
                 case "--monikers":
-                    Args.Monikers = value.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    Args.Monikers = ParseMonikers(value);
                     return true;
                 case "--dependencies":
                     Args.Dependencies = ParseDependencies(value);
@@ -85,6 +86,22 @@ namespace PackageManager
                     result[i] = (parts[0], null);
                 else
                     result[i] = (parts[0], parts[1][0] == 'v' ? parts[1].Substring(1) : parts[1]);
+            }
+
+            return result;
+        }
+
+        private IReadOnlyCollection<NuGetFramework> ParseMonikers(string arg)
+        {
+            string[] values = arg.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            List<NuGetFramework> result = new List<NuGetFramework>();
+            foreach (string value in values)
+            {
+                NuGetFramework framework = NuGetFramework.Parse(value, DefaultFrameworkNameProvider.Instance);
+                result.Add(framework);
+
+                //NuGetFramework framework = new NuGetFramework(value);
+                //result.Add(framework);
             }
 
             return result;
