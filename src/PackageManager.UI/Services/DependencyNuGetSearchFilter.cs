@@ -14,11 +14,14 @@ namespace PackageManager.Services
     public class DependencyNuGetSearchFilter : NuGetSearchService.IFilter
     {
         private readonly (string id, string version)[] dependencies;
+        private readonly IReadOnlyCollection<NuGetFramework> frameworks;
 
-        public DependencyNuGetSearchFilter((string id, string version)[] dependencies)
+        public DependencyNuGetSearchFilter((string id, string version)[] dependencies, IReadOnlyCollection<NuGetFramework> frameworks)
         {
             Ensure.NotNull(dependencies, "dependencies");
+            Ensure.NotNull(frameworks, "frameworks");
             this.dependencies = dependencies;
+            this.frameworks = frameworks;
         }
 
         public bool IsPassed(IPackageSearchMetadata package)
@@ -28,7 +31,7 @@ namespace PackageManager.Services
 
             foreach (var group in package.DependencySets)
             {
-                if (group.TargetFramework == NuGetFramework.AnyFramework)
+                if (frameworks.Contains(group.TargetFramework))
                 {
                     foreach (var dependency in dependencies)
                     {

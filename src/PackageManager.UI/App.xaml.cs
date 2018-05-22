@@ -99,9 +99,6 @@ namespace PackageManager
             {
                 NuGetFramework framework = NuGetFramework.Parse(value, DefaultFrameworkNameProvider.Instance);
                 result.Add(framework);
-
-                //NuGetFramework framework = new NuGetFramework(value);
-                //result.Add(framework);
             }
 
             return result;
