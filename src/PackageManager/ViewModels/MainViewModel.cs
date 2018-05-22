@@ -62,9 +62,15 @@ namespace PackageManager.ViewModels
                 Updates.Refresh
             );
             Cancel.CanExecuteChanged += OnCancelCanExecuteChanged;
+
+            Installed.Uninstall.Completed += OnInstalledChanged;
+            Updates.Update.Completed += OnInstalledChanged;
         }
 
         private void OnCancelCanExecuteChanged(object sender, EventArgs e)
             => IsLoading = Cancel.CanExecute();
+
+        private void OnInstalledChanged()
+            => Browser.Packages.Clear();
     }
 }
