@@ -3,9 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net47</TargetFramework>
     <RootNamespace>PackageManager</RootNamespace>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
