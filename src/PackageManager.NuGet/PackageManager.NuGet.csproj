@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Neptuo" Version="6.0.0" />
     <PackageReference Include="NuGet.PackageManagement" Version="4.7.0" />
   </ItemGroup>
 
