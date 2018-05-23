@@ -57,6 +57,7 @@ namespace PackageManager.Views
             {
                 newValue.Install.Completed += RaiseCanExecuteChangedOnCommands;
                 newValue.Uninstall.Completed += RaiseCanExecuteChangedOnCommands;
+                newValue.Search.Completed += OnSearchCompleted;
             }
         }
 
@@ -67,6 +68,12 @@ namespace PackageManager.Views
                 if (ViewModel.Search.CanExecute())
                     ViewModel.Search.Execute();
             }
+        }
+
+        private void OnSearchCompleted()
+        {
+            lvwPackages.Focus();
+            lvwPackages.SelectedIndex = 0;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)

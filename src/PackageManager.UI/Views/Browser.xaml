@@ -17,7 +17,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             
-            <ListView x:Name="lvwPackages" ItemsSource="{Binding Packages}" SelectionChanged="lvwPackages_SelectionChanged" HorizontalContentAlignment="Stretch" Margin="8,4,4,8" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView x:Name="lvwPackages" ItemsSource="{Binding Packages}" SelectionChanged="lvwPackages_SelectionChanged" Margin="8,4,4,8" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Border Padding="8">

@@ -17,6 +17,8 @@ namespace PackageManager.ViewModels.Commands
         private readonly IPackageSourceProvider packageSource;
         private readonly ISearchService search;
 
+        public event Action Completed;
+
         public SearchCommand(BrowserViewModel viewModel, IPackageSourceProvider packageSource, ISearchService search)
         {
             Ensure.NotNull(viewModel, "viewModel");
@@ -35,6 +37,8 @@ namespace PackageManager.ViewModels.Commands
             IEnumerable<IPackage> packages = await search.SearchAsync(packageSource.Url, viewModel.SearchText, cancellationToken: cancellationToken);
             viewModel.Packages.Clear();
             viewModel.Packages.AddRange(packages);
+
+            Completed?.Invoke();
         }
     }
 }

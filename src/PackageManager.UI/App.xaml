@@ -10,6 +10,17 @@
         <converters:NullConverter x:Key="NullToCollapsedConverter" TrueValue="Collapsed" FalseValue="Visible" />
         <converters:BoolConverter x:Key="TrueToVisibleConverter" TrueValue="Visible" FalseValue="Collapsed" />
 
+        <Style TargetType="ListView">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style TargetType="Label">
             <Setter Property="Padding" Value="2" />
         </Style>
