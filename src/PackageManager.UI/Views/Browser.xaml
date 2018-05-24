@@ -8,7 +8,15 @@
     <DockPanel x:Name="MainPanel">
         <StackPanel Margin="8" DockPanel.Dock="Top">
             <Label Content="Search:" />
-            <TextBox x:Name="tbxSearch" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="tbxSearch_PreviewKeyDown" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBox x:Name="tbxSearch" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="tbxSearch_PreviewKeyDown" />
+                <Button x:Name="btnSearch" Content="Search" Command="{Binding Search}" Grid.Column="1" Margin="8,0,0,0" />
+            </Grid>
         </StackPanel>
 
         <Grid>
