@@ -1,5 +1,6 @@
 ﻿using Neptuo;
 using NuGet.Common;
+using NuGet.Frameworks;
 using NuGet.Packaging;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace PackageManager.Models
         {
             foreach (FrameworkSpecificGroup group in await reader.GetLibItemsAsync(cancellationToken))
             {
-                if (group.TargetFramework.IsAny)
+                if (group.TargetFramework.IsAny || group.TargetFramework == FrameworkConstants.CommonFrameworks.Net461)
                 {
                     return group.Items;
                 }
