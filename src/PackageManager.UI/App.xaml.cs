@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,7 +19,11 @@ namespace PackageManager
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            ParseParameters(e.Args);
+            if (!ParseParameters(e.Args))
+            {
+                Shutdown();
+                return;
+            }
 
             base.OnStartup(e);
 
@@ -37,7 +42,7 @@ namespace PackageManager
             wnd.Show();
         }
 
-        private void ParseParameters(string[] args)
+        private bool ParseParameters(string[] args)
         {
             Args = new Args();
             if (args.Length % 2 == 0)
@@ -49,6 +54,23 @@ namespace PackageManager
                     ParseParameter(name, value);
                 }
             }
+
+            if (!Directory.Exists(Args.Path))
+            {
+                MessageBox.Show("Missing argument '--path' - a target path to install packages to.", "Packages");
+                return false;
+            }
+
+            if (Args.Monikers.Count == 0)
+            {
+                Args.Monikers = new List<NuGetFramework>()
+                {
+                    NuGetFramework.AnyFramework,
+                    FrameworkConstants.CommonFrameworks.Net461
+                };
+            }
+
+            return true;
         }
 
         private bool ParseParameter(string name, string value)
