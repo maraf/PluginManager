@@ -59,6 +59,7 @@ namespace PackageManager.ViewModels
                 Browser.Uninstall,
                 Installed.Uninstall,
                 Updates.Update,
+                Updates.UpdateAll,
                 Updates.Refresh
             );
             Cancel.CanExecuteChanged += OnCancelCanExecuteChanged;
