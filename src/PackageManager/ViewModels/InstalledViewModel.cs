@@ -19,6 +19,7 @@ namespace PackageManager.ViewModels
 
         public ObservableCollection<IPackage> Packages { get; }
         public ICommand Refresh { get; }
+        public ReinstallCommand Reinstall { get; }
         public UninstallCommand Uninstall { get; }
 
         public InstalledViewModel(IPackageSourceProvider packageSource, IInstallService service)
@@ -28,6 +29,7 @@ namespace PackageManager.ViewModels
 
             Packages = new ObservableCollection<IPackage>();
             Refresh = new RefreshInstalledCommand(this, packageSource, service);
+            Reinstall = new ReinstallCommand(service);
             Uninstall = new UninstallCommand(service);
         }
     }

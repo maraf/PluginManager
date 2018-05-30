@@ -57,7 +57,9 @@ namespace PackageManager.ViewModels
                 Browser.Search, 
                 Browser.Install, 
                 Browser.Uninstall,
+                Browser.Reinstall,
                 Installed.Uninstall,
+                Installed.Reinstall,
                 Updates.Update,
                 Updates.UpdateAll,
                 Updates.Refresh

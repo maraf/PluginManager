@@ -89,6 +89,7 @@ namespace PackageManager.Views
         {
             ViewModel.Install.RaiseCanExecuteChanged();
             ViewModel.Uninstall.RaiseCanExecuteChanged();
+            ViewModel.Reinstall.RaiseCanExecuteChanged();
         }
 
         void IAutoFocus.Focus()

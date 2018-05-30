@@ -57,6 +57,7 @@
                     <StackPanel Margin="0,8" Orientation="Horizontal">
                         <Button Content="Install" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Install}" CommandParameter="{Binding}" />
                         <Button Content="Uninstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Uninstall}" CommandParameter="{Binding}" Margin="8,0,0,0" />
+                        <Button Content="Reinstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Reinstall}" CommandParameter="{Binding}" Margin="8,0,0,0" />
                     </StackPanel>
                     
                     <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
