@@ -5,9 +5,11 @@ VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackageManager.UI", "src\PackageManager.UI\PackageManager.UI.csproj", "{6F4FA02A-B061-4607-925E-27B122DE60BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackageManager", "src\PackageManager\PackageManager.csproj", "{3B5E3720-B3CB-4A12-B2D4-6BCB6BE78FF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PackageManager", "src\PackageManager\PackageManager.csproj", "{3B5E3720-B3CB-4A12-B2D4-6BCB6BE78FF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackageManager.NuGet", "src\PackageManager.NuGet\PackageManager.NuGet.csproj", "{B302D166-37CE-439D-8AE1-0CCB80BAD332}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PackageManager.NuGet", "src\PackageManager.NuGet\PackageManager.NuGet.csproj", "{B302D166-37CE-439D-8AE1-0CCB80BAD332}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitExtensions.PluginManager", "src\GitExtensions.PluginManager\GitExtensions.PluginManager.csproj", "{4EB0566E-6D4F-43AF-AA97-2A15ABB66787}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{B302D166-37CE-439D-8AE1-0CCB80BAD332}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B302D166-37CE-439D-8AE1-0CCB80BAD332}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B302D166-37CE-439D-8AE1-0CCB80BAD332}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EB0566E-6D4F-43AF-AA97-2A15ABB66787}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EB0566E-6D4F-43AF-AA97-2A15ABB66787}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EB0566E-6D4F-43AF-AA97-2A15ABB66787}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EB0566E-6D4F-43AF-AA97-2A15ABB66787}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

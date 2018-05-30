@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <Authors>Maraf</Authors>
+    <Company>Neptuo</Company>
+    <Description>NuGet-based Plugin Manager for GitExtensions</Description>
+    <RepositoryUrl>https://github.com/maraf/GitExtensions.PluginManager</RepositoryUrl>
+    <PackageTags>Neptuo GitExtensions</PackageTags>
+    <PackageProjectUrl>http://www.neptuo.com/project/dev/gitextensions.pluginmanager</PackageProjectUrl>
+    <LangVersion>latest</LangVersion>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Neptuo" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="GitUI">
+      <HintPath>C:\Program Files (x86)\GitExtensions\GitUI.dll</HintPath>
+    </Reference>
+    <Reference Include="GitUIPluginInterfaces">
+      <HintPath>C:\Program Files (x86)\GitExtensions\GitUIPluginInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ResourceManager">
+      <HintPath>C:\Program Files (x86)\GitExtensions\ResourceManager.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(TargetDir)Neptuo.dll&quot; &quot;C:\Program Files (x86)\GitExtensions\Plugins\Neptuo.dll&quot;&#xD;&#xA;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\GitExtensions\Plugins\$(TargetFileName)&quot;" />
+  </Target>
+
+</Project>
