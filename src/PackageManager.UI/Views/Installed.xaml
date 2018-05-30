@@ -6,9 +6,14 @@
              xmlns:dd="clr-namespace:PackageManager.Views.DesignData"
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Installed}}" Background="White">
     <DockPanel x:Name="MainPanel">
-        <StackPanel Margin="8" Orientation="Horizontal" DockPanel.Dock="Top">
-            <Button Content="Refresh" Command="{Binding Refresh}" />
-        </StackPanel>
+        <Grid DockPanel.Dock="Top">
+            <StackPanel Margin="8" Orientation="Horizontal">
+                <Button Content="Refresh" Command="{Binding Refresh}" />
+            </StackPanel>
+            <StackPanel Margin="8" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Uninstall All" Command="{Binding UninstallAll}" Margin="8,0,0,0" />
+            </StackPanel>
+        </Grid>
 
         <ListView x:Name="lvwPackages" ItemsSource="{Binding Packages}" HorizontalContentAlignment="Stretch" Margin="8,0,8,8" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListView.ItemTemplate>

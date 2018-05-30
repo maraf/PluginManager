@@ -1,5 +1,6 @@
 ﻿using Neptuo;
 using Neptuo.Observables.Commands;
+using PackageManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -10,16 +11,17 @@ using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels.Commands
 {
-    public partial class UpdateAllCommand : AsyncCommand
+    public partial class UninstallAllCommand : AsyncCommand
     {
         private readonly IViewModel viewModel;
-        private IEnumerator<PackageUpdateViewModel> current;
+        private IEnumerator<IPackage> current;
         private TaskCompletionSource<bool> currentCompletion;
 
-        public UpdateAllCommand(IViewModel viewModel)
+        public UninstallAllCommand(IViewModel viewModel)
         {
             Ensure.NotNull(viewModel, "viewModel");
             this.viewModel = viewModel;
+
             viewModel.Packages.CollectionChanged += OnPackagesChanged;
         }
 
@@ -34,7 +36,7 @@ namespace PackageManager.ViewModels.Commands
             current = viewModel.Packages.ToList().GetEnumerator();
             currentCompletion = new TaskCompletionSource<bool>();
 
-            viewModel.Update.Completed += OnOneCompleted;
+            viewModel.Uninstall.Completed += OnOneCompleted;
             ExecuteNext();
             RaiseCanExecuteChanged();
 
@@ -51,8 +53,8 @@ namespace PackageManager.ViewModels.Commands
         {
             if (current.MoveNext())
             {
-                if (viewModel.Update.CanExecute(current.Current))
-                    viewModel.Update.Execute(current.Current);
+                if (viewModel.Uninstall.CanExecute(current.Current))
+                    viewModel.Uninstall.Execute(current.Current);
                 else
                     ExecuteNext();
             }
@@ -60,7 +62,7 @@ namespace PackageManager.ViewModels.Commands
             {
                 current = null;
                 currentCompletion.TrySetResult(true);
-                viewModel.Update.Completed -= ExecuteNext;
+                viewModel.Uninstall.Completed -= ExecuteNext;
                 RaiseCanExecuteChanged();
             }
         }

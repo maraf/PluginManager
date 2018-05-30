@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace PackageManager.ViewModels
 {
-    public class InstalledViewModel : ObservableObject
+    public class InstalledViewModel : ObservableObject, UninstallAllCommand.IViewModel
     {
         private readonly IInstallService service;
 
@@ -21,6 +21,7 @@ namespace PackageManager.ViewModels
         public ICommand Refresh { get; }
         public ReinstallCommand Reinstall { get; }
         public UninstallCommand Uninstall { get; }
+        public UninstallAllCommand UninstallAll { get; }
 
         public InstalledViewModel(IPackageSourceProvider packageSource, IInstallService service)
         {
@@ -31,6 +32,7 @@ namespace PackageManager.ViewModels
             Refresh = new RefreshInstalledCommand(this, packageSource, service);
             Reinstall = new ReinstallCommand(service);
             Uninstall = new UninstallCommand(service);
+            UninstallAll = new UninstallAllCommand(this);
         }
     }
 }
