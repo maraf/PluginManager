@@ -12,28 +12,28 @@ using System.Threading.Tasks;
 
 namespace PackageManager.Models
 {
-    public class NuGetPackageContent : IPackageContent
+    public partial class NuGetPackageContent : IPackageContent
     {
         private readonly PackageReaderBase reader;
+        private readonly IFrameworkFilter filter;
 
-        public NuGetPackageContent(PackageReaderBase reader)
+        public NuGetPackageContent(PackageReaderBase reader, IFrameworkFilter filter = null)
         {
             Ensure.NotNull(reader, "reader");
+
+            if (filter == null)
+                filter = AnyFrameworkFilter.Instance;
+
             this.reader = reader;
+            this.filter = filter;
         }
 
         private async Task<IEnumerable<string>> EnumerateFiles(CancellationToken cancellationToken)
         {
             foreach (FrameworkSpecificGroup group in await reader.GetLibItemsAsync(cancellationToken))
             {
-                if (group.TargetFramework.IsAny || group.TargetFramework == FrameworkConstants.CommonFrameworks.Net461)
-                {
+                if (filter.IsPassed(group))
                     return group.Items;
-                }
-                else
-                {
-                    // TODO: Supported moniker -> group.TargetFramework.GetShortFolderName()
-                }
             }
 
             return Enumerable.Empty<string>();

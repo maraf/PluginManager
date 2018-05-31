@@ -1,4 +1,5 @@
 ﻿using NuGet.Frameworks;
+using PackageManager.Models;
 using PackageManager.Services;
 using PackageManager.ViewModels;
 using PackageManager.Views;
@@ -28,13 +29,17 @@ namespace PackageManager
             base.OnStartup(e);
 
             NuGetSourceRepositoryFactory repositoryFactory = new NuGetSourceRepositoryFactory();
-            NuGetSearchService.IFilter filter = null;
+            NuGetSearchService.IFilter searchFilter = null;
             if (Args.Dependencies.Any())
-                filter = new DependencyNuGetSearchFilter(Args.Dependencies, Args.Monikers);
+                searchFilter = new DependencyNuGetSearchFilter(Args.Dependencies, Args.Monikers);
+
+            NuGetPackageContent.IFrameworkFilter frameworkFilter = null;
+            if (Args.Monikers.Any())
+                frameworkFilter = new NuGetFrameworkFilter(Args.Monikers);
 
             MainViewModel viewModel = new MainViewModel(
-                new NuGetSearchService(repositoryFactory, filter),
-                new NuGetInstallService(repositoryFactory, Args.Path)
+                new NuGetSearchService(repositoryFactory, searchFilter, frameworkFilter),
+                new NuGetInstallService(repositoryFactory, Args.Path, frameworkFilter)
             );
             viewModel.PackageSourceUrl = Args.PackageSourceUrl;
 

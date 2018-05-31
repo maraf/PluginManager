@@ -16,6 +16,7 @@ namespace PackageManager.Models
     {
         private readonly IPackageSearchMetadata source;
         private readonly SourceRepository repository;
+        private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
 
         public string Id => source.Identity.Id;
         public string Version => source.Identity.Version.ToFullString();
@@ -29,12 +30,13 @@ namespace PackageManager.Models
         public Uri ProjectUrl => source.ProjectUrl;
         public Uri LicenseUrl => source.LicenseUrl;
 
-        public NuGetPackage(IPackageSearchMetadata source, SourceRepository repository)
+        public NuGetPackage(IPackageSearchMetadata source, SourceRepository repository, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
         {
             Ensure.NotNull(source, "source");
             Ensure.NotNull(repository, "repository");
             this.source = source;
             this.repository = repository;
+            this.frameworkFilter = frameworkFilter;
         }
 
         public async Task<IPackageContent> GetContentAsync(CancellationToken cancellationToken)
@@ -52,7 +54,7 @@ namespace PackageManager.Models
                 else if (result.Status == DownloadResourceResultStatus.NotFound)
                     throw Ensure.Exception.InvalidOperation($"Package '{source.Identity.Id}-v{source.Identity.Version}' not found");
                 
-                return new NuGetPackageContent(new PackageArchiveReader(result.PackageStream));
+                return new NuGetPackageContent(new PackageArchiveReader(result.PackageStream), frameworkFilter);
             }
         }
     }

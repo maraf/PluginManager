@@ -20,16 +20,18 @@ namespace PackageManager.Services
     public class NuGetInstallService : IInstallService
     {
         private readonly IFactory<SourceRepository, string> repositoryFactory;
+        private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
 
         public string Path { get; }
         public string ConfigFilePath => System.IO.Path.Combine(Path, "packages.config");
 
-        public NuGetInstallService(IFactory<SourceRepository, string> repositoryFactory, string path)
+        public NuGetInstallService(IFactory<SourceRepository, string> repositoryFactory, string path, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
             Ensure.NotNull(path, "path");
             this.repositoryFactory = repositoryFactory;
             Path = path;
+            this.frameworkFilter = frameworkFilter;
         }
 
         public bool IsInstalled(IPackage package)
@@ -88,7 +90,7 @@ namespace PackageManager.Services
                         var metadata = await metadataResource.GetMetadataAsync(package.PackageIdentity, context, NullLogger.Instance, cancellationToken);
                         if (metadata != null)
                         {
-                            result.Add(new NuGetPackage(metadata, repository));
+                            result.Add(new NuGetPackage(metadata, repository, frameworkFilter));
                             continue;
                         }
                     }

@@ -16,16 +16,18 @@ namespace PackageManager.Services
     {
         private readonly IFactory<SourceRepository, string> repositoryFactory;
         private readonly IFilter filter;
+        private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
 
-        public NuGetSearchService(IFactory<SourceRepository, string> repositoryFactory, IFilter filter = null)
+        public NuGetSearchService(IFactory<SourceRepository, string> repositoryFactory, IFilter filter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
 
             if (filter == null)
-                filter = new NullFilter();
+                filter = NullFilter.Instance;
 
             this.repositoryFactory = repositoryFactory;
             this.filter = filter;
+            this.frameworkFilter = frameworkFilter;
         }
 
         private SearchOptions EnsureOptions(SearchOptions options)
@@ -68,7 +70,7 @@ namespace PackageManager.Services
                         break;
 
                     if (filter.IsPassed(package))
-                        result.Add(new NuGetPackage(package, repository));
+                        result.Add(new NuGetPackage(package, repository, frameworkFilter));
                 }
 
                 if (!hasItems)

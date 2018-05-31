@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NuGet.Protocol.Core.Types;
+using NuGet.Packaging;
 
-namespace PackageManager.Services
+namespace PackageManager.Models
 {
-    partial class NuGetSearchService
+    partial class NuGetPackageContent
     {
-        public class NullFilter : IFilter
+        public class AnyFrameworkFilter : IFrameworkFilter
         {
-            public bool IsPassed(IPackageSearchMetadata package)
-                => true;
+            public bool IsPassed(FrameworkSpecificGroup group)
+                => group.TargetFramework.IsAny;
 
-            private static NullFilter instance;
+            private static AnyFrameworkFilter instance;
             private static object instanceLock;
 
-            public static NullFilter Instance
+            public static AnyFrameworkFilter Instance
             {
                 get
                 {
@@ -26,7 +26,7 @@ namespace PackageManager.Services
                         lock (instanceLock)
                         {
                             if (instance == null)
-                                instance = new NullFilter();
+                                instance = new AnyFrameworkFilter();
                         }
                     }
 
