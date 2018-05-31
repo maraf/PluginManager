@@ -61,6 +61,7 @@ namespace PackageManager.ViewModels
                 Installed.Uninstall,
                 Installed.UninstallAll,
                 Installed.Reinstall,
+                Installed.Refresh,
                 Updates.Update,
                 Updates.UpdateAll,
                 Updates.Refresh

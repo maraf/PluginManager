@@ -54,11 +54,11 @@ namespace PackageManager.Views
         }
 
         private void OnRefresh()
-            => ViewModel.Refresh.Execute(null);
+            => ViewModel.Refresh.Execute();
 
         void IAutoFocus.Focus()
         {
-            ViewModel.Refresh.Execute(null);
+            ViewModel.Refresh.Execute();
             lvwPackages.Focus();
         }
     }

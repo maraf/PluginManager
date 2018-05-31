@@ -18,7 +18,7 @@ namespace PackageManager.ViewModels
         private readonly IInstallService service;
 
         public ObservableCollection<IPackage> Packages { get; }
-        public ICommand Refresh { get; }
+        public RefreshInstalledCommand Refresh { get; }
         public ReinstallCommand Reinstall { get; }
         public UninstallCommand Uninstall { get; }
         public UninstallAllCommand UninstallAll { get; }

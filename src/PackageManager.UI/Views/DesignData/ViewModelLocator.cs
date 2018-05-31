@@ -54,7 +54,7 @@ namespace PackageManager.Views.DesignData
                 if (installed == null)
                 {
                     installed = new InstalledViewModel(new MockPackageSourceProvider(), new MockInstallService());
-                    installed.Refresh.Execute(null);
+                    installed.Refresh.Execute();
                 }
 
                 return installed;
