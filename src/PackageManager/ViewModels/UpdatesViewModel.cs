@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace PackageManager.ViewModels
 {
-    public class UpdatesViewModel : ObservableObject, UpdateAllCommand.IViewModel
+    public class UpdatesViewModel : ObservableModel, UpdateAllCommand.IViewModel
     {
         public ObservableCollection<PackageUpdateViewModel> Packages { get; }
         public RefreshUpdatesCommand Refresh { get; }

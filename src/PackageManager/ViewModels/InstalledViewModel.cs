@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace PackageManager.ViewModels
 {
-    public class InstalledViewModel : ObservableObject, UninstallAllCommand.IViewModel
+    public class InstalledViewModel : ObservableModel, UninstallAllCommand.IViewModel
     {
         private readonly IInstallService service;
 

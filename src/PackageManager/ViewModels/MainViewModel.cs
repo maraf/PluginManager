@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels
 {
-    public class MainViewModel : ObservableObject, IPackageSourceProvider
+    public class MainViewModel : ObservableModel, IPackageSourceProvider
     {
         private string packageSourceUrl;
         public string PackageSourceUrl
