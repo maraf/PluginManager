@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PackageManager.NuGet", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitExtensions.PluginManager", "src\GitExtensions.PluginManager\GitExtensions.PluginManager.csproj", "{4EB0566E-6D4F-43AF-AA97-2A15ABB66787}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackageManager.Tests", "test\PackageManager.Tests\PackageManager.Tests.csproj", "{72134702-9CC0-408F-9E07-B4D59C9D7E43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{4EB0566E-6D4F-43AF-AA97-2A15ABB66787}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EB0566E-6D4F-43AF-AA97-2A15ABB66787}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EB0566E-6D4F-43AF-AA97-2A15ABB66787}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72134702-9CC0-408F-9E07-B4D59C9D7E43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72134702-9CC0-408F-9E07-B4D59C9D7E43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72134702-9CC0-408F-9E07-B4D59C9D7E43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72134702-9CC0-408F-9E07-B4D59C9D7E43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
