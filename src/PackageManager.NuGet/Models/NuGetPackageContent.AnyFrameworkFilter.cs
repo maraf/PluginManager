@@ -15,7 +15,7 @@ namespace PackageManager.Models
                 => group.TargetFramework.IsAny;
 
             private static AnyFrameworkFilter instance;
-            private static object instanceLock;
+            private static object instanceLock = new object();
 
             public static AnyFrameworkFilter Instance
             {

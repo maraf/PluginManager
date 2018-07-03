@@ -15,7 +15,7 @@ namespace PackageManager.Services
                 => true;
 
             private static NullFilter instance;
-            private static object instanceLock;
+            private static object instanceLock = new object();
 
             public static NullFilter Instance
             {
