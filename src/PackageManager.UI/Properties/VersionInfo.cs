@@ -8,7 +8,7 @@ namespace PackageManager
 {
     public static class VersionInfo
     {
-        internal const string Version = "0.1.0";
+        internal const string Version = "0.2.1";
         internal const string Preview = null; //-beta1
 
         public static Version GetVersion()
