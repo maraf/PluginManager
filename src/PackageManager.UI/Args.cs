@@ -14,10 +14,116 @@ namespace PackageManager
         public (string id, string version)[] Dependencies { get; set; }
         public string PackageSourceUrl { get; set; }
 
-        public Args()
+        public Args(string[] args)
         {
             Monikers = Array.Empty<NuGetFramework>();
             Dependencies = Array.Empty<(string id, string version)>();
+
+            ParseParameters(args);
+        }
+
+        #region Parse
+
+        private void ParseParameters(string[] args)
+        {
+            if (args.Length % 2 == 0)
+            {
+                for (int i = 0; i < args.Length; i += 2)
+                {
+                    string name = args[i];
+                    string value = args[i + 1];
+                    ParseParameter(name, value);
+                }
+            }
+
+            if (Monikers.Count == 0)
+            {
+                Monikers = new List<NuGetFramework>()
+                {
+                    NuGetFramework.AnyFramework,
+                    FrameworkConstants.CommonFrameworks.Net461
+                };
+            }
+        }
+
+        private bool ParseParameter(string name, string value)
+        {
+            switch (name)
+            {
+                case "--path":
+                    Path = value;
+                    return true;
+                case "--monikers":
+                    Monikers = ParseMonikers(value);
+                    return true;
+                case "--dependencies":
+                    Dependencies = ParseDependencies(value);
+                    return true;
+                case "--packagesource":
+                    PackageSourceUrl = value;
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private (string id, string version)[] ParseDependencies(string arg)
+        {
+            string[] dependencies = arg.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            (string id, string version)[] result = new(string id, string version)[dependencies.Length];
+
+            for (int i = 0; i < dependencies.Length; i++)
+            {
+                string dependency = dependencies[i];
+
+                string[] parts = dependency.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length == 1)
+                    result[i] = (parts[0], null);
+                else
+                    result[i] = (parts[0], parts[1][0] == 'v' ? parts[1].Substring(1) : parts[1]);
+            }
+
+            return result;
+        }
+
+        private IReadOnlyCollection<NuGetFramework> ParseMonikers(string arg)
+        {
+            string[] values = arg.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            List<NuGetFramework> result = new List<NuGetFramework>();
+            foreach (string value in values)
+            {
+                NuGetFramework framework = NuGetFramework.Parse(value, DefaultFrameworkNameProvider.Instance);
+                result.Add(framework);
+            }
+
+            return result;
+        }
+
+        #endregion
+
+        public override string ToString()
+        {
+            StringBuilder result = new StringBuilder();
+
+            if (!String.IsNullOrEmpty(Path))
+                result.Append($"--path \"{Path}\"");
+
+            if (Monikers.Count > 0)
+            {
+                result.Append($" --monikers ");
+                result.Append(String.Join(",", Monikers.Select(m => m.GetShortFolderName(DefaultFrameworkNameProvider.Instance))));
+            }
+
+            if (Dependencies.Length > 0)
+            {
+                result.Append(" --dependencies ");
+                result.Append(String.Join(",", Dependencies.Select(d => d.id + "-v" + d.version)));
+            }
+
+            if (!String.IsNullOrEmpty(PackageSourceUrl))
+                result.Append($" --packagesource {PackageSourceUrl}");
+
+            return result.ToString();
         }
     }
 }
