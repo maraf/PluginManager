@@ -17,6 +17,14 @@ function Ensure-Artifacts {
     Ensure-Path "..\artifacts";
 }
 
+function Copy-File {
+    param ($sourcePath, $targetPath)
+    If(test-path $sourcePath) 
+    {
+        Copy-Item $sourcePath -Destination $targetPath
+    }
+}
+
 function Copy-PackageManager {
     $sourcePath = "..\src\PackageManager.UI\bin\Release"
     $targetPath = "..\artifacts\PackageManager"
@@ -24,11 +32,11 @@ function Copy-PackageManager {
     Ensure-Path $targetPath;
 
     Copy-Item ($sourcePath + "\Neptuo*.dll") -Destination $targetPath
-    Copy-Item ($sourcePath + "\Newtonsoft.Json.dll") -Destination $targetPath
+    Copy-File ($sourcePath + "\Newtonsoft.Json.dll") $targetPath
     Copy-Item ($sourcePath + "\NuGet*.dll") -Destination $targetPath
     Copy-Item ($sourcePath + "\PackageManager*.dll") -Destination $targetPath
     Copy-Item ($sourcePath + "\PackageManager*.exe") -Destination $targetPath
-    Copy-Item ($sourcePath + "\System.Net.Http.dll") -Destination $targetPath
+    Copy-File ($sourcePath + "\System.Net.Http.dll") $targetPath
 
     return $targetPath;
 }
