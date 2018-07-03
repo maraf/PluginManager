@@ -14,7 +14,7 @@ namespace GitExtensions.PluginManager
     /// <summary>
     /// GitExtensions plugin for backuping using bundles.
     /// </summary>
-    public class Plugin : GitPluginBase, IGitPluginForRepository
+    public class Plugin : GitPluginBase
     {
         public const string GitExtensionsRelativePath = @"GitExtensions.exe";
         public const string PluginManagerRelativePath = @"PluginManager\PackageManager.UI.exe";
