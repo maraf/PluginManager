@@ -1,5 +1,8 @@
-﻿using System;
+﻿using PackageManager.Services;
+using PackageManager.ViewModels;
+using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace PackageManager.Cli
 {
@@ -11,7 +14,23 @@ namespace PackageManager.Cli
         {
             if (ParseParameters(args))
             {
+                if (Args.IsUpdateCount)
+                {
+                    var repositoryFactory = new NuGetSourceRepositoryFactory();
+                    var installService = new NuGetInstallService(repositoryFactory, Args.Path);
+                    var searchService = new NuGetSearchService(repositoryFactory);
 
+                    TaskCompletionSource<bool> taskSource = new TaskCompletionSource<bool>();
+                    UpdatesViewModel viewModel = new UpdatesViewModel(Args, installService, searchService);
+                    viewModel.Refresh.Completed += () =>
+                    {
+                        Console.WriteLine(viewModel.Packages.Count);
+                        taskSource.TrySetResult(true);
+                    };
+                    viewModel.Refresh.Execute();
+
+                    Task.WaitAll(taskSource.Task);
+                }
             }
         }
 
@@ -48,7 +67,7 @@ namespace PackageManager.Cli
 
             if (!Uri.IsWellFormedUriString(Args.PackageSourceUrl, UriKind.Absolute))
             {
-                Console.WriteLine("Missing argument '--path' - a target path to install packages to.");
+                Console.WriteLine("Missing argument '--packagesource' - a package repository URL.");
                 return false;
             }
 

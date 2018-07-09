@@ -1,9 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>net471</TargetFramework>
     <RootNamespace>PackageManager</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Neptuo" Version="6.0.0" />
+    <PackageReference Include="NuGet.PackageManagement" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PackageManager.NuGet\PackageManager.NuGet.csproj" />
+    <ProjectReference Include="..\PackageManager\PackageManager.csproj" />
+  </ItemGroup>
 
 </Project>
