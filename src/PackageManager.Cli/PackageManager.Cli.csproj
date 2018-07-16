@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net471</TargetFramework>
     <RootNamespace>PackageManager</RootNamespace>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

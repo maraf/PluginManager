@@ -10,7 +10,7 @@ namespace PackageManager.Cli
     {
         public static Args Args { get; private set; }
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             if (ParseParameters(args))
             {
@@ -20,16 +20,11 @@ namespace PackageManager.Cli
                     var installService = new NuGetInstallService(repositoryFactory, Args.Path);
                     var searchService = new NuGetSearchService(repositoryFactory);
 
-                    TaskCompletionSource<bool> taskSource = new TaskCompletionSource<bool>();
                     UpdatesViewModel viewModel = new UpdatesViewModel(Args, installService, searchService);
-                    viewModel.Refresh.Completed += () =>
-                    {
-                        Console.WriteLine(viewModel.Packages.Count);
-                        taskSource.TrySetResult(true);
-                    };
-                    viewModel.Refresh.Execute();
+                    await viewModel.Refresh.ExecuteAsync();
+                    Console.WriteLine(viewModel.Packages.Count);
+                    UpdatesViewModel viewModel = new UpdatesViewModel(Args, installService, searchService);
 
-                    Task.WaitAll(taskSource.Task);
                 }
             }
         }
