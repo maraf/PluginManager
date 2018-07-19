@@ -15,6 +15,9 @@ namespace PackageManager
 
         public bool IsUpdateCount { get; set; }
 
+        public bool IsUpdatePackage { get; set; }
+        public string PackageId { get; set; }
+
         string IPackageSourceProvider.Url => PackageSourceUrl;
 
         public Args(string[] args)
@@ -34,6 +37,12 @@ namespace PackageManager
                 {
                     IsUpdateCount = true;
                     skipped++;
+                }
+                else if(args[1] == "--package")
+                {
+                    IsUpdatePackage = true;
+                    PackageId = args[2];
+                    skipped += 2;
                 }
             }
 
