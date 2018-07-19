@@ -13,6 +13,7 @@ namespace PackageManager
         public IReadOnlyCollection<NuGetFramework> Monikers { get; set; }
         public (string id, string version)[] Dependencies { get; set; }
         public string PackageSourceUrl { get; set; }
+        public string SelfPackageId { get; set; }
 
         public Args(string[] args)
         {
@@ -61,6 +62,9 @@ namespace PackageManager
                     return true;
                 case "--packagesource":
                     PackageSourceUrl = value;
+                    return true;
+                case "--selfpackageid":
+                    SelfPackageId = value;
                     return true;
                 default:
                     return false;

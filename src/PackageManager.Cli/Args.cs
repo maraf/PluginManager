@@ -11,6 +11,7 @@ namespace PackageManager
     {
         public string Path { get; set; }
         public string PackageSourceUrl { get; set; }
+        public string SelfPackageId { get; set; }
 
         public bool IsUpdateCount { get; set; }
 
@@ -58,6 +59,9 @@ namespace PackageManager
                     return true;
                 case "--packagesource":
                     PackageSourceUrl = value;
+                    return true;
+                case "--selfpackageid":
+                    SelfPackageId = value;
                     return true;
                 default:
                     return false;
