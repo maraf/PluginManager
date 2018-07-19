@@ -58,8 +58,9 @@ namespace PackageManager.Cli
             var repositoryFactory = new NuGetSourceRepositoryFactory();
             var installService = new NuGetInstallService(repositoryFactory, Args.Path);
             var searchService = new NuGetSearchService(repositoryFactory);
+            var selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
 
-            UpdatesViewModel viewModel = new UpdatesViewModel(Args, installService, searchService);
+            UpdatesViewModel viewModel = new UpdatesViewModel(Args, installService, searchService, selfPackageConfiguration);
             return viewModel;
         }
     }

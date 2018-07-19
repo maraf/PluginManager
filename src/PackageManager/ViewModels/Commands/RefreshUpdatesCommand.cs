@@ -17,17 +17,20 @@ namespace PackageManager.ViewModels.Commands
         private readonly IPackageSourceProvider packageSource;
         private readonly IInstallService installService;
         private readonly ISearchService searchService;
+        private readonly SelfPackageConfiguration selfPackageConfiguration;
 
-        public RefreshUpdatesCommand(UpdatesViewModel viewModel, IPackageSourceProvider packageSource, IInstallService installService, ISearchService searchService)
+        public RefreshUpdatesCommand(UpdatesViewModel viewModel, IPackageSourceProvider packageSource, IInstallService installService, ISearchService searchService, SelfPackageConfiguration selfPackageConfiguration)
         {
             Ensure.NotNull(viewModel, "viewModel");
             Ensure.NotNull(packageSource, "packageSource");
             Ensure.NotNull(installService, "installService");
             Ensure.NotNull(searchService, "searchService");
+            Ensure.NotNull(selfPackageConfiguration, "selfPackageConfiguration");
             this.viewModel = viewModel;
             this.packageSource = packageSource;
             this.installService = installService;
             this.searchService = searchService;
+            this.selfPackageConfiguration = selfPackageConfiguration;
         }
 
         protected override bool CanExecuteOverride()
@@ -43,7 +46,13 @@ namespace PackageManager.ViewModels.Commands
 
                 // TODO: Compare versions.
                 if (latest.Version != current.Version)
-                    viewModel.Packages.Add(new PackageUpdateViewModel(current, latest));
+                {
+                    viewModel.Packages.Add(new PackageUpdateViewModel(
+                        current, 
+                        latest, 
+                        selfPackageConfiguration.PackageId != null && current.Id == selfPackageConfiguration.PackageId
+                    ));
+                }
             }
         }
     }

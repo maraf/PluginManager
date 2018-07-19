@@ -1,4 +1,5 @@
 ﻿using PackageManager.Models;
+using PackageManager.Services;
 using PackageManager.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,23 @@ namespace PackageManager.Views.DesignData
 {
     public static class ViewModelLocator
     {
+        private static SelfPackageConfiguration selfPackageConfiguration;
         private static MainViewModel main;
         private static BrowserViewModel browser;
         private static InstalledViewModel installed;
         private static UpdatesViewModel updates;
         private static IPackage package;
+
+        public static SelfPackageConfiguration SelfPackageConfiguration
+        {
+            get
+            {
+                if (selfPackageConfiguration == null)
+                    selfPackageConfiguration = new SelfPackageConfiguration(Package.Id);
+
+                return selfPackageConfiguration;
+            }
+        }
 
         public static MainViewModel Main
         {
@@ -22,7 +35,7 @@ namespace PackageManager.Views.DesignData
             {
                 if (main == null)
                 {
-                    main = new MainViewModel(new MockSearchService(), new MockInstallService());
+                    main = new MainViewModel(new MockSearchService(), new MockInstallService(), SelfPackageConfiguration);
                     main.Browser.Search.Execute();
                 }
 
@@ -67,7 +80,7 @@ namespace PackageManager.Views.DesignData
             {
                 if (updates == null)
                 {
-                    updates = new UpdatesViewModel(new MockPackageSourceProvider(), new MockInstallService(), new MockSearchService());
+                    updates = new UpdatesViewModel(new MockPackageSourceProvider(), new MockInstallService(), new MockSearchService(), SelfPackageConfiguration);
                     updates.Refresh.Execute();
                 }
 
