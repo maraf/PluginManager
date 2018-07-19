@@ -25,7 +25,10 @@
                              VerticalAlignment="Center" Margin="8,0,0,0" DockPanel.Dock="Right" />
                             <StackPanel>
                                 <Grid>
-                                    <TextBlock Text="{Binding Latest.Id}" FontWeight="Bold" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Latest.Id}" FontWeight="Bold" />
+                                        <TextBlock Text=" (PackageManager update)" Visibility="{Binding IsSelf, Converter={StaticResource TrueToVisibleConverter}}" />
+                                    </StackPanel>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <TextBlock Text="v" />
                                         <TextBlock Text="{Binding Latest.Version}" />
