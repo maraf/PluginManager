@@ -15,6 +15,8 @@ namespace PackageManager
         public string PackageSourceUrl { get; set; }
         public string SelfPackageId { get; set; }
 
+        public bool IsSelfUpdate { get; set; }
+
         public Args(string[] args)
         {
             Monikers = Array.Empty<NuGetFramework>();
@@ -27,6 +29,17 @@ namespace PackageManager
 
         private void ParseParameters(string[] args)
         {
+            List<string> items = args.ToList();
+            foreach (string arg in items.ToList())
+            {
+                if (arg == "--selfupdate")
+                {
+                    IsSelfUpdate = true;
+                    items.Remove(arg);
+                }
+            }
+
+            args = items.ToArray();
             if (args.Length % 2 == 0)
             {
                 for (int i = 0; i < args.Length; i += 2)
