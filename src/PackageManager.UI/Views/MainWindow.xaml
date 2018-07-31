@@ -23,7 +23,7 @@
             <TextBox x:Name="PackageSource" Text="{Binding PackageSourceUrl, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
-        <TabControl controls:TabControl.IsAutoFocus="True" IsEnabled="{Binding PackageSourceUrl, Converter={StaticResource ValidUrlToTrueConverter}}" Grid.Row="1">
+        <TabControl x:Name="Tabs" controls:TabControl.IsAutoFocus="True" IsEnabled="{Binding PackageSourceUrl, Converter={StaticResource ValidUrlToTrueConverter}}" Grid.Row="1">
             <TabItem Header="Browse" Padding="8,4">
                 <views:Browser x:Name="Browser" ViewModel="{Binding Browser}" />
             </TabItem>

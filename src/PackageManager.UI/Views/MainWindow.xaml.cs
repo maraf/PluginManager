@@ -37,5 +37,11 @@ namespace PackageManager.Views
             if (String.IsNullOrEmpty(ViewModel.PackageSourceUrl))
                 PackageSource.Focus();
         }
+
+        public void SelectUpdatesTab() 
+            => Tabs.SelectedIndex = 2;
+
+        public void AfterUpdatesFocus(Action handler)
+            => Updates.FocusCompleted += (sender, e) => handler();
     }
 }

@@ -49,6 +49,28 @@ namespace PackageManager
 
             MainWindow wnd = new MainWindow(viewModel);
             wnd.Show();
+
+            if (Args.IsSelfUpdate)
+            {
+                // TODO: Execute self update.
+
+                wnd.AfterUpdatesFocus(() =>
+                {
+                    PackageUpdateViewModel package = viewModel.Updates.Packages.FirstOrDefault(p => p.Current.Id == Args.SelfPackageId);
+                    if (package != null)
+                    {
+                        viewModel.Updates.Update.ExecuteAsync(package);
+
+                        // TODO: Restart new app.
+                        Shutdown();
+                    }
+                    else
+                    {
+                        // TODO: Show some error.
+                    }
+                });
+                wnd.SelectUpdatesTab();
+            }
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
