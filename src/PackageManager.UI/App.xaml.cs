@@ -43,7 +43,8 @@ namespace PackageManager
             MainViewModel viewModel = new MainViewModel(
                 new NuGetSearchService(repositoryFactory, searchFilter, frameworkFilter),
                 new NuGetInstallService(repositoryFactory, Args.Path, frameworkFilter),
-                new SelfPackageConfiguration(Args.SelfPackageId)
+                new SelfPackageConfiguration(Args.SelfPackageId),
+                new SelfUpdateService(this)
             );
             viewModel.PackageSourceUrl = Args.PackageSourceUrl;
 

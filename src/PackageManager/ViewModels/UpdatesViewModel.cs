@@ -20,14 +20,14 @@ namespace PackageManager.ViewModels
         public UpdateCommand Update { get; }
         public UpdateAllCommand UpdateAll { get; }
 
-        public UpdatesViewModel(IPackageSourceProvider packageSource, IInstallService installService, ISearchService searchService, SelfPackageConfiguration selfPackageConfiguration)
+        public UpdatesViewModel(IPackageSourceProvider packageSource, IInstallService installService, ISearchService searchService, SelfPackageConfiguration selfPackageConfiguration, ISelfUpdateService selfUpdate)
         {
             Ensure.NotNull(installService, "service");
             Ensure.NotNull(searchService, "searchService");
 
             Packages = new ObservableCollection<PackageUpdateViewModel>();
             Refresh = new RefreshUpdatesCommand(this, packageSource, installService, searchService, selfPackageConfiguration);
-            Update = new UpdateCommand(installService);
+            Update = new UpdateCommand(installService, selfUpdate);
             UpdateAll = new UpdateAllCommand(this);
         }
     }

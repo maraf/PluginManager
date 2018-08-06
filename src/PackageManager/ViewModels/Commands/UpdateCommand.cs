@@ -13,28 +13,40 @@ namespace PackageManager.ViewModels.Commands
 {
     public class UpdateCommand : AsyncCommand<PackageUpdateViewModel>
     {
-        private readonly IInstallService installService;
+        private readonly IInstallService install;
+        private readonly ISelfUpdateService selfUpdate;
 
         public event Action Completed;
 
-        public UpdateCommand(IInstallService installService)
+        public UpdateCommand(IInstallService installService, ISelfUpdateService selfUpdate)
         {
             Ensure.NotNull(installService, "service");
-            this.installService = installService;
+            Ensure.NotNull(selfUpdate, "selfUpdate");
+            this.install = installService;
+            this.selfUpdate = selfUpdate;
         }
 
         protected override bool CanExecuteOverride(PackageUpdateViewModel package)
-            => package != null && installService.IsInstalled(package.Current);
+            => package != null && install.IsInstalled(package.Current);
 
         protected override async Task ExecuteAsync(PackageUpdateViewModel package, CancellationToken cancellationToken)
         {
+            if (package.IsSelf && !selfUpdate.IsSelfUpdate)
+            {
+                selfUpdate.Update(package.Latest);
+                return;
+            }
+
             IPackageContent packageContent = await package.Current.GetContentAsync(cancellationToken);
-            await packageContent.RemoveFromAsync(installService.Path, cancellationToken);
-            installService.Uninstall(package.Current);
+            await packageContent.RemoveFromAsync(install.Path, cancellationToken);
+            install.Uninstall(package.Current);
 
             packageContent = await package.Latest.GetContentAsync(cancellationToken);
-            await packageContent.ExtractToAsync(installService.Path, cancellationToken);
-            installService.Install(package.Latest);
+            await packageContent.ExtractToAsync(install.Path, cancellationToken);
+            install.Install(package.Latest);
+
+            if (package.IsSelf)
+                selfUpdate.RunNewInstance(package.Latest);
 
             Completed?.Invoke();
         }

@@ -47,11 +47,11 @@ namespace PackageManager.ViewModels
             }
         }
 
-        public MainViewModel(ISearchService search, IInstallService install, SelfPackageConfiguration selfPackageConfiguration)
+        public MainViewModel(ISearchService search, IInstallService install, SelfPackageConfiguration selfPackageConfiguration, ISelfUpdateService selfUpdate)
         {
             Browser = new BrowserViewModel(this, search, install);
             Installed = new InstalledViewModel(this, install);
-            Updates = new UpdatesViewModel(this, install, search, selfPackageConfiguration);
+            Updates = new UpdatesViewModel(this, install, search, selfPackageConfiguration, selfUpdate);
 
             Cancel = new CancelCommand(
                 Browser.Search, 

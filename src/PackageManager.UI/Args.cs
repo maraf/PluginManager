@@ -140,6 +140,12 @@ namespace PackageManager
             if (!String.IsNullOrEmpty(PackageSourceUrl))
                 result.Append($" --packagesource {PackageSourceUrl}");
 
+            if (!String.IsNullOrEmpty(SelfPackageId))
+                result.Append($" --selfpackageid {SelfPackageId}");
+
+            if (IsSelfUpdate)
+                result.Append(" --selfupdate");
+
             return result.ToString();
         }
     }
