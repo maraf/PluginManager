@@ -16,6 +16,7 @@ namespace PackageManager
         public string SelfPackageId { get; set; }
 
         public bool IsSelfUpdate { get; set; }
+        public string SelfOriginalPath { get; set; }
 
         public Args(string[] args)
         {
@@ -78,6 +79,9 @@ namespace PackageManager
                     return true;
                 case "--selfpackageid":
                     SelfPackageId = value;
+                    return true;
+                case "--selforiginalpath":
+                    SelfOriginalPath = value;
                     return true;
                 default:
                     return false;
@@ -145,6 +149,9 @@ namespace PackageManager
 
             if (IsSelfUpdate)
                 result.Append(" --selfupdate");
+
+            if (!String.IsNullOrEmpty(SelfOriginalPath))
+                result.Append($" --selforiginalpath \"{SelfOriginalPath}\"");
 
             return result.ToString();
         }
