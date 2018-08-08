@@ -40,8 +40,5 @@ namespace PackageManager.Views
 
         public void SelectUpdatesTab() 
             => Tabs.SelectedIndex = 2;
-
-        public void AfterUpdatesFocus(Action handler)
-            => Updates.FocusCompleted += (sender, e) => handler();
     }
 }

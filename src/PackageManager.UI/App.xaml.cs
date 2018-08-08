@@ -54,24 +54,22 @@ namespace PackageManager
             wnd.Show();
 
             if (Args.IsSelfUpdate)
-            {
-                // TODO: Execute self update.
+                RunSelfUpdate(wnd);
+        }
 
-                wnd.AfterUpdatesFocus(async () =>
-                {
-                    PackageUpdateViewModel package = viewModel.Updates.Packages.FirstOrDefault(p => p.Current.Id == Args.SelfPackageId);
-                    if (package != null)
-                    {
-                        await viewModel.Updates.Update.ExecuteAsync(package);
-                        Shutdown();
-                    }
-                    else
-                    {
-                        // TODO: Show some error.
-                    }
-                });
-                wnd.SelectUpdatesTab();
-            }
+        private void RunSelfUpdate(MainWindow wnd)
+        {
+            wnd.ViewModel.Updates.Refresh.Completed += async () =>
+            {
+                PackageUpdateViewModel package = wnd.ViewModel.Updates.Packages.FirstOrDefault(p => p.Current.Id == Args.SelfPackageId);
+                if (package != null)
+                    await wnd.ViewModel.Updates.Update.ExecuteAsync(package);
+                else
+                    MessageBox.Show($"Unnable to find update package for PackageManager in feed '{wnd.ViewModel.PackageSourceUrl}'.");
+
+                Shutdown();
+            };
+            wnd.SelectUpdatesTab();
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
@@ -97,9 +95,6 @@ namespace PackageManager
             Shutdown();
         }
 
-        void SelfUpdateService.IApplication.Shutdown()
-        {
-            throw new NotImplementedException();
-        }
+        void SelfUpdateService.IApplication.Shutdown() => Shutdown();
     }
 }

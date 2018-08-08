@@ -37,8 +37,6 @@ namespace PackageManager.Views
             view.OnViewModelChanged((UpdatesViewModel)e.OldValue, (UpdatesViewModel)e.NewValue);
         }
 
-        public event EventHandler<EventArgs> FocusCompleted;
-
         public Updates()
         {
             InitializeComponent();
@@ -62,7 +60,6 @@ namespace PackageManager.Views
         { 
             lvwPackages.Focus();
             await ViewModel.Refresh.ExecuteAsync();
-            FocusCompleted?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -19,6 +19,8 @@ namespace PackageManager.ViewModels.Commands
         private readonly ISearchService searchService;
         private readonly SelfPackageConfiguration selfPackageConfiguration;
 
+        public event Action Completed;
+
         public RefreshUpdatesCommand(UpdatesViewModel viewModel, IPackageSourceProvider packageSource, IInstallService installService, ISearchService searchService, SelfPackageConfiguration selfPackageConfiguration)
         {
             Ensure.NotNull(viewModel, "viewModel");
@@ -54,6 +56,8 @@ namespace PackageManager.ViewModels.Commands
                     ));
                 }
             }
+
+            Completed?.Invoke();
         }
     }
 }
