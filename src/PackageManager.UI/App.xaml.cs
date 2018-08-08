@@ -55,14 +55,12 @@ namespace PackageManager
             {
                 // TODO: Execute self update.
 
-                wnd.AfterUpdatesFocus(() =>
+                wnd.AfterUpdatesFocus(async () =>
                 {
                     PackageUpdateViewModel package = viewModel.Updates.Packages.FirstOrDefault(p => p.Current.Id == Args.SelfPackageId);
                     if (package != null)
                     {
-                        viewModel.Updates.Update.ExecuteAsync(package);
-
-                        // TODO: Restart new app.
+                        await viewModel.Updates.Update.ExecuteAsync(package);
                         Shutdown();
                     }
                     else
