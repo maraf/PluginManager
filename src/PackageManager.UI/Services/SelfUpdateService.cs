@@ -11,11 +11,11 @@ using PackageManager.Models;
 
 namespace PackageManager.Services
 {
-    internal class SelfUpdateService : ISelfUpdateService
+    internal partial class SelfUpdateService : ISelfUpdateService
     {
-        private readonly App application;
+        private readonly IApplication application;
 
-        public SelfUpdateService(App application)
+        public SelfUpdateService(IApplication application)
         {
             Ensure.NotNull(application, "application");
             this.application = application;

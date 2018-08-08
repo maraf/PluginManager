@@ -1,4 +1,5 @@
 ﻿using NuGet.Frameworks;
+using PackageManager.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PackageManager
 {
-    public class Args
+    public class Args : SelfUpdateService.IArgs
     {
         public string Path { get; set; }
         public IReadOnlyCollection<NuGetFramework> Monikers { get; set; }

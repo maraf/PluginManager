@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\PackageManager.UI\Services\SelfUpdateService.cs" Link="Services\SelfUpdateService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Costura.Fody" Version="3.1.0" />
     <PackageReference Include="Neptuo" Version="6.0.0" />
     <PackageReference Include="NuGet.PackageManagement" Version="4.7.0" />
@@ -16,6 +20,10 @@
   <ItemGroup>
     <ProjectReference Include="..\PackageManager.NuGet\PackageManager.NuGet.csproj" />
     <ProjectReference Include="..\PackageManager\PackageManager.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

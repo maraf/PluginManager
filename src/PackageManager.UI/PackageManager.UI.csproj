@@ -85,6 +85,8 @@
     <Compile Include="Properties\VersionInfo.cs" />
     <Compile Include="Services\DependencyNuGetSearchFilter.cs" />
     <Compile Include="Services\SelfUpdateService.cs" />
+    <Compile Include="Services\SelfUpdateService.IApplication.cs" />
+    <Compile Include="Services\SelfUpdateService.IArgs.cs" />
     <Compile Include="Views\Browser.xaml.cs">
       <DependentUpon>Browser.xaml</DependentUpon>
     </Compile>

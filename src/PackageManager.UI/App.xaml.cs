@@ -16,9 +16,11 @@ using System.Windows.Threading;
 
 namespace PackageManager
 {
-    public partial class App : Application
+    public partial class App : Application, SelfUpdateService.IApplication
     {
         public Args Args { get; private set; }
+
+        SelfUpdateService.IArgs SelfUpdateService.IApplication.Args => Args;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -93,6 +95,11 @@ namespace PackageManager
             Process.Start(processStart);
 
             Shutdown();
+        }
+
+        void SelfUpdateService.IApplication.Shutdown()
+        {
+            throw new NotImplementedException();
         }
     }
 }

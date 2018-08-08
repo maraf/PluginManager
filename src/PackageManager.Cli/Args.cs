@@ -1,4 +1,5 @@
-﻿using PackageManager.ViewModels;
+﻿using PackageManager.Services;
+using PackageManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PackageManager
 {
-    public partial class Args : IPackageSourceProvider
+    public partial class Args : IPackageSourceProvider, SelfUpdateService.IArgs
     {
         public string Path { get; set; }
         public string PackageSourceUrl { get; set; }
@@ -17,6 +18,9 @@ namespace PackageManager
 
         public bool IsUpdatePackage { get; set; }
         public string PackageId { get; set; }
+
+        public bool IsSelfUpdate { get; set; }
+        public string SelfOriginalPath { get; set; }
 
         string IPackageSourceProvider.Url => PackageSourceUrl;
 
@@ -29,6 +33,18 @@ namespace PackageManager
 
         private bool ParseParameters(string[] args)
         {
+            List<string> items = args.ToList();
+            foreach (string arg in items.ToList())
+            {
+                if (arg == "--selfupdate")
+                {
+                    IsSelfUpdate = true;
+                    items.Remove(arg);
+                }
+            }
+
+            args = items.ToArray();
+
             int skipped = 0;
             if (args[0] == "update")
             {
@@ -72,11 +88,36 @@ namespace PackageManager
                 case "--selfpackageid":
                     SelfPackageId = value;
                     return true;
+                case "--selforiginalpath":
+                    SelfOriginalPath = value;
+                    return true;
                 default:
                     return false;
             }
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            StringBuilder result = new StringBuilder();
+
+            if (!String.IsNullOrEmpty(Path))
+                result.Append($"--path \"{Path}\"");
+
+            if (!String.IsNullOrEmpty(PackageSourceUrl))
+                result.Append($" --packagesource {PackageSourceUrl}");
+
+            if (!String.IsNullOrEmpty(SelfPackageId))
+                result.Append($" --selfpackageid {SelfPackageId}");
+
+            if (IsSelfUpdate)
+                result.Append(" --selfupdate");
+
+            if (!String.IsNullOrEmpty(SelfOriginalPath))
+                result.Append($" --selforiginalpath \"{SelfOriginalPath}\"");
+
+            return result.ToString();
+        }
     }
 }

@@ -7,11 +7,15 @@ using System.Threading.Tasks;
 
 namespace PackageManager.Cli
 {
-    class Program
+    class Program : SelfUpdateService.IApplication
     {
-        public static Args Args { get; private set; }
+        static Task Main(string[] args) => new Program().MainAsync(args);
 
-        static async Task Main(string[] args)
+        SelfUpdateService.IArgs SelfUpdateService.IApplication.Args => Args;
+
+        public Args Args { get; private set; }
+
+        public async Task MainAsync(string[] args)
         {
             Args = new Args(args);
 
@@ -53,15 +57,21 @@ namespace PackageManager.Cli
             }
         }
 
-        private static UpdatesViewModel CreateUpdatesViewModel()
+        private UpdatesViewModel CreateUpdatesViewModel()
         {
             var repositoryFactory = new NuGetSourceRepositoryFactory();
             var installService = new NuGetInstallService(repositoryFactory, Args.Path);
             var searchService = new NuGetSearchService(repositoryFactory);
             var selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
+            var selfUpdateService = new SelfUpdateService(this);
 
-            UpdatesViewModel viewModel = new UpdatesViewModel(Args, installService, searchService, selfPackageConfiguration);
+            UpdatesViewModel viewModel = new UpdatesViewModel(Args, installService, searchService, selfPackageConfiguration, selfUpdateService);
             return viewModel;
+        }
+
+        void SelfUpdateService.IApplication.Shutdown()
+        {
+            Environment.Exit(0);
         }
     }
 }
