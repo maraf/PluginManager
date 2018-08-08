@@ -49,7 +49,7 @@ namespace PackageManager.Views.DesignData
             {
                 if (browser == null)
                 {
-                    browser = new BrowserViewModel(new MockPackageSourceProvider(), new MockSearchService(), new MockInstallService())
+                    browser = new BrowserViewModel(new MockPackageSourceProvider(), new MockSearchService(), new MockInstallService(), SelfPackageConfiguration)
                     {
                         SearchText = "GitExtensions"
                     };
@@ -66,7 +66,7 @@ namespace PackageManager.Views.DesignData
             {
                 if (installed == null)
                 {
-                    installed = new InstalledViewModel(new MockPackageSourceProvider(), new MockInstallService());
+                    installed = new InstalledViewModel(new MockPackageSourceProvider(), new MockInstallService(), SelfPackageConfiguration);
                     installed.Refresh.Execute();
                 }
 

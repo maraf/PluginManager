@@ -10,6 +10,7 @@
         <converters:DropNewLineConverter x:Key="DropNewLineConverter" />
         <converters:NullConverter x:Key="NullToCollapsedConverter" TrueValue="Collapsed" FalseValue="Visible" />
         <converters:BoolConverter x:Key="TrueToVisibleConverter" TrueValue="Visible" FalseValue="Collapsed" />
+        <converters:SelfPackageConverter x:Key="SelfPackageToVisibleConverter" TrueValue="Visible" FalseValue="Collapsed" />
 
         <Style TargetType="ListView">
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />

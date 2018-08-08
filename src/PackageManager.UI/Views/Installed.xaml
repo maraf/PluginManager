@@ -27,7 +27,10 @@
                             </StackPanel>
                             <StackPanel>
                                 <Grid>
-                                    <TextBlock Text="{Binding Id}" FontWeight="Bold" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Id}" FontWeight="Bold" />
+                                        <TextBlock Text=" (PackageManager)" Visibility="{Binding Converter={StaticResource SelfPackageToVisibleConverter}}" />
+                                    </StackPanel>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <TextBlock Text="v" />
                                         <TextBlock Text="{Binding Version}" />

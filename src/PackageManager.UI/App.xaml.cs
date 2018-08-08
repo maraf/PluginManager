@@ -3,6 +3,7 @@ using PackageManager.Models;
 using PackageManager.Services;
 using PackageManager.ViewModels;
 using PackageManager.Views;
+using PackageManager.Views.Converters;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -42,10 +43,14 @@ namespace PackageManager
             if (Args.Monikers.Any())
                 frameworkFilter = new NuGetFrameworkFilter(Args.Monikers);
 
+            SelfPackageConfiguration selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
+
+            SelfPackageConverter.Configuration = selfPackageConfiguration;
+
             MainViewModel viewModel = new MainViewModel(
                 new NuGetSearchService(repositoryFactory, searchFilter, frameworkFilter),
                 new NuGetInstallService(repositoryFactory, Args.Path, frameworkFilter),
-                new SelfPackageConfiguration(Args.SelfPackageId),
+                selfPackageConfiguration,
                 new SelfUpdateService(this)
             );
             viewModel.PackageSourceUrl = Args.PackageSourceUrl;

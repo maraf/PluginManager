@@ -14,15 +14,18 @@ namespace PackageManager.ViewModels.Commands
     public class ReinstallCommand : AsyncCommand<IPackage>
     {
         private readonly IInstallService service;
+        private readonly SelfPackageConfiguration selfPackageConfiguration;
 
-        public ReinstallCommand(IInstallService service)
+        public ReinstallCommand(IInstallService service, SelfPackageConfiguration selfPackageConfiguration)
         {
             Ensure.NotNull(service, "service");
+            Ensure.NotNull(selfPackageConfiguration, "selfPackageConfiguration");
             this.service = service;
+            this.selfPackageConfiguration = selfPackageConfiguration;
         }
 
         protected override bool CanExecuteOverride(IPackage package)
-            => package != null && service.IsInstalled(package);
+            => package != null && service.IsInstalled(package) && selfPackageConfiguration.PackageId != package.Id;
 
         protected override async Task ExecuteAsync(IPackage package, CancellationToken cancellationToken)
         {

@@ -97,6 +97,7 @@
     <Compile Include="Views\Converters\FormatConverter.cs" />
     <Compile Include="Views\Converters\NullConverter.cs" />
     <Compile Include="Views\Converters\NullValueConverter.cs" />
+    <Compile Include="Views\Converters\SelfPackageConverter.cs" />
     <Compile Include="Views\Converters\ValidUrlToTrueConverter.cs" />
     <Compile Include="Views\DesignData\MockInstallService.cs" />
     <Compile Include="Views\DesignData\MockPackage.cs" />
