@@ -82,6 +82,7 @@
     </Compile>
     <Compile Include="Args.cs" />
     <Compile Include="Models\NuGetFrameworkFilter.cs" />
+    <Compile Include="Models\SelfPackage.cs" />
     <Compile Include="Properties\VersionInfo.cs" />
     <Compile Include="Services\DependencyNuGetSearchFilter.cs" />
     <Compile Include="Services\ProcessService.cs" />

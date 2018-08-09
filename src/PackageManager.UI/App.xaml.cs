@@ -50,11 +50,17 @@ namespace PackageManager
 
             SelfPackageConverter.Configuration = selfPackageConfiguration;
 
+            NuGetSearchService searchService = new NuGetSearchService(repositoryFactory, searchFilter, frameworkFilter);
+            NuGetInstallService installService = new NuGetInstallService(repositoryFactory, Args.Path, frameworkFilter);
+            SelfUpdateService selfUpdateService = new SelfUpdateService(this, ProcessService);
+
+            EnsureSelfPackageInstalled(installService);
+
             MainViewModel viewModel = new MainViewModel(
-                new NuGetSearchService(repositoryFactory, searchFilter, frameworkFilter),
-                new NuGetInstallService(repositoryFactory, Args.Path, frameworkFilter),
+                searchService,
+                installService,
                 selfPackageConfiguration,
-                new SelfUpdateService(this, ProcessService)
+                selfUpdateService
             );
             viewModel.PackageSourceUrl = Args.PackageSourceUrl;
 
@@ -63,6 +69,16 @@ namespace PackageManager
 
             if (Args.IsSelfUpdate)
                 RunSelfUpdate(wnd);
+        }
+
+        private void EnsureSelfPackageInstalled(NuGetInstallService installService)
+        {
+            if (Args.SelfPackageId != null)
+            {
+                SelfPackage package = new SelfPackage(Args.SelfPackageId);
+                if (!installService.IsInstalled(package))
+                    installService.Install(package);
+            }
         }
 
         private void RunSelfUpdate(MainWindow wnd)
