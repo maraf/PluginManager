@@ -14,11 +14,14 @@ namespace PackageManager.Services
     internal partial class SelfUpdateService : ISelfUpdateService
     {
         private readonly IApplication application;
+        private readonly ProcessService processes;
 
-        public SelfUpdateService(IApplication application)
+        public SelfUpdateService(IApplication application, ProcessService processes)
         {
             Ensure.NotNull(application, "application");
+            Ensure.NotNull(processes, "processes");
             this.application = application;
+            this.processes = processes;
         }
 
         public string CurrentFileName => Path.GetFileName(Assembly.GetExecutingAssembly().Location);
@@ -42,14 +45,7 @@ namespace PackageManager.Services
             application.Args.SelfOriginalPath = current;
             string arguments = application.Args.ToString();
 
-            ProcessStartInfo processStart = new ProcessStartInfo(
-                temp,
-                arguments
-            );
-
-            processStart.Verb = "runas";
-            Process.Start(processStart);
-
+            processes.Run(temp, arguments);
             application.Shutdown();
         }
 
@@ -72,13 +68,7 @@ namespace PackageManager.Services
                 application.Args.IsSelfUpdate = false;
                 string arguments = application.Args.ToString();
 
-                ProcessStartInfo processStart = new ProcessStartInfo(
-                    target,
-                    arguments
-                );
-
-                processStart.Verb = "runas";
-                Process.Start(processStart);
+                processes.Run(target, arguments);
             }
         }
     }

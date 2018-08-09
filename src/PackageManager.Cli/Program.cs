@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace PackageManager.Cli
 {
-    class Program : SelfUpdateService.IApplication
+    class Program : SelfUpdateService.IApplication, ProcessService.IApplication
     {
         static Task Main(string[] args) => new Program().MainAsync(args);
 
-        SelfUpdateService.IArgs SelfUpdateService.IApplication.Args => Args;
-
         public Args Args { get; private set; }
+
+        SelfUpdateService.IArgs SelfUpdateService.IApplication.Args => Args;
+        object ProcessService.IApplication.Args => Args;
 
         public async Task MainAsync(string[] args)
         {
@@ -63,15 +64,13 @@ namespace PackageManager.Cli
             var installService = new NuGetInstallService(repositoryFactory, Args.Path);
             var searchService = new NuGetSearchService(repositoryFactory);
             var selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
-            var selfUpdateService = new SelfUpdateService(this);
+            var selfUpdateService = new SelfUpdateService(this, new ProcessService(this));
 
             UpdatesViewModel viewModel = new UpdatesViewModel(Args, installService, searchService, selfPackageConfiguration, selfUpdateService);
             return viewModel;
         }
 
-        void SelfUpdateService.IApplication.Shutdown()
-        {
-            Environment.Exit(0);
-        }
+        public void Shutdown() 
+            => Environment.Exit(0);
     }
 }

@@ -1,10 +1,4 @@
-﻿using NuGet.Frameworks;
-using PackageManager.Models;
-using PackageManager.Services;
-using PackageManager.ViewModels;
-using PackageManager.Views;
-using PackageManager.Views.Converters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -14,14 +8,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using PackageManager.Models;
+using PackageManager.Services;
+using PackageManager.ViewModels;
+using PackageManager.Views;
+using PackageManager.Views.Converters;
 
 namespace PackageManager
 {
-    public partial class App : Application, SelfUpdateService.IApplication
+    public partial class App : Application, SelfUpdateService.IApplication, ProcessService.IApplication
     {
         public Args Args { get; private set; }
+        internal ProcessService ProcessService { get; private set; }
 
         SelfUpdateService.IArgs SelfUpdateService.IApplication.Args => Args;
+        object ProcessService.IApplication.Args => Args;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -31,6 +32,8 @@ namespace PackageManager
                 MessageBox.Show("Missing argument '--path' - a target path to install packages to.", "Packages");
                 Shutdown();
             }
+
+            ProcessService = new ProcessService(this);
 
             base.OnStartup(e);
 
@@ -51,7 +54,7 @@ namespace PackageManager
                 new NuGetSearchService(repositoryFactory, searchFilter, frameworkFilter),
                 new NuGetInstallService(repositoryFactory, Args.Path, frameworkFilter),
                 selfPackageConfiguration,
-                new SelfUpdateService(this)
+                new SelfUpdateService(this, ProcessService)
             );
             viewModel.PackageSourceUrl = Args.PackageSourceUrl;
 
@@ -82,24 +85,8 @@ namespace PackageManager
             if (e.Exception is UnauthorizedAccessException)
             {
                 e.Handled = true;
-                RestartAsAdministrator();
+                ProcessService.RestartAsAdministrator();
             }
         }
-
-        private void RestartAsAdministrator()
-        {
-            Process current = Process.GetCurrentProcess();
-            ProcessStartInfo processStart = new ProcessStartInfo(
-                current.MainModule.FileName,
-                Args.ToString()
-            );
-
-            processStart.Verb = "runas";
-            Process.Start(processStart);
-
-            Shutdown();
-        }
-
-        void SelfUpdateService.IApplication.Shutdown() => Shutdown();
     }
 }
