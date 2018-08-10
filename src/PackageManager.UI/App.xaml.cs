@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using NuGet.Packaging;
 using PackageManager.Models;
 using PackageManager.Services;
 using PackageManager.ViewModels;
@@ -98,7 +99,7 @@ namespace PackageManager
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            if (e.Exception is UnauthorizedAccessException)
+            if (e.Exception is UnauthorizedAccessException || (e.Exception is PackagesConfigWriterException && e.Exception.InnerException is FileNotFoundException))
             {
                 e.Handled = true;
                 ProcessService.RestartAsAdministrator();
