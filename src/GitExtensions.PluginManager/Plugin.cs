@@ -17,6 +17,7 @@ namespace GitExtensions.PluginManager
     /// </summary>
     public class Plugin : GitPluginBase
     {
+        public const string PackageId = @"GitExtensions.PluginManager";
         public const string GitExtensionsRelativePath = @"GitExtensions.exe";
         public const string PluginManagerRelativePath = @"PluginManager\PackageManager.UI.exe";
         public const string PluginsPackageNameFormat = "--dependencies GitExtensions.Plugins-v{0}.{1}";
@@ -50,6 +51,7 @@ namespace GitExtensions.PluginManager
             args.Add($"--path \"{pluginsPath}\"");
             args.Add(String.Format(PluginsPackageNameFormat, version.ProductMajorPart, version.ProductMinorPart));
             args.Add($"--monikers {String.Join(",", FrameworkMonikers)}");
+            args.Add($"--selfpackageid {PackageId}");
 
             if (Uri.IsWellFormedUriString(Configuration.PackageSourceUrl, UriKind.Absolute))
                 args.Add($"--packagesource {Configuration.PackageSourceUrl}");
