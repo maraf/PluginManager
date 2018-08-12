@@ -32,6 +32,7 @@ namespace PackageManager
             {
                 MessageBox.Show("Missing argument '--path' - a target path to install packages to.", "Packages");
                 Shutdown();
+                return;
             }
 
             ProcessService = new ProcessService(this);
