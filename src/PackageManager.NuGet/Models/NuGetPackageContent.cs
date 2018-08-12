@@ -1,6 +1,5 @@
 ﻿using Neptuo;
 using NuGet.Common;
-using NuGet.Frameworks;
 using NuGet.Packaging;
 using System;
 using System.Collections.Generic;
@@ -28,36 +27,49 @@ namespace PackageManager.Models
             this.filter = filter;
         }
 
-        private async Task<IEnumerable<string>> EnumerateFiles(CancellationToken cancellationToken)
+        private async Task<(string frameworkFolderName, IEnumerable<string> packagePaths)> EnumerateFiles(CancellationToken cancellationToken)
         {
             foreach (FrameworkSpecificGroup group in await reader.GetLibItemsAsync(cancellationToken))
             {
                 if (filter.IsPassed(group))
-                    return group.Items;
+                    return (group.TargetFramework.GetShortFolderName(), group.Items);
             }
 
-            return Enumerable.Empty<string>();
+            return (null, Enumerable.Empty<string>());
         }
 
-        private string MapPackageFilePath(string rootPath, string packagePath)
-            => Path.Combine(rootPath, Path.GetFileName(packagePath));
+        private string MapPackageFilePath(string rootPath, string frameworkFolderName, string packagePath)
+        {
+            // TODO: Not sure if 100% reliable.
+
+            if (packagePath.StartsWith(rootPath, StringComparison.InvariantCultureIgnoreCase))
+                packagePath = packagePath.Substring(rootPath.Length + 1);
+
+            if (packagePath.StartsWith("lib", StringComparison.InvariantCultureIgnoreCase))
+                packagePath = packagePath.Substring("lib".Length + 1);
+
+            if (frameworkFolderName != null && packagePath.StartsWith(frameworkFolderName, StringComparison.InvariantCultureIgnoreCase))
+                packagePath = packagePath.Substring(frameworkFolderName.Length + 1);
+
+            return Path.Combine(rootPath, packagePath);
+        }
 
         public Task ExtractToAsync(string path, CancellationToken cancellationToken)
         {
             return Task.Run(
                 async () =>
                 {
+                    var content = await EnumerateFiles(cancellationToken);
                     string ExtractFile(string sourceFile, string targetPath, Stream sourceContent)
                     {
-                        string result = MapPackageFilePath(path, targetPath);
+                        string result = MapPackageFilePath(path, content.frameworkFolderName, targetPath);
                         using (FileStream targetContent = new FileStream(result, FileMode.OpenOrCreate))
                             sourceContent.CopyTo(targetContent);
 
                         return result;
                     }
 
-                    var packagePaths = await EnumerateFiles(cancellationToken);
-                    await reader.CopyFilesAsync(path, packagePaths, ExtractFile, NullLogger.Instance, cancellationToken);
+                    await reader.CopyFilesAsync(path, content.packagePaths, ExtractFile, NullLogger.Instance, cancellationToken);
                 },
                 cancellationToken
             );
@@ -68,10 +80,10 @@ namespace PackageManager.Models
             return Task.Run(
                 async () =>
                 {
-                    var packagePaths = await EnumerateFiles(cancellationToken);
-                    foreach (string packagePath in packagePaths)
+                    var content = await EnumerateFiles(cancellationToken);
+                    foreach (string packagePath in content.packagePaths)
                     {
-                        string filePath = MapPackageFilePath(path, packagePath);
+                        string filePath = MapPackageFilePath(path, content.frameworkFolderName, packagePath);
                         File.Delete(filePath);
                     }
                 },
