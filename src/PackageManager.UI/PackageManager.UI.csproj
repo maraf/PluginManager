@@ -85,6 +85,7 @@
     <Compile Include="Models\SelfPackage.cs" />
     <Compile Include="Properties\VersionInfo.cs" />
     <Compile Include="Services\DependencyNuGetSearchFilter.cs" />
+    <Compile Include="Services\Navigator.cs" />
     <Compile Include="Services\ProcessService.cs" />
     <Compile Include="Services\ProcessService.IApplication.cs" />
     <Compile Include="Services\SelfUpdateService.cs" />

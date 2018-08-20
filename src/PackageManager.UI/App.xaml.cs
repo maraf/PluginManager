@@ -21,6 +21,7 @@ namespace PackageManager
     {
         public Args Args { get; private set; }
         internal ProcessService ProcessService { get; private set; }
+        internal Navigator Navigator { get; private set; }
 
         SelfUpdateService.IArgs SelfUpdateService.IApplication.Args => Args;
         object ProcessService.IApplication.Args => Args;
@@ -67,6 +68,9 @@ namespace PackageManager
             viewModel.PackageSourceUrl = Args.PackageSourceUrl;
 
             MainWindow wnd = new MainWindow(viewModel);
+
+            Navigator = new Navigator(wnd);
+
             wnd.Show();
 
             if (Args.IsSelfUpdate)
@@ -91,7 +95,7 @@ namespace PackageManager
                 if (package != null)
                     await wnd.ViewModel.Updates.Update.ExecuteAsync(package);
                 else
-                    MessageBox.Show($"Unnable to find update package for PackageManager in feed '{wnd.ViewModel.PackageSourceUrl}'.");
+                    Navigator.Message("Self Update Error", $"Unnable to find update package for PackageManager in feed '{wnd.ViewModel.PackageSourceUrl}'.");
 
                 Shutdown();
             };
