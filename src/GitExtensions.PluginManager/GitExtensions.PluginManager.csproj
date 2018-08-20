@@ -27,6 +27,7 @@
     <Reference Include="ResourceManager">
       <HintPath>C:\Program Files (x86)\GitExtensions\ResourceManager.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
 

@@ -3,6 +3,7 @@ using ResourceManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace GitExtensions.PluginManager
     /// <summary>
     /// GitExtensions plugin for backuping using bundles.
     /// </summary>
+    [Export(typeof(IGitPlugin))]
     public class Plugin : GitPluginBase
     {
         public const string PackageId = @"GitExtensions.PluginManager";
