@@ -19,9 +19,29 @@ namespace PackageManager.Services
             this.wnd = wnd;
         }
 
-        public void Message(string title, string message)
+        public void Message(string title, string message, MessageType type = MessageType.Info)
+            => MessageBox.Show(wnd, message, title, MessageBoxButton.OK, MapTypeToImage(type));
+
+        private MessageBoxImage MapTypeToImage(MessageType type)
         {
-            MessageBox.Show(wnd, message, title, MessageBoxButton.OK);
+            switch (type)
+            {
+                case MessageType.Info:
+                    return MessageBoxImage.Information;
+                case MessageType.Error:
+                    return MessageBoxImage.Error;
+                case MessageType.Warning:
+                    return MessageBoxImage.Warning;
+                default:
+                    throw Ensure.Exception.NotSupported(type);
+            }
+        }
+
+        public enum MessageType
+        {
+            Info,
+            Error,
+            Warning
         }
     }
 }
