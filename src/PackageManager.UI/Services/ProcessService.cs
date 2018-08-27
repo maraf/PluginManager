@@ -11,11 +11,14 @@ namespace PackageManager.Services
     internal partial class ProcessService
     {
         private readonly IApplication application;
+        private readonly IReadOnlyCollection<string> toKillNames;
 
-        public ProcessService(IApplication application)
+        public ProcessService(IApplication application, params string[] toKillNames)
         {
             Ensure.NotNull(application, "application");
+            Ensure.NotNull(toKillNames, "toKillNames");
             this.application = application;
+            this.toKillNames = toKillNames;
         }
 
         public void RestartAsAdministrator()
@@ -42,5 +45,7 @@ namespace PackageManager.Services
             processStart.Verb = "runas";
             Process.Start(processStart);
         }
+
+        public ProcessKillContext PrepareContextForProcessesKillBeforeChange() => new ProcessKillContext(toKillNames);
     }
 }

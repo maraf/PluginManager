@@ -16,6 +16,7 @@ namespace PackageManager.ViewModels.Commands
         private readonly IInstallService install;
         private readonly ISelfUpdateService selfUpdate;
 
+        public event Func<Task<bool>> Executing;
         public event Action Completed;
 
         public UpdateCommand(IInstallService installService, ISelfUpdateService selfUpdate)
@@ -31,22 +32,30 @@ namespace PackageManager.ViewModels.Commands
 
         protected override async Task ExecuteAsync(PackageUpdateViewModel package, CancellationToken cancellationToken)
         {
-            if (package.IsSelf && !selfUpdate.IsSelfUpdate)
+            bool execute = true;
+
+            if (Executing != null)
+                execute = await Executing();
+
+            if (execute)
             {
-                selfUpdate.Update(package.Latest);
-                return;
+                if (package.IsSelf && !selfUpdate.IsSelfUpdate)
+                {
+                    selfUpdate.Update(package.Latest);
+                    return;
+                }
+
+                IPackageContent packageContent = await package.Current.GetContentAsync(cancellationToken);
+                await packageContent.RemoveFromAsync(install.Path, cancellationToken);
+                install.Uninstall(package.Current);
+
+                packageContent = await package.Latest.GetContentAsync(cancellationToken);
+                await packageContent.ExtractToAsync(install.Path, cancellationToken);
+                install.Install(package.Latest);
+
+                if (package.IsSelf)
+                    selfUpdate.RunNewInstance(package.Latest);
             }
-
-            IPackageContent packageContent = await package.Current.GetContentAsync(cancellationToken);
-            await packageContent.RemoveFromAsync(install.Path, cancellationToken);
-            install.Uninstall(package.Current);
-
-            packageContent = await package.Latest.GetContentAsync(cancellationToken);
-            await packageContent.ExtractToAsync(install.Path, cancellationToken);
-            install.Install(package.Latest);
-
-            if (package.IsSelf)
-                selfUpdate.RunNewInstance(package.Latest);
 
             Completed?.Invoke();
         }

@@ -19,12 +19,17 @@ namespace PackageManager
         public bool IsSelfUpdate { get; set; }
         public string SelfOriginalPath { get; set; }
 
+        public string[] ProcessNamesToKillBeforeChange { get; set; }
+
         public Args(string[] args)
         {
             Monikers = Array.Empty<NuGetFramework>();
             Dependencies = Array.Empty<(string id, string version)>();
 
             ParseParameters(args);
+
+            if (ProcessNamesToKillBeforeChange == null)
+                ProcessNamesToKillBeforeChange = new string[0];
         }
 
         #region Parse
@@ -84,6 +89,9 @@ namespace PackageManager
                 case "--selforiginalpath":
                     SelfOriginalPath = value;
                     return true;
+                case "--processnamestokillbeforechange":
+                    ProcessNamesToKillBeforeChange = value.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    return true;
                 default:
                     return false;
             }
@@ -92,7 +100,7 @@ namespace PackageManager
         private (string id, string version)[] ParseDependencies(string arg)
         {
             string[] dependencies = arg.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            (string id, string version)[] result = new(string id, string version)[dependencies.Length];
+            (string id, string version)[] result = new (string id, string version)[dependencies.Length];
 
             for (int i = 0; i < dependencies.Length; i++)
             {
@@ -153,6 +161,9 @@ namespace PackageManager
 
             if (!String.IsNullOrEmpty(SelfOriginalPath))
                 result.Append($" --selforiginalpath \"{SelfOriginalPath}\"");
+
+            if (ProcessNamesToKillBeforeChange != null && ProcessNamesToKillBeforeChange.Length > 0)
+                result.Append($" --processnamestokillbeforechange \"{String.Join(",", ProcessNamesToKillBeforeChange)}\"");
 
             return result.ToString();
         }

@@ -93,6 +93,7 @@
     <Compile Include="Services\Navigator.cs" />
     <Compile Include="Services\ProcessService.cs" />
     <Compile Include="Services\ProcessService.IApplication.cs" />
+    <Compile Include="Services\ProcessService.ProcessKillContext.cs" />
     <Compile Include="Services\SelfUpdateService.cs" />
     <Compile Include="Services\SelfUpdateService.IApplication.cs" />
     <Compile Include="Services\SelfUpdateService.IArgs.cs" />

@@ -16,6 +16,7 @@ namespace PackageManager.ViewModels.Commands
         private readonly IInstallService service;
         private readonly SelfPackageConfiguration selfPackageConfiguration;
 
+        public event Func<Task<bool>> Executing;
         public event Action Completed;
 
         public UninstallCommand(IInstallService service, SelfPackageConfiguration selfPackageConfiguration)
@@ -31,12 +32,21 @@ namespace PackageManager.ViewModels.Commands
 
         protected override async Task ExecuteAsync(IPackage package, CancellationToken cancellationToken)
         {
-            IPackageContent packageContent = await package.GetContentAsync(cancellationToken);
-            await packageContent.RemoveFromAsync(service.Path, cancellationToken);
+            bool execute = true;
 
-            cancellationToken.ThrowIfCancellationRequested();
+            if (Executing != null)
+                execute = await Executing();
 
-            service.Uninstall(package);
+            if (execute)
+            {
+                IPackageContent packageContent = await package.GetContentAsync(cancellationToken);
+                await packageContent.RemoveFromAsync(service.Path, cancellationToken);
+
+                cancellationToken.ThrowIfCancellationRequested();
+
+                service.Uninstall(package);
+            }
+
             Completed?.Invoke();
         }
 

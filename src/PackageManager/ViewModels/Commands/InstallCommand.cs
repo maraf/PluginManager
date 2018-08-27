@@ -15,6 +15,7 @@ namespace PackageManager.ViewModels.Commands
     {
         private readonly IInstallService service;
 
+        public event Func<Task<bool>> Executing;
         public event Action Completed;
 
         public InstallCommand(IInstallService service)
@@ -28,10 +29,19 @@ namespace PackageManager.ViewModels.Commands
 
         protected override async Task ExecuteAsync(IPackage package, CancellationToken cancellationToken)
         {
-            IPackageContent packageContent = await package.GetContentAsync(cancellationToken);
-            await packageContent.ExtractToAsync(service.Path, cancellationToken);
+            bool execute = true;
 
-            service.Install(package);
+            if (Executing != null)
+                execute = await Executing();
+
+            if (execute)
+            {
+                IPackageContent packageContent = await package.GetContentAsync(cancellationToken);
+                await packageContent.ExtractToAsync(service.Path, cancellationToken);
+
+                service.Install(package);
+            }
+
             Completed?.Invoke();
         }
 

@@ -39,11 +39,12 @@ namespace PackageManager
             LogFactory = new DefaultLogFactory()
                 .AddConsole();
 
-            ProcessService = new ProcessService(this);
+            Args = new Args(e.Args);
+
+            ProcessService = new ProcessService(this, Args.ProcessNamesToKillBeforeChange ?? new string[0]);
             Navigator = new Navigator(this);
             BuildExceptionHandler();
 
-            Args = new Args(e.Args);
             if (!Directory.Exists(Args.Path))
             {
                 Navigator.Notify("Missing argument '--path' - a target path to install packages to.", "Packages", Navigator.MessageType.Error);
@@ -80,7 +81,7 @@ namespace PackageManager
             );
             viewModel.PackageSourceUrl = Args.PackageSourceUrl;
 
-            MainWindow wnd = new MainWindow(viewModel);
+            MainWindow wnd = new MainWindow(viewModel, ProcessService, Navigator);
 
             wnd.Show();
 
