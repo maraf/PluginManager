@@ -83,6 +83,7 @@
     <Compile Include="Args.cs" />
     <Compile Include="Exceptions\MessageExceptionHandler.cs" />
     <Compile Include="Exceptions\NuGetFatalProtocolExceptionHandler.cs" />
+    <Compile Include="Exceptions\PackageInstallExceptionHandler.cs" />
     <Compile Include="Exceptions\UnauthorizedExceptionHandler.cs" />
     <Compile Include="Exceptions\ShutdownExceptionHandler.cs" />
     <Compile Include="Models\NuGetFrameworkFilter.cs" />

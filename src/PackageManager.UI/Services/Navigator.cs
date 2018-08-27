@@ -11,19 +11,19 @@ namespace PackageManager.Services
 {
     internal class Navigator
     {
-        private readonly MainWindow wnd;
+        private readonly App application;
 
-        public Navigator(MainWindow wnd)
+        public Navigator(App application)
         {
-            Ensure.NotNull(wnd, "wnd");
-            this.wnd = wnd;
+            Ensure.NotNull(application, "application");
+            this.application = application;
         }
 
         public void Notify(string title, string message, MessageType type = MessageType.Info)
-            => MessageBox.Show(wnd, message, title, MessageBoxButton.OK, MapTypeToImage(type));
+            => MessageBox.Show(application.MainWindow, message, title, MessageBoxButton.OK, MapTypeToImage(type));
 
         public bool Confirm(string title, string message, MessageType type = MessageType.Info)
-            => MessageBox.Show(wnd, message, title, MessageBoxButton.YesNo, MapTypeToImage(type)) == MessageBoxResult.Yes;
+            => MessageBox.Show(application.MainWindow, message, title, MessageBoxButton.YesNo, MapTypeToImage(type)) == MessageBoxResult.Yes;
 
         private MessageBoxImage MapTypeToImage(MessageType type)
         {

@@ -33,21 +33,23 @@ namespace PackageManager
 
         SelfUpdateService.IArgs SelfUpdateService.IApplication.Args => Args;
         object ProcessService.IApplication.Args => Args;
-        
+
         protected override void OnStartup(StartupEventArgs e)
         {
             LogFactory = new DefaultLogFactory()
                 .AddConsole();
 
+            ProcessService = new ProcessService(this);
+            Navigator = new Navigator(this);
+            BuildExceptionHandler();
+
             Args = new Args(e.Args);
             if (!Directory.Exists(Args.Path))
             {
-                MessageBox.Show("Missing argument '--path' - a target path to install packages to.", "Packages");
+                Navigator.Notify("Missing argument '--path' - a target path to install packages to.", "Packages", Navigator.MessageType.Error);
                 Shutdown();
                 return;
             }
-
-            ProcessService = new ProcessService(this);
 
             base.OnStartup(e);
 
@@ -80,10 +82,6 @@ namespace PackageManager
 
             MainWindow wnd = new MainWindow(viewModel);
 
-            Navigator = new Navigator(wnd);
-
-            BuildExceptionHandler();
-
             wnd.Show();
 
             if (Args.IsSelfUpdate)
@@ -112,10 +110,13 @@ namespace PackageManager
                 .Filter<FatalProtocolException>()
                 .Handler(new NuGetFatalProtocolExceptionHandler(Navigator));
 
+            var packageContent = new PackageInstallExceptionHandler(Navigator);
             exceptionBuilder
-                .Handler(new MessageExceptionHandler(Navigator));
+                .Handler<PackageFileExtractionException>(packageContent)
+                .Handler<PackageFileRemovalException>(packageContent);
 
             exceptionBuilder
+                .Handler(new MessageExceptionHandler(Navigator))
                 .Handler(new ShutdownExceptionHandler(this));
 
             ExceptionHandler = exceptionBuilder;

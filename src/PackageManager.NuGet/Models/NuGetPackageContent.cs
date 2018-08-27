@@ -62,11 +62,18 @@ namespace PackageManager.Models
                     var content = await EnumerateFiles(cancellationToken);
                     string ExtractFile(string sourceFile, string targetPath, Stream sourceContent)
                     {
-                        string result = MapPackageFilePath(path, content.frameworkFolderName, targetPath);
-                        using (FileStream targetContent = new FileStream(result, FileMode.OpenOrCreate))
-                            sourceContent.CopyTo(targetContent);
+                        try
+                        {
+                            string result = MapPackageFilePath(path, content.frameworkFolderName, targetPath);
+                            using (FileStream targetContent = new FileStream(result, FileMode.OpenOrCreate))
+                                sourceContent.CopyTo(targetContent);
 
-                        return result;
+                            return result;
+                        }
+                        catch (IOException e)
+                        {
+                            throw new PackageFileExtractionException(targetPath, e);
+                        }
                     }
 
                     await reader.CopyFilesAsync(path, content.packagePaths, ExtractFile, NullLogger.Instance, cancellationToken);
@@ -84,7 +91,14 @@ namespace PackageManager.Models
                     foreach (string packagePath in content.packagePaths)
                     {
                         string filePath = MapPackageFilePath(path, content.frameworkFolderName, packagePath);
-                        File.Delete(filePath);
+                        try
+                        {
+                            File.Delete(filePath);
+                        }
+                        catch (IOException e)
+                        {
+                            throw new PackageFileRemovalException(filePath, e);
+                        }
                     }
                 },
                 cancellationToken
