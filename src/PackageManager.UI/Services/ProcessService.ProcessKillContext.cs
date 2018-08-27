@@ -18,7 +18,7 @@ namespace PackageManager.Services
             public ProcessKillContext(IReadOnlyCollection<string> names)
             {
                 Ensure.NotNull(names, "names");
-                targets = Process.GetProcesses().Where(p => names.Contains(p.MainModule.FileName)).ToList();
+                targets = names.SelectMany(name => Process.GetProcessesByName(name)).ToList();
             }
 
             public bool IsExecutable => targets.Count > 0;
