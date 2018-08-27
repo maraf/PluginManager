@@ -54,52 +54,27 @@ namespace GitExtensions.PluginManager
             args.Add(String.Format(PluginsPackageNameFormat, version.ProductMajorPart, version.ProductMinorPart));
             args.Add($"--monikers {String.Join(",", FrameworkMonikers)}");
             args.Add($"--selfpackageid {PackageId}");
-            args.Add($"--processnamestokillbeforechange {Process.GetCurrentProcess().ProcessName}");
+            args.Add($"--processnamestokillbeforechange \"{Process.GetCurrentProcess().ProcessName}\"");
 
             if (Uri.IsWellFormedUriString(Configuration.PackageSourceUrl, UriKind.Absolute))
                 args.Add($"--packagesource {Configuration.PackageSourceUrl}");
 
-            ProcessStartInfo info = new ProcessStartInfo(
-                Path.Combine(pluginsPath, PluginManagerRelativePath),
-                String.Join(" ", args)
-            );
-            info.UseShellExecute = false;
-            info.Verb = "runas";
-
-            bool? isConfirmed = IsShutdownConfirmed();
-            if (isConfirmed != null)
+            ProcessStartInfo info = new ProcessStartInfo()
             {
-                Process.Start(info);
+                FileName = Path.Combine(pluginsPath, PluginManagerRelativePath),
+                Arguments = String.Join(" ", args),
+                UseShellExecute = false,
+                Verb = "runas"
+            };
+            Process.Start(info);
 
-                if (isConfirmed.Value)
-                {
-                    CloseAllOtherInstances();
-                    Application.Exit();
-                }
+            if (!Configuration.AskToCloseInstances)
+            {
+                CloseAllOtherInstances();
+                Application.Exit();
             }
 
             return true;
-        }
-
-        private bool? IsShutdownConfirmed()
-        {
-            if (!Configuration.AskToCloseInstances)
-                return true;
-
-            DialogResult result = MessageBox.Show(
-                "Plugin Manager (based on your actions) may try to write files to your GitExtensions installation folder. " + Environment.NewLine +
-                "All instances of GitExtensions should be closed to avoid locks." + Environment.NewLine +
-                "Do you want to kill all instances of GitExtensions?",
-                "GitExtensions - PluginManager",
-                MessageBoxButtons.YesNoCancel
-            );
-
-            if (result == DialogResult.Yes)
-                return true;
-            else if (result == DialogResult.No)
-                return false;
-
-            return null;
         }
 
         private void CloseAllOtherInstances()
