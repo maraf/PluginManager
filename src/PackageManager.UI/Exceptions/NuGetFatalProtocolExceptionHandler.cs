@@ -26,7 +26,7 @@ namespace PackageManager.Exceptions
         {
             if (context.Exception.InnerException is HttpRequestException && context.Exception.InnerException.InnerException is WebException webException)
             {
-                navigator.Message("Communcation Error", GetMessage(webException), Navigator.MessageType.Error);
+                navigator.Notify("Communcation Error", GetMessage(webException), Navigator.MessageType.Error);
                 context.IsHandled = true;
             }
         }

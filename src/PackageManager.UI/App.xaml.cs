@@ -113,6 +113,9 @@ namespace PackageManager
                 .Handler(new NuGetFatalProtocolExceptionHandler(Navigator));
 
             exceptionBuilder
+                .Handler(new MessageExceptionHandler(Navigator));
+
+            exceptionBuilder
                 .Handler(new ShutdownExceptionHandler(this));
 
             ExceptionHandler = exceptionBuilder;
@@ -136,7 +139,7 @@ namespace PackageManager
                 if (package != null)
                     await wnd.ViewModel.Updates.Update.ExecuteAsync(package);
                 else
-                    Navigator.Message("Self Update Error", $"Unnable to find update package for PackageManager in feed '{wnd.ViewModel.PackageSourceUrl}'.", Navigator.MessageType.Error);
+                    Navigator.Notify("Self Update Error", $"Unnable to find update package for PackageManager in feed '{wnd.ViewModel.PackageSourceUrl}'.", Navigator.MessageType.Error);
 
                 Shutdown();
             };

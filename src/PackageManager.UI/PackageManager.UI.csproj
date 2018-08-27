@@ -81,6 +81,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Args.cs" />
+    <Compile Include="Exceptions\MessageExceptionHandler.cs" />
     <Compile Include="Exceptions\NuGetFatalProtocolExceptionHandler.cs" />
     <Compile Include="Exceptions\UnauthorizedExceptionHandler.cs" />
     <Compile Include="Exceptions\ShutdownExceptionHandler.cs" />

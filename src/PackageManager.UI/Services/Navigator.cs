@@ -19,8 +19,11 @@ namespace PackageManager.Services
             this.wnd = wnd;
         }
 
-        public void Message(string title, string message, MessageType type = MessageType.Info)
+        public void Notify(string title, string message, MessageType type = MessageType.Info)
             => MessageBox.Show(wnd, message, title, MessageBoxButton.OK, MapTypeToImage(type));
+
+        public bool Confirm(string title, string message, MessageType type = MessageType.Info)
+            => MessageBox.Show(wnd, message, title, MessageBoxButton.YesNo, MapTypeToImage(type)) == MessageBoxResult.Yes;
 
         private MessageBoxImage MapTypeToImage(MessageType type)
         {
