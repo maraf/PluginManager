@@ -54,7 +54,6 @@ namespace GitExtensions.PluginManager
             args.Add(String.Format(PluginsPackageNameFormat, version.ProductMajorPart, version.ProductMinorPart));
             args.Add($"--monikers {String.Join(",", FrameworkMonikers)}");
             args.Add($"--selfpackageid {PackageId}");
-            args.Add($"--processnamestokillbeforechange \"{Process.GetCurrentProcess().ProcessName}\"");
 
             if (Uri.IsWellFormedUriString(Configuration.PackageSourceUrl, UriKind.Absolute))
                 args.Add($"--packagesource {Configuration.PackageSourceUrl}");
@@ -68,7 +67,7 @@ namespace GitExtensions.PluginManager
             };
             Process.Start(info);
 
-            if (!Configuration.AskToCloseInstances)
+            if (Configuration.CloseInstances)
             {
                 CloseAllOtherInstances();
                 Application.Exit();

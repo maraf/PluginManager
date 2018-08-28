@@ -19,7 +19,7 @@ namespace GitExtensions.PluginManager
         /// <summary>
         /// Gets a property holding if asking to close git extensions is required.
         /// </summary>
-        public static BoolSetting AskToCloseInstancesProperty { get; } = new BoolSetting("AskToCloseInstances", "Ask to close all instances of GitExtensions before starting PluginManager", true);
+        public static BoolSetting CloseInstancesProperty { get; } = new BoolSetting("CloseInstances", "Close all instances of GitExtensions before starting PluginManager", false);
 
         private readonly ISettingsSource source;
 
@@ -27,7 +27,7 @@ namespace GitExtensions.PluginManager
         /// Gets current value of <see cref="PackageSourceUrlProperty"/>.
         /// </summary>
         public string PackageSourceUrl => source.GetValue(PackageSourceUrlProperty.Name, PackageSourceUrlProperty.DefaultValue, t => t);
-        public bool AskToCloseInstances => source.GetValue(AskToCloseInstancesProperty.Name, AskToCloseInstancesProperty.DefaultValue, t => Boolean.Parse(t));
+        public bool CloseInstances => source.GetValue(CloseInstancesProperty.Name, CloseInstancesProperty.DefaultValue, t => Boolean.Parse(t));
 
         public PluginSettings(ISettingsSource source)
         {
@@ -44,7 +44,7 @@ namespace GitExtensions.PluginManager
             properties = new List<ISetting>(2)
             {
                 PackageSourceUrlProperty,
-                AskToCloseInstancesProperty
+                CloseInstancesProperty
             };
         }
 
