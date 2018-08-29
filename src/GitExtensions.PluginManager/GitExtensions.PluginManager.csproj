@@ -10,7 +10,7 @@
     <PackageProjectUrl>http://www.neptuo.com/project/dev/gitextensions.pluginmanager</PackageProjectUrl>
     <LangVersion>latest</LangVersion>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
