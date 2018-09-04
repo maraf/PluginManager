@@ -12,39 +12,43 @@ namespace PackageManager.ViewModels.Commands
     public class InstallService
     {
         public IInstallService Object { get; }
-        public bool IsInstallCalled { get; private set; }
-        public bool IsUninstallCalled { get; private set; }
-        public bool IsIsInstalledCalled { get; private set; }
+        public CallCounter InstallCalled { get; } = new CallCounter();
+        public CallCounter UninstallCalled { get; } = new CallCounter();
+        public CallCounter InstalledCalled { get; } = new CallCounter();
+
+        public List<IPackage> InstallPackages { get; } = new List<IPackage>();
+        public List<IPackage> UninstallPackages { get; } = new List<IPackage>();
+        public List<IPackage> InstalledPackages { get; } = new List<IPackage>();
 
         public InstallService(string extractPath, Package installPackage = null, Package uninstallPackage = null, Package installedPackage = null)
         {
             Mock<IInstallService> mock = new Mock<IInstallService>();
 
-            if (installPackage != null)
-            {
-                mock
-                    .Setup(i => i.Install(It.Is<IPackage>(p => p == installPackage.Object)))
-                    .Callback(() => IsInstallCalled = true);
-            }
+            mock
+                .Setup(i => i.Install(It.Is<IPackage>(p => p == InstallPackages[InstallCalled])))
+                .Callback(() => InstallCalled.Increment());
 
-            if (uninstallPackage != null)
-            {
-                mock
-                    .Setup(i => i.Uninstall(It.Is<IPackage>(p => p == uninstallPackage.Object)))
-                    .Callback(() => IsUninstallCalled = true);
-            }
+            mock
+                .Setup(i => i.Uninstall(It.Is<IPackage>(p => p == UninstallPackages[UninstallCalled])))
+                .Callback(() => UninstallCalled.Increment());
 
-            if (installedPackage != null)
-            {
-                mock
-                    .Setup(i => i.IsInstalled(It.Is<IPackage>(p => p == installedPackage.Object)))
-                    .Callback(() => IsIsInstalledCalled = true)
-                    .Returns(true);
-            }
+            mock
+                .Setup(i => i.IsInstalled(It.Is<IPackage>(p => p == InstalledPackages[InstalledCalled])))
+                .Callback(() => InstalledCalled.Increment())
+                .Returns(true);
 
             mock
                 .Setup(i => i.Path)
                 .Returns(() => extractPath);
+
+            if (installPackage != null)
+                InstallPackages.Add(installPackage.Object);
+
+            if (uninstallPackage != null)
+                UninstallPackages.Add(uninstallPackage.Object);
+
+            if (installedPackage != null)
+                InstalledPackages.Add(installedPackage.Object);
 
             Object = mock.Object;
         }

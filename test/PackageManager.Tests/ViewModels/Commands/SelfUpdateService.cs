@@ -12,9 +12,11 @@ namespace PackageManager.ViewModels.Commands
     public class SelfUpdateService
     {
         public ISelfUpdateService Object { get; }
-        public bool IsIsSelfUpdateCalled { get; private set; }
-        public bool IsUpdateCalled { get; private set; }
-        public bool IsRunNewInstanceCalled { get; private set; }
+        public CallCounter IsSelfUpdateCalled { get; } = new CallCounter();
+        public CallCounter UpdateCalled { get; } = new CallCounter();
+        public CallCounter RunNewInstanceCalled { get; } = new CallCounter();
+
+        public List<IPackage> UpdatePackages { get; } = new List<IPackage>();
 
         public SelfUpdateService(bool isSelfUpdate, Package updatePackage)
         {
@@ -22,16 +24,19 @@ namespace PackageManager.ViewModels.Commands
 
             mock
                 .SetupGet(s => s.IsSelfUpdate)
-                .Callback(() => IsIsSelfUpdateCalled = true)
+                .Callback(() => IsSelfUpdateCalled.Increment())
                 .Returns(isSelfUpdate);
 
             mock
-                .Setup(s => s.Update(It.Is<IPackage>(p => p == updatePackage.Object)))
-                .Callback(() => IsUpdateCalled = true);
+                .Setup(s => s.Update(It.Is<IPackage>(p => p == UpdatePackages[UpdateCalled])))
+                .Callback(() => UpdateCalled.Increment());
 
             mock
-                .Setup(s => s.RunNewInstance(It.Is<IPackage>(p => p == updatePackage.Object)))
-                .Callback(() => IsRunNewInstanceCalled = true);
+                .Setup(s => s.RunNewInstance(It.Is<IPackage>(p => p == UpdatePackages[RunNewInstanceCalled])))
+                .Callback(() => RunNewInstanceCalled.Increment());
+
+            if (updatePackage != null)
+                UpdatePackages.Add(updatePackage.Object);
 
             Object = mock.Object;
         }

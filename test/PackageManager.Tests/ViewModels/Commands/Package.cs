@@ -11,9 +11,9 @@ namespace PackageManager.ViewModels.Commands
 {
     public class Package
     {
-        public bool IsGetContentCalled { get; private set; }
-        public bool IsExtractToAsyncCalled { get; private set; }
-        public bool IsRemoveFromAsyncCalled { get; private set; }
+        public CallCounter GetContentCalled { get; } = new CallCounter();
+        public CallCounter ExtractToAsyncCalled { get; } = new CallCounter();
+        public CallCounter RemoveFromAsyncCalled { get; } = new CallCounter();
         public IPackage Object { get; }
 
         public Package(string extractPath, string id)
@@ -21,18 +21,18 @@ namespace PackageManager.ViewModels.Commands
             Mock<IPackageContent> contentMock = new Mock<IPackageContent>();
             contentMock
                 .Setup(pc => pc.ExtractToAsync(It.Is<string>(s => s == extractPath), It.IsAny<CancellationToken>()))
-                .Callback(() => IsExtractToAsyncCalled = true)
+                .Callback(() => ExtractToAsyncCalled.Increment())
                 .Returns(() => Task.CompletedTask);
 
             contentMock
                 .Setup(pc => pc.RemoveFromAsync(It.Is<string>(s => s == extractPath), It.IsAny<CancellationToken>()))
-                .Callback(() => IsRemoveFromAsyncCalled = true)
+                .Callback(() => RemoveFromAsyncCalled.Increment())
                 .Returns(() => Task.CompletedTask);
 
             Mock<IPackage> mock = new Mock<IPackage>();
             mock
                 .Setup(p => p.GetContentAsync(It.IsAny<CancellationToken>()))
-                .Callback(() => IsGetContentCalled = true)
+                .Callback(() => GetContentCalled.Increment())
                 .Returns(() => Task.FromResult(contentMock.Object));
 
             mock

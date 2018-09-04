@@ -25,9 +25,9 @@ namespace PackageManager.ViewModels.Commands
             var command = new InstallCommand(install.Object);
             command.ExecuteAsync(package.Object).Wait();
 
-            Assert.IsTrue(package.IsGetContentCalled);
-            Assert.IsTrue(package.IsExtractToAsyncCalled);
-            Assert.IsTrue(install.IsInstallCalled);
+            Assert.IsTrue(package.GetContentCalled);
+            Assert.IsTrue(package.ExtractToAsyncCalled);
+            Assert.IsTrue(install.InstallCalled);
         }
 
         [TestMethod]
@@ -41,10 +41,10 @@ namespace PackageManager.ViewModels.Commands
 
             command.ExecuteAsync(package.Object).Wait();
 
-            Assert.IsTrue(package.IsGetContentCalled);
-            Assert.IsTrue(package.IsRemoveFromAsyncCalled);
-            Assert.IsTrue(install.IsIsInstalledCalled);
-            Assert.IsTrue(install.IsUninstallCalled);
+            Assert.IsTrue(package.GetContentCalled);
+            Assert.IsTrue(package.RemoveFromAsyncCalled);
+            Assert.IsTrue(install.InstalledCalled);
+            Assert.IsTrue(install.UninstallCalled);
         }
 
         [TestMethod]
@@ -71,10 +71,10 @@ namespace PackageManager.ViewModels.Commands
 
             command.ExecuteAsync(viewModel).Wait();
 
-            Assert.IsFalse(selfUpdate.IsIsSelfUpdateCalled);
-            Assert.IsFalse(selfUpdate.IsRunNewInstanceCalled);
-            Assert.IsTrue(install.IsUninstallCalled);
-            Assert.IsTrue(install.IsInstallCalled);
+            Assert.IsFalse(selfUpdate.IsSelfUpdateCalled);
+            Assert.IsFalse(selfUpdate.RunNewInstanceCalled);
+            Assert.IsTrue(install.UninstallCalled);
+            Assert.IsTrue(install.InstallCalled);
         }
 
         [TestMethod]
@@ -91,11 +91,11 @@ namespace PackageManager.ViewModels.Commands
 
             command.ExecuteAsync(viewModel).Wait();
 
-            Assert.IsTrue(selfUpdate.IsIsSelfUpdateCalled);
-            Assert.IsTrue(selfUpdate.IsUpdateCalled);
-            Assert.IsFalse(selfUpdate.IsRunNewInstanceCalled);
-            Assert.IsFalse(install.IsUninstallCalled);
-            Assert.IsFalse(install.IsInstallCalled);
+            Assert.IsTrue(selfUpdate.IsSelfUpdateCalled);
+            Assert.IsTrue(selfUpdate.UpdateCalled);
+            Assert.IsFalse(selfUpdate.RunNewInstanceCalled);
+            Assert.IsFalse(install.UninstallCalled);
+            Assert.IsFalse(install.InstallCalled);
         }
 
         [TestMethod]
@@ -112,11 +112,48 @@ namespace PackageManager.ViewModels.Commands
 
             command.ExecuteAsync(viewModel).Wait();
 
-            Assert.IsTrue(selfUpdate.IsIsSelfUpdateCalled);
-            Assert.IsFalse(selfUpdate.IsUpdateCalled);
-            Assert.IsTrue(selfUpdate.IsRunNewInstanceCalled);
-            Assert.IsTrue(install.IsUninstallCalled);
-            Assert.IsTrue(install.IsInstallCalled);
+            Assert.IsTrue(selfUpdate.IsSelfUpdateCalled);
+            Assert.IsFalse(selfUpdate.UpdateCalled);
+            Assert.IsTrue(selfUpdate.RunNewInstanceCalled);
+            Assert.IsTrue(install.UninstallCalled);
+            Assert.IsTrue(install.InstallCalled);
+        }
+
+        [TestMethod]
+        public void UpdateAll()
+        {
+            var packageA = new Package(ExtractPath, "A");
+            var packageB = new Package(ExtractPath, "B");
+            var packageC = new Package(ExtractPath, "C");
+
+            PackageUpdateViewModel ToUpdate(Package package) => new PackageUpdateViewModel(package.Object, package.Object, false);
+
+            var install = new InstallService(ExtractPath, packageA, packageA, packageA);
+            install.InstallPackages.Add(packageB.Object);
+            install.InstallPackages.Add(packageC.Object);
+            install.UninstallPackages.Add(packageB.Object);
+            install.UninstallPackages.Add(packageC.Object);
+            install.InstalledPackages.Add(packageB.Object);
+            install.InstalledPackages.Add(packageC.Object);
+
+            var selfUpdate = new SelfUpdateService(false, packageA);
+            selfUpdate.UpdatePackages.Add(packageB.Object);
+            selfUpdate.UpdatePackages.Add(packageC.Object);
+
+            var innerCommand = new UpdateCommand(install.Object, selfUpdate.Object);
+
+            var viewModel = new UpdateAllCommandViewModel(innerCommand, new List<PackageUpdateViewModel>() { ToUpdate(packageA), ToUpdate(packageB), ToUpdate(packageC) });
+            var command = new UpdateAllCommand(viewModel.Object);
+
+            Assert.IsTrue(command.CanExecute());
+
+            command.ExecuteAsync().Wait();
+
+            Assert.AreEqual(3, install.InstallCalled);
+            Assert.AreEqual(3, install.UninstallCalled);
+            Assert.AreEqual(3, install.InstalledCalled);
+
+            Assert.AreEqual(0, selfUpdate.IsSelfUpdateCalled);
         }
     }
 }
