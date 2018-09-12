@@ -14,7 +14,7 @@ namespace PackageManager.ViewModels.Commands
         public IInstallService Object { get; }
         public CallCounter InstallCalled { get; } = new CallCounter();
         public CallCounter UninstallCalled { get; } = new CallCounter();
-        public CallCounter InstalledCalled { get; } = new CallCounter();
+        public CallCounter IsInstalledCalled { get; } = new CallCounter();
 
         public List<IPackage> InstallPackages { get; } = new List<IPackage>();
         public List<IPackage> UninstallPackages { get; } = new List<IPackage>();
@@ -33,8 +33,8 @@ namespace PackageManager.ViewModels.Commands
                 .Callback(() => UninstallCalled.Increment());
 
             mock
-                .Setup(i => i.IsInstalled(It.Is<IPackage>(p => p == InstalledPackages[InstalledCalled])))
-                .Callback(() => InstalledCalled.Increment())
+                .Setup(i => i.IsInstalled(It.Is<IPackage>(p => p == InstalledPackages[IsInstalledCalled])))
+                .Callback(() => IsInstalledCalled.Increment())
                 .Returns(true);
 
             mock

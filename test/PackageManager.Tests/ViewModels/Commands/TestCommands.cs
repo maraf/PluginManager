@@ -43,7 +43,7 @@ namespace PackageManager.ViewModels.Commands
 
             Assert.IsTrue(package.GetContentCalled);
             Assert.IsTrue(package.RemoveFromAsyncCalled);
-            Assert.IsTrue(install.InstalledCalled);
+            Assert.IsTrue(install.IsInstalledCalled);
             Assert.IsTrue(install.UninstallCalled);
         }
 
@@ -55,6 +55,30 @@ namespace PackageManager.ViewModels.Commands
 
             var command = new UninstallCommand(install.Object, new SelfPackageConfiguration("Test"));
             Assert.IsFalse(command.CanExecute(package.Object));
+        }
+
+        [TestMethod]
+        public void UninstallAll()
+        {
+            var packageA = new Package(ExtractPath, "A");
+            var packageB = new Package(ExtractPath, "B");
+            var packageC = new Package(ExtractPath, "C");
+
+            var install = new InstallService(ExtractPath, packageA, packageA, packageA);
+            install.UninstallPackages.Add(packageB.Object);
+            install.UninstallPackages.Add(packageC.Object);
+            install.InstalledPackages.Add(packageB.Object);
+            install.InstalledPackages.Add(packageC.Object);
+
+            var innerCommand = new UninstallCommand(install.Object, new SelfPackageConfiguration(null));
+
+            var viewModel = new UninstallAllCommandViewModel(innerCommand, new List<IPackage>() { packageA.Object, packageB.Object, packageC.Object });
+            var command = new UninstallAllCommand(viewModel.Object);
+
+            command.ExecuteAsync().Wait();
+
+            Assert.AreEqual(3, install.UninstallCalled);
+            Assert.AreEqual(3, install.IsInstalledCalled);
         }
 
         [TestMethod]
@@ -151,7 +175,7 @@ namespace PackageManager.ViewModels.Commands
 
             Assert.AreEqual(3, install.InstallCalled);
             Assert.AreEqual(3, install.UninstallCalled);
-            Assert.AreEqual(3, install.InstalledCalled);
+            Assert.AreEqual(3, install.IsInstalledCalled);
 
             Assert.AreEqual(0, selfUpdate.IsSelfUpdateCalled);
         }
