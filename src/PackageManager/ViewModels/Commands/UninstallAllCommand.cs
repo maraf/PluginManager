@@ -14,8 +14,6 @@ namespace PackageManager.ViewModels.Commands
     public partial class UninstallAllCommand : AsyncCommand
     {
         private readonly IViewModel viewModel;
-        private IEnumerator<IPackage> current;
-        private TaskCompletionSource<bool> currentCompletion;
 
         public UninstallAllCommand(IViewModel viewModel)
         {
@@ -29,41 +27,14 @@ namespace PackageManager.ViewModels.Commands
             => RaiseCanExecuteChanged();
 
         protected override bool CanExecuteOverride()
-            => current == null && viewModel.Packages.Count > 0;
+            => viewModel.Packages.Count > 0;
 
-        protected override Task ExecuteAsync(CancellationToken cancellationToken)
+        protected async override Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            current = viewModel.Packages.ToList().GetEnumerator();
-            currentCompletion = new TaskCompletionSource<bool>();
-
-            viewModel.Uninstall.Completed += OnOneCompleted;
-            ExecuteNext();
-            RaiseCanExecuteChanged();
-
-            return currentCompletion.Task;
-        }
-
-        private async void OnOneCompleted()
-        {
-            await Task.Delay(10);
-            ExecuteNext();
-        }
-
-        private void ExecuteNext()
-        {
-            if (current.MoveNext())
+            foreach (IPackage package in viewModel.Packages.ToList())
             {
-                if (viewModel.Uninstall.CanExecute(current.Current))
-                    viewModel.Uninstall.Execute(current.Current);
-                else
-                    ExecuteNext();
-            }
-            else
-            {
-                current = null;
-                currentCompletion.TrySetResult(true);
-                viewModel.Uninstall.Completed -= ExecuteNext;
-                RaiseCanExecuteChanged();
+                if (viewModel.Uninstall.CanExecute(package))
+                    await viewModel.Uninstall.ExecuteAsync(package);
             }
         }
     }
