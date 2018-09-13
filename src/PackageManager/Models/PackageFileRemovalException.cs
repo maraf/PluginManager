@@ -24,7 +24,7 @@ namespace PackageManager.Models
         /// <param name="filePath">A real file path where removal problem occured.</param>
         /// <param name="inner">An inner cause of the exceptional state.</param>
         public PackageFileRemovalException(string filePath, Exception inner)
-            : base($"Error extracting file to '{filePath}'", inner)
+            : base($"Error extracting file to '{filePath}'.", inner)
         {
             FilePath = filePath;
         }
