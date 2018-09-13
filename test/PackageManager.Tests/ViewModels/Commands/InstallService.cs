@@ -18,9 +18,9 @@ namespace PackageManager.ViewModels.Commands
 
         public List<IPackage> InstallPackages { get; } = new List<IPackage>();
         public List<IPackage> UninstallPackages { get; } = new List<IPackage>();
-        public List<IPackage> InstalledPackages { get; } = new List<IPackage>();
+        public List<IPackage> IsInstalledPackages { get; } = new List<IPackage>();
 
-        public InstallService(string extractPath, Package installPackage = null, Package uninstallPackage = null, Package installedPackage = null)
+        public InstallService(string extractPath, Package installPackage = null, Package uninstallPackage = null, Package isInstalledPackage = null)
         {
             Mock<IInstallService> mock = new Mock<IInstallService>();
 
@@ -33,7 +33,7 @@ namespace PackageManager.ViewModels.Commands
                 .Callback(() => UninstallCalled.Increment());
 
             mock
-                .Setup(i => i.IsInstalled(It.Is<IPackage>(p => p == InstalledPackages[IsInstalledCalled])))
+                .Setup(i => i.IsInstalled(It.Is<IPackage>(p => p == IsInstalledPackages[IsInstalledCalled])))
                 .Callback(() => IsInstalledCalled.Increment())
                 .Returns(true);
 
@@ -47,8 +47,8 @@ namespace PackageManager.ViewModels.Commands
             if (uninstallPackage != null)
                 UninstallPackages.Add(uninstallPackage.Object);
 
-            if (installedPackage != null)
-                InstalledPackages.Add(installedPackage.Object);
+            if (isInstalledPackage != null)
+                IsInstalledPackages.Add(isInstalledPackage.Object);
 
             Object = mock.Object;
         }

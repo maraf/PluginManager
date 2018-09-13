@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Neptuo.Observables.Commands;
 using PackageManager.Models;
 using PackageManager.Services;
 using System;
@@ -23,6 +24,9 @@ namespace PackageManager.ViewModels.Commands
             var install = new InstallService(ExtractPath, package);
 
             var command = new InstallCommand(install.Object);
+
+            // We can't test here CanExecute, because InstallService doesn't support returning false from IsInstalled.
+
             command.ExecuteAsync(package.Object).Wait();
 
             Assert.IsTrue(package.GetContentCalled);
@@ -48,6 +52,21 @@ namespace PackageManager.ViewModels.Commands
         }
 
         [TestMethod]
+        public void Reinstall()
+        {
+            var package = new Package(ExtractPath, "Test");
+            var install = new InstallService(ExtractPath, null, null, package);
+
+            var command = new ReinstallCommand(install.Object, new SelfPackageConfiguration(null));
+            Assert.IsTrue(command.CanExecute(package.Object));
+
+            command.ExecuteAsync(package.Object).Wait();
+
+            Assert.AreEqual(1, package.RemoveFromAsyncCalled);
+            Assert.AreEqual(1, package.ExtractToAsyncCalled);
+        }
+
+        [TestMethod]
         public void Uninstall_Self()
         {
             var package = new Package(ExtractPath, "Test");
@@ -67,8 +86,8 @@ namespace PackageManager.ViewModels.Commands
             var install = new InstallService(ExtractPath, packageA, packageA, packageA);
             install.UninstallPackages.Add(packageB.Object);
             install.UninstallPackages.Add(packageC.Object);
-            install.InstalledPackages.Add(packageB.Object);
-            install.InstalledPackages.Add(packageC.Object);
+            install.IsInstalledPackages.Add(packageB.Object);
+            install.IsInstalledPackages.Add(packageC.Object);
 
             var innerCommand = new UninstallCommand(install.Object, new SelfPackageConfiguration(null));
 
@@ -157,8 +176,8 @@ namespace PackageManager.ViewModels.Commands
             install.InstallPackages.Add(packageC.Object);
             install.UninstallPackages.Add(packageB.Object);
             install.UninstallPackages.Add(packageC.Object);
-            install.InstalledPackages.Add(packageB.Object);
-            install.InstalledPackages.Add(packageC.Object);
+            install.IsInstalledPackages.Add(packageB.Object);
+            install.IsInstalledPackages.Add(packageC.Object);
 
             var selfUpdate = new SelfUpdateService(false, packageA);
             selfUpdate.UpdatePackages.Add(packageB.Object);
