@@ -11,7 +11,14 @@ namespace PackageManager.Services
     {
         public interface IFilter
         {
-            bool IsPassed(IPackageSearchMetadata package);
+            FilterResult IsPassed(IPackageSearchMetadata package);
+        }
+
+        public enum FilterResult
+        {
+            Ok,
+            NotPassed,
+            TryOlderVersion
         }
     }
 }

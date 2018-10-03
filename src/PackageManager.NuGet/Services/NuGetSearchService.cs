@@ -57,7 +57,7 @@ namespace PackageManager.Services
                 return Enumerable.Empty<IPackage>();
 
             List<IPackage> result = new List<IPackage>();
-            
+
             // Try to find N results passing filter (until zero results is returned).
             int i = 0;
             while (i < options.PageSize)
@@ -69,8 +69,17 @@ namespace PackageManager.Services
                     if (i >= options.PageSize)
                         break;
 
-                    if (filter.IsPassed(package))
-                        result.Add(new NuGetPackage(package, repository, frameworkFilter));
+                    FilterResult filterResult = filter.IsPassed(package);
+                    switch (filterResult)
+                    {
+                        case FilterResult.Ok:
+                            result.Add(new NuGetPackage(package, repository, frameworkFilter));
+                            break;
+
+                        case FilterResult.TryOlderVersion:
+                            await TryAddOlderVersionOfPackageAsync(result, package, repository);
+                            break;
+                    }
                 }
 
                 if (!hasItems)
@@ -84,6 +93,23 @@ namespace PackageManager.Services
             }
 
             return result;
+        }
+
+        private async Task TryAddOlderVersionOfPackageAsync(List<IPackage> result, IPackageSearchMetadata package, SourceRepository repository)
+        {
+            IEnumerable<VersionInfo> versions = await package.GetVersionsAsync();
+            foreach (VersionInfo version in versions)
+            {
+                if (version.Version != package.Identity.Version)
+                {
+                    FilterResult filterResult = filter.IsPassed(version.PackageSearchMetadata);
+                    if (filterResult == FilterResult.Ok)
+                    {
+                        result.Add(new NuGetPackage(version.PackageSearchMetadata, repository, frameworkFilter));
+                        return;
+                    }
+                }
+            }
         }
 
         public async Task<IPackage> FindLatestVersionAsync(string packageSourceUrl, IPackage package, CancellationToken cancellationToken = default)

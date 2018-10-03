@@ -8,10 +8,11 @@ using NuGet.Frameworks;
 using NuGet.Packaging.Core;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
+using static PackageManager.Services.NuGetSearchService;
 
 namespace PackageManager.Services
 {
-    public class DependencyNuGetSearchFilter : NuGetSearchService.IFilter
+    public class DependencyNuGetSearchFilter : IFilter
     {
         private readonly (string id, string version)[] dependencies;
         private readonly IReadOnlyCollection<NuGetFramework> frameworks;
@@ -24,10 +25,10 @@ namespace PackageManager.Services
             this.frameworks = frameworks;
         }
 
-        public bool IsPassed(IPackageSearchMetadata package)
+        public FilterResult IsPassed(IPackageSearchMetadata package)
         {
             if (!dependencies.Any())
-                return true;
+                return FilterResult.Ok;
 
             foreach (var group in package.DependencySets)
             {
@@ -37,17 +38,17 @@ namespace PackageManager.Services
                     {
                         PackageDependency packageDependency = group.Packages.FirstOrDefault(p => p.Id == dependency.id);
                         if (packageDependency == null)
-                            return false;
+                            return FilterResult.TryOlderVersion;
 
                         if (dependency.version != null && !packageDependency.VersionRange.Satisfies(new NuGetVersion(dependency.version)))
-                            return false;
+                            return FilterResult.TryOlderVersion;
                     }
 
-                    return true;
+                    return FilterResult.Ok;
                 }
             }
 
-            return false;
+            return FilterResult.NotPassed;
         }
     }
 }

@@ -11,8 +11,8 @@ namespace PackageManager.Services
     {
         public class NullFilter : IFilter
         {
-            public bool IsPassed(IPackageSearchMetadata package)
-                => true;
+            public FilterResult IsPassed(IPackageSearchMetadata package)
+                => FilterResult.Ok;
 
             private static NullFilter instance;
             private static object instanceLock = new object();
