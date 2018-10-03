@@ -30,6 +30,7 @@
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="{Binding Id}" FontWeight="Bold" />
                                         <TextBlock Text=" (PackageManager)" Visibility="{Binding Converter={StaticResource SelfPackageToVisibleConverter}}" />
+                                        <TextBlock Text=" (Not Supported)" ToolTip="Installed version is not supported by current version of application." Foreground="Red" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <TextBlock Text="v" />
