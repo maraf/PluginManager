@@ -19,13 +19,13 @@
 
   <ItemGroup>
     <Reference Include="GitUI">
-      <HintPath>C:\Program Files (x86)\GitExtensions\GitUI.dll</HintPath>
+      <HintPath>..\..\references\GitExtensions-3.00.00.01\GitUI.dll</HintPath>
     </Reference>
     <Reference Include="GitUIPluginInterfaces">
-      <HintPath>C:\Program Files (x86)\GitExtensions\GitUIPluginInterfaces.dll</HintPath>
+      <HintPath>..\..\references\GitExtensions-3.00.00.01\GitUIPluginInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="ResourceManager">
-      <HintPath>C:\Program Files (x86)\GitExtensions\ResourceManager.dll</HintPath>
+      <HintPath>..\..\references\GitExtensions-3.00.00.01\ResourceManager.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Windows.Forms" />
