@@ -91,7 +91,7 @@ namespace PackageManager.ViewModels.Commands
 
             var innerCommand = new UninstallCommand(install.Object, new SelfPackageConfiguration(null));
 
-            var viewModel = new UninstallAllCommandViewModel(innerCommand, new List<IPackage>() { packageA.Object, packageB.Object, packageC.Object });
+            var viewModel = new UninstallAllCommandViewModel(innerCommand, new List<IInstalledPackage>() { new InstalledPackage(packageA.Object).Object, new InstalledPackage(packageB.Object).Object, new InstalledPackage(packageC.Object).Object });
             var command = new UninstallAllCommand(viewModel.Object);
 
             command.ExecuteAsync().Wait();

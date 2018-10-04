@@ -16,7 +16,7 @@ namespace PackageManager.ViewModels.Commands
 
         public UninstallAllCommand.IViewModel Object { get; }
 
-        public UninstallAllCommandViewModel(UninstallCommand command, ICollection<IPackage> packages)
+        public UninstallAllCommandViewModel(UninstallCommand command, ICollection<IInstalledPackage> packages)
         {
             Mock<UninstallAllCommand.IViewModel> mock = new Mock<UninstallAllCommand.IViewModel>();
             mock
@@ -27,7 +27,7 @@ namespace PackageManager.ViewModels.Commands
             mock
                 .SetupGet(vm => vm.Packages)
                 .Callback(() => PackagesCalled.Increment())
-                .Returns(new ObservableCollection<IPackage>(packages));
+                .Returns(new ObservableCollection<IInstalledPackage>(packages));
 
             Object = mock.Object;
         }
