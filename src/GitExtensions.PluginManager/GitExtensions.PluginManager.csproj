@@ -30,9 +30,4 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) == 'Debug'">
-    <Exec Command="copy &quot;$(TargetDir)Neptuo.dll&quot; &quot;C:\Program Files (x86)\GitExtensions\Plugins\Neptuo.dll&quot;&#xD;&#xA;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\GitExtensions\Plugins\$(TargetFileName)&quot;" />
-  </Target>
-
 </Project>
