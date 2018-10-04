@@ -22,6 +22,8 @@ namespace PackageManager.ViewModels.Commands
             mock
                 .SetupGet(p => p.IsCompatible)
                 .Returns(isCompatible);
+
+            Object = mock.Object;
         }
     }
 }

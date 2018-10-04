@@ -31,10 +31,10 @@ namespace PackageManager.ViewModels.Commands
 
         protected async override Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            foreach (IPackage package in viewModel.Packages.ToList())
+            foreach (IInstalledPackage package in viewModel.Packages.ToList())
             {
-                if (viewModel.Uninstall.CanExecute(package))
-                    await viewModel.Uninstall.ExecuteAsync(package);
+                if (viewModel.Uninstall.CanExecute(package.Definition))
+                    await viewModel.Uninstall.ExecuteAsync(package.Definition);
             }
         }
     }
