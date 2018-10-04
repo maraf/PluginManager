@@ -12,7 +12,7 @@ namespace PackageManager.ViewModels.Commands
     {
         public interface IViewModel
         {
-            ObservableCollection<IPackage> Packages { get; }
+            ObservableCollection<IInstalledPackage> Packages { get; }
             UninstallCommand Uninstall { get; }
         }
     }

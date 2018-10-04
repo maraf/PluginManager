@@ -17,6 +17,6 @@ namespace PackageManager.Services
         void Install(IPackage package);
         void Uninstall(IPackage package);
 
-        Task<IReadOnlyCollection<IPackage>> GetInstalledAsync(string packageSourceUrl, CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<IInstalledPackage>> GetInstalledAsync(string packageSourceUrl, CancellationToken cancellationToken);
     }
 }

@@ -42,17 +42,17 @@ namespace PackageManager.ViewModels.Commands
         {
             viewModel.Packages.Clear();
 
-            foreach (IPackage current in await installService.GetInstalledAsync(packageSource.Url, cancellationToken))
+            foreach (IInstalledPackage current in await installService.GetInstalledAsync(packageSource.Url, cancellationToken))
             {
-                IPackage latest = await searchService.FindLatestVersionAsync(packageSource.Url, current, cancellationToken);
+                IPackage latest = await searchService.FindLatestVersionAsync(packageSource.Url, current.Definition, cancellationToken);
 
                 // TODO: Compare versions.
-                if (latest.Version != current.Version)
+                if (latest.Version != current.Definition.Version)
                 {
                     viewModel.Packages.Add(new PackageUpdateViewModel(
-                        current, 
+                        current.Definition, 
                         latest, 
-                        selfPackageConfiguration.PackageId != null && current.Id == selfPackageConfiguration.PackageId
+                        selfPackageConfiguration.PackageId != null && current.Definition.Id == selfPackageConfiguration.PackageId
                     ));
                 }
             }

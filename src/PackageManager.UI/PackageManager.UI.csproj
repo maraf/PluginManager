@@ -100,6 +100,7 @@
     <Compile Include="Views\Browser.xaml.cs">
       <DependentUpon>Browser.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\CompatibilityLabel.cs" />
     <Compile Include="Views\Controls\TabControl.cs" />
     <Compile Include="Views\Converters\BoolConverter.cs" />
     <Compile Include="Views\Converters\CuttingConverter.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Views\Converters\NullValueConverter.cs" />
     <Compile Include="Views\Converters\SelfPackageConverter.cs" />
     <Compile Include="Views\Converters\ValidUrlToTrueConverter.cs" />
+    <Compile Include="Views\DesignData\MockInstalledPackage.cs" />
     <Compile Include="Views\DesignData\MockInstallService.cs" />
     <Compile Include="Views\DesignData\MockPackage.cs" />
     <Compile Include="Views\DesignData\MockPackageSourceProvider.cs" />

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dd="clr-namespace:PackageManager.Views.DesignData"
+             xmlns:controls="clr-namespace:PackageManager.Views.Controls"
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Installed}}" Background="White">
     <DockPanel x:Name="MainPanel">
         <Grid DockPanel.Dock="Top">
@@ -20,24 +21,24 @@
                 <DataTemplate>
                     <Border Padding="8">
                         <DockPanel>
-                            <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
+                            <Image Source="{Binding Definition.IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
                             <StackPanel VerticalAlignment="Center" Margin="8,0,0,0" DockPanel.Dock="Right">
-                                <Button Content="Uninstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.Uninstall}" CommandParameter="{Binding}" Margin="0,0,0,8" />
-                                <Button Content="Reinstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.Reinstall}" CommandParameter="{Binding}" />
+                                <Button Content="Uninstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.Uninstall}" CommandParameter="{Binding Definition}" Margin="0,0,0,8" />
+                                <Button Content="Reinstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.Reinstall}" CommandParameter="{Binding Definition}" />
                             </StackPanel>
                             <StackPanel>
                                 <Grid>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Id}" FontWeight="Bold" />
-                                        <TextBlock Text=" (PackageManager)" Visibility="{Binding Converter={StaticResource SelfPackageToVisibleConverter}}" />
-                                        <TextBlock Text=" (Not Supported)" ToolTip="Installed version is not supported by current version of application." Foreground="Red" />
+                                        <TextBlock Text="{Binding Definition.Id}" FontWeight="Bold" />
+                                        <TextBlock Text=" (PackageManager)" Visibility="{Binding Definition, Converter={StaticResource SelfPackageToVisibleConverter}}" />
+                                        <controls:CompatibilityLabel IsCompatible="{Binding IsCompatible}" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <TextBlock Text="v" />
-                                        <TextBlock Text="{Binding Version}" />
+                                        <TextBlock Text="{Binding Definition.Version}" />
                                     </StackPanel>
                                 </Grid>
-                                <TextBlock Text="{Binding Description, Converter={StaticResource DropNewLineConverter}}" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding Definition.Description, Converter={StaticResource DropNewLineConverter}}" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
                             </StackPanel>
                         </DockPanel>
                     </Border>

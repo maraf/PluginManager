@@ -10,9 +10,9 @@ namespace PackageManager.ViewModels
 {
     public class PackageUpdateViewModel
     {
-        public IPackage Current { get; private set; }
-        public IPackage Latest { get; private set; }
-        public bool IsSelf { get; private set; }
+        public IPackage Current { get; }
+        public IPackage Latest { get; }
+        public bool IsSelf { get; }
 
         public PackageUpdateViewModel(IPackage current, IPackage latest, bool isSelf)
         {

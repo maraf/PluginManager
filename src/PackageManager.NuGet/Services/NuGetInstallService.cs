@@ -20,18 +20,24 @@ namespace PackageManager.Services
     public class NuGetInstallService : IInstallService
     {
         private readonly IFactory<SourceRepository, string> repositoryFactory;
+        private readonly INuGetPackageFilter packageFilter;
         private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
 
         public string Path { get; }
         public string ConfigFilePath => System.IO.Path.Combine(Path, "packages.config");
 
-        public NuGetInstallService(IFactory<SourceRepository, string> repositoryFactory, string path, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetInstallService(IFactory<SourceRepository, string> repositoryFactory, string path, INuGetPackageFilter packageFilter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
             Ensure.NotNull(path, "path");
             this.repositoryFactory = repositoryFactory;
             Path = path;
             this.frameworkFilter = frameworkFilter;
+
+            if (packageFilter == null)
+                packageFilter = OkNuGetPackageFilter.Instance;
+
+            this.packageFilter = packageFilter;
         }
 
         public bool IsInstalled(IPackage package)
@@ -69,17 +75,17 @@ namespace PackageManager.Services
                 writer.RemovePackageEntry(package.Id, new NuGetVersion(package.Version), NuGetFramework.AnyFramework);
         }
 
-        public async Task<IReadOnlyCollection<IPackage>> GetInstalledAsync(string packageSourceUrl, CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<IInstalledPackage>> GetInstalledAsync(string packageSourceUrl, CancellationToken cancellationToken)
         {
             if (!File.Exists(ConfigFilePath))
-                return new List<IPackage>(0);
+                return new List<IInstalledPackage>(0);
 
             SourceRepository repository = repositoryFactory.Create(packageSourceUrl);
 
             using (Stream fileContent = new FileStream(ConfigFilePath, FileMode.Open))
             using (SourceCacheContext context = new SourceCacheContext())
             {
-                List<IPackage> result = new List<IPackage>();
+                List<IInstalledPackage> result = new List<IInstalledPackage>();
 
                 PackagesConfigReader reader = new PackagesConfigReader(fileContent);
                 foreach (PackageReference package in reader.GetPackages())
@@ -90,8 +96,11 @@ namespace PackageManager.Services
                         var metadata = await metadataResource.GetMetadataAsync(package.PackageIdentity, context, NullLogger.Instance, cancellationToken);
                         if (metadata != null)
                         {
-                            result.Add(new NuGetPackage(metadata, repository, frameworkFilter));
-                            continue;
+                            NuGetPackageFilterResult filterResult = packageFilter.IsPassed(metadata);
+                            result.Add(new NuGetInstalledPackage(
+                                new NuGetPackage(metadata, repository, frameworkFilter),
+                                filterResult == NuGetPackageFilterResult.Ok
+                            ));
                         }
                     }
                 }

@@ -17,6 +17,8 @@ namespace PackageManager.Views.DesignData
         private static InstalledViewModel installed;
         private static UpdatesViewModel updates;
         private static IPackage package;
+        private static IInstalledPackage compatiblePackage;
+        private static IInstalledPackage incompatiblePackage;
 
         public static SelfPackageConfiguration SelfPackageConfiguration
         {
@@ -108,6 +110,28 @@ namespace PackageManager.Views.DesignData
                 }
 
                 return package;
+            }
+        }
+
+        public static IInstalledPackage CompatiblePackage
+        {
+            get
+            {
+                if (compatiblePackage == null)
+                    compatiblePackage = new MockInstalledPackage(Package, true);
+
+                return compatiblePackage;
+            }
+        }
+
+        public static IInstalledPackage IncompatiblePackage
+        {
+            get
+            {
+                if (incompatiblePackage == null)
+                    incompatiblePackage = new MockInstalledPackage(Package, true);
+
+                return incompatiblePackage;
             }
         }
     }

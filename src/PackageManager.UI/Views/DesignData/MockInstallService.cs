@@ -22,12 +22,13 @@ namespace PackageManager.Views.DesignData
         public void Uninstall(IPackage package)
         { }
 
-        public Task<IReadOnlyCollection<IPackage>> GetInstalledAsync(string packageSourceUrl, CancellationToken cancellationToken)
+        public Task<IReadOnlyCollection<IInstalledPackage>> GetInstalledAsync(string packageSourceUrl, CancellationToken cancellationToken)
         {
-            return Task.FromResult<IReadOnlyCollection<IPackage>>(
-                new List<IPackage>()
+            return Task.FromResult<IReadOnlyCollection<IInstalledPackage>>(
+                new List<IInstalledPackage>()
                 {
-                    ViewModelLocator.Package
+                    ViewModelLocator.IncompatiblePackage,
+                    ViewModelLocator.CompatiblePackage
                 }
             );
         }
