@@ -55,9 +55,9 @@ namespace PackageManager
             base.OnStartup(e);
 
             NuGetSourceRepositoryFactory repositoryFactory = new NuGetSourceRepositoryFactory();
-            NuGetSearchService.IFilter searchFilter = null;
+            INuGetPackageFilter packageFilter = null;
             if (Args.Dependencies.Any())
-                searchFilter = new DependencyNuGetSearchFilter(Args.Dependencies, Args.Monikers);
+                packageFilter = new DependencyNuGetPackageFilter(Args.Dependencies, Args.Monikers);
 
             NuGetPackageContent.IFrameworkFilter frameworkFilter = null;
             if (Args.Monikers.Any())
@@ -67,7 +67,7 @@ namespace PackageManager
 
             SelfPackageConverter.Configuration = selfPackageConfiguration;
 
-            NuGetSearchService searchService = new NuGetSearchService(repositoryFactory, searchFilter, frameworkFilter);
+            NuGetSearchService searchService = new NuGetSearchService(repositoryFactory, packageFilter, frameworkFilter);
             NuGetInstallService installService = new NuGetInstallService(repositoryFactory, Args.Path, frameworkFilter);
             SelfUpdateService selfUpdateService = new SelfUpdateService(this, ProcessService);
 

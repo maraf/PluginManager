@@ -8,16 +8,15 @@ using NuGet.Frameworks;
 using NuGet.Packaging.Core;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
-using static PackageManager.Services.NuGetSearchService;
 
 namespace PackageManager.Services
 {
-    public class DependencyNuGetSearchFilter : IFilter
+    public class DependencyNuGetPackageFilter : INuGetPackageFilter
     {
         private readonly (string id, string version)[] dependencies;
         private readonly IReadOnlyCollection<NuGetFramework> frameworks;
 
-        public DependencyNuGetSearchFilter((string id, string version)[] dependencies, IReadOnlyCollection<NuGetFramework> frameworks)
+        public DependencyNuGetPackageFilter((string id, string version)[] dependencies, IReadOnlyCollection<NuGetFramework> frameworks)
         {
             Ensure.NotNull(dependencies, "dependencies");
             Ensure.NotNull(frameworks, "frameworks");
@@ -25,10 +24,10 @@ namespace PackageManager.Services
             this.frameworks = frameworks;
         }
 
-        public FilterResult IsPassed(IPackageSearchMetadata package)
+        public NuGetPackageFilterResult IsPassed(IPackageSearchMetadata package)
         {
             if (!dependencies.Any())
-                return FilterResult.Ok;
+                return NuGetPackageFilterResult.Ok;
 
             foreach (var group in package.DependencySets)
             {
@@ -38,17 +37,17 @@ namespace PackageManager.Services
                     {
                         PackageDependency packageDependency = group.Packages.FirstOrDefault(p => p.Id == dependency.id);
                         if (packageDependency == null)
-                            return FilterResult.TryOlderVersion;
+                            return NuGetPackageFilterResult.NotCompatibleVersion;
 
                         if (dependency.version != null && !packageDependency.VersionRange.Satisfies(new NuGetVersion(dependency.version)))
-                            return FilterResult.TryOlderVersion;
+                            return NuGetPackageFilterResult.NotCompatibleVersion;
                     }
 
-                    return FilterResult.Ok;
+                    return NuGetPackageFilterResult.Ok;
                 }
             }
 
-            return FilterResult.NotPassed;
+            return NuGetPackageFilterResult.NotCompatible;
         }
     }
 }

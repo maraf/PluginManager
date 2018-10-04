@@ -15,15 +15,15 @@ namespace PackageManager.Services
     public partial class NuGetSearchService : ISearchService
     {
         private readonly IFactory<SourceRepository, string> repositoryFactory;
-        private readonly IFilter filter;
+        private readonly INuGetPackageFilter filter;
         private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
 
-        public NuGetSearchService(IFactory<SourceRepository, string> repositoryFactory, IFilter filter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetSearchService(IFactory<SourceRepository, string> repositoryFactory, INuGetPackageFilter filter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
 
             if (filter == null)
-                filter = NullFilter.Instance;
+                filter = OkNuGetPackageFilter.Instance;
 
             this.repositoryFactory = repositoryFactory;
             this.filter = filter;
@@ -69,14 +69,14 @@ namespace PackageManager.Services
                     if (i >= options.PageSize)
                         break;
 
-                    FilterResult filterResult = filter.IsPassed(package);
+                    NuGetPackageFilterResult filterResult = filter.IsPassed(package);
                     switch (filterResult)
                     {
-                        case FilterResult.Ok:
+                        case NuGetPackageFilterResult.Ok:
                             result.Add(new NuGetPackage(package, repository, frameworkFilter));
                             break;
 
-                        case FilterResult.TryOlderVersion:
+                        case NuGetPackageFilterResult.NotCompatibleVersion:
                             await TryAddOlderVersionOfPackageAsync(result, package, repository);
                             break;
                     }
@@ -102,8 +102,8 @@ namespace PackageManager.Services
             {
                 if (version.Version != package.Identity.Version)
                 {
-                    FilterResult filterResult = filter.IsPassed(version.PackageSearchMetadata);
-                    if (filterResult == FilterResult.Ok)
+                    NuGetPackageFilterResult filterResult = filter.IsPassed(version.PackageSearchMetadata);
+                    if (filterResult == NuGetPackageFilterResult.Ok)
                     {
                         result.Add(new NuGetPackage(version.PackageSearchMetadata, repository, frameworkFilter));
                         return;
