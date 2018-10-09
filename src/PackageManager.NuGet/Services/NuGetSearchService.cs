@@ -14,6 +14,8 @@ namespace PackageManager.Services
 {
     public partial class NuGetSearchService : ISearchService
     {
+        public const int PageCountToProbe = 10;
+
         private readonly IFactory<SourceRepository, string> repositoryFactory;
         private readonly INuGetPackageFilter filter;
         private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
@@ -59,14 +61,13 @@ namespace PackageManager.Services
             List<IPackage> result = new List<IPackage>();
 
             // Try to find N results passing filter (until zero results is returned).
-            int i = 0;
-            while (i < options.PageSize)
+            while (result.Count < options.PageSize && options.PageIndex < PageCountToProbe)
             {
                 bool hasItems = false;
                 foreach (IPackageSearchMetadata package in await SearchAsync(search, searchText, options, cancellationToken))
                 {
                     hasItems = true;
-                    if (i >= options.PageSize)
+                    if (result.Count >= options.PageSize)
                         break;
 
                     NuGetPackageFilterResult filterResult = filter.IsPassed(package);
