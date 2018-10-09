@@ -22,7 +22,6 @@ namespace GitExtensions.PluginManager
         public const string PackageId = @"GitExtensions.PluginManager";
         public const string GitExtensionsRelativePath = @"GitExtensions.exe";
         public const string PluginManagerRelativePath = @"PackageManager\PackageManager.UI.exe";
-        public const string PluginsPackageNameFormat = "--dependencies GitExtensions.Plugins-v{0}.{1}";
         public static readonly List<string> FrameworkMonikers = new List<string>() { "net461", "net462", "any", "netstandard2.0" };
 
         internal PluginSettings Configuration { get; private set; }
@@ -47,11 +46,9 @@ namespace GitExtensions.PluginManager
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
             string pluginsPath = Path.Combine(basePath, "Plugins");
 
-            FileVersionInfo version = FileVersionInfo.GetVersionInfo(Path.Combine(basePath, GitExtensionsRelativePath));
-
             List<string> args = new List<string>();
             args.Add($"--path \"{pluginsPath}\"");
-            args.Add(String.Format(PluginsPackageNameFormat, version.ProductMajorPart, version.ProductMinorPart));
+            args.Add($"--dependencies GitExtensions.Plugins");
             args.Add($"--monikers {String.Join(",", FrameworkMonikers)}");
             args.Add($"--selfpackageid {PackageId}");
             args.Add($"--processnamestokillbeforechange \"{Process.GetCurrentProcess().ProcessName}\"");
