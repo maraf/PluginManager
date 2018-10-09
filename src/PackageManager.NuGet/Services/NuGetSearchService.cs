@@ -58,6 +58,8 @@ namespace PackageManager.Services
 
         public async Task<IEnumerable<IPackage>> SearchAsync(string packageSourceUrl, string searchText, SearchOptions options = default, CancellationToken cancellationToken = default)
         {
+            log.Debug($"Searching '{searchText}' in '{packageSourceUrl}'.");
+
             options = EnsureOptions(options);
 
             SourceRepository repository = repositoryFactory.Create(packageSourceUrl);
@@ -70,9 +72,13 @@ namespace PackageManager.Services
             // Try to find N results passing filter (until zero results is returned).
             while (result.Count < options.PageSize && options.PageIndex < PageCountToProbe)
             {
+                log.Debug($"Loading page '{options.PageIndex}'.");
+
                 bool hasItems = false;
                 foreach (IPackageSearchMetadata package in await SearchAsync(search, searchText, options, cancellationToken))
                 {
+                    log.Debug($"Found '{package.Identity}'.");
+
                     hasItems = true;
                     if (result.Count >= options.PageSize)
                         break;
@@ -81,11 +87,17 @@ namespace PackageManager.Services
                     switch (filterResult)
                     {
                         case NuGetPackageFilterResult.Ok:
+                            log.Debug("Package added.");
                             result.Add(new NuGetPackage(package, repository, log, frameworkFilter));
                             break;
 
                         case NuGetPackageFilterResult.NotCompatibleVersion:
+                            log.Debug("Loading order versions.");
                             await TryAddOlderVersionOfPackageAsync(result, package, repository);
+                            break;
+
+                        default:
+                            log.Debug("Package skipped.");
                             break;
                     }
                 }
@@ -100,6 +112,7 @@ namespace PackageManager.Services
                 };
             }
 
+            log.Debug($"Search completed. Found '{result.Count}' items.");
             return result;
         }
 
@@ -110,11 +123,19 @@ namespace PackageManager.Services
             {
                 if (version.Version != package.Identity.Version)
                 {
+                    log.Debug($"Found '{version.PackageSearchMetadata.Identity}'.");
+
                     NuGetPackageFilterResult filterResult = filter.IsPassed(version.PackageSearchMetadata);
-                    if (filterResult == NuGetPackageFilterResult.Ok)
+                    switch (filterResult)
                     {
-                        result.Add(new NuGetPackage(version.PackageSearchMetadata, repository, log, frameworkFilter));
-                        return;
+                        case NuGetPackageFilterResult.Ok:
+                            log.Debug("Package added.");
+                            result.Add(new NuGetPackage(version.PackageSearchMetadata, repository, log, frameworkFilter));
+                            return;
+
+                        default:
+                            log.Debug("Package skipped.");
+                            break;
                     }
                 }
             }
@@ -124,10 +145,15 @@ namespace PackageManager.Services
         {
             Ensure.NotNull(package, "package");
 
+            log.Debug($"Finding latest version of '{package.Id}' in '{packageSourceUrl}'.");
+
             IEnumerable<IPackage> packages = await SearchAsync(packageSourceUrl, package.Id, new SearchOptions() { PageSize = 1 }, cancellationToken);
             IPackage latest = packages.FirstOrDefault();
             if (latest != null && latest.Id == package.Id)
+            {
+                log.Debug($"Found version '{latest.Version}'.");
                 return latest;
+            }
 
             return null;
         }
