@@ -67,8 +67,8 @@ namespace PackageManager
 
             SelfPackageConverter.Configuration = selfPackageConfiguration;
 
-            NuGetSearchService searchService = new NuGetSearchService(repositoryFactory, packageFilter, frameworkFilter);
-            NuGetInstallService installService = new NuGetInstallService(repositoryFactory, Args.Path, packageFilter, frameworkFilter);
+            NuGetSearchService searchService = new NuGetSearchService(repositoryFactory, LogFactory.Scope("Search"), packageFilter, frameworkFilter);
+            NuGetInstallService installService = new NuGetInstallService(repositoryFactory, LogFactory.Scope("Install"), Args.Path, packageFilter, frameworkFilter);
             SelfUpdateService selfUpdateService = new SelfUpdateService(this, ProcessService);
 
             EnsureSelfPackageInstalled(installService);

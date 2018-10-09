@@ -1,4 +1,5 @@
-﻿using PackageManager.Services;
+﻿using Neptuo.Logging;
+using PackageManager.Services;
 using PackageManager.ViewModels;
 using System;
 using System.IO;
@@ -60,9 +61,11 @@ namespace PackageManager.Cli
 
         private UpdatesViewModel CreateUpdatesViewModel()
         {
+            var log = new DefaultLog();
+
             var repositoryFactory = new NuGetSourceRepositoryFactory();
-            var installService = new NuGetInstallService(repositoryFactory, Args.Path);
-            var searchService = new NuGetSearchService(repositoryFactory);
+            var installService = new NuGetInstallService(repositoryFactory, log, Args.Path);
+            var searchService = new NuGetSearchService(repositoryFactory, log);
             var selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
             var selfUpdateService = new SelfUpdateService(this, new ProcessService(this));
 

@@ -1,7 +1,9 @@
 ﻿using Neptuo;
+using Neptuo.Logging;
 using NuGet.Common;
 using NuGet.Packaging;
 using NuGet.Protocol.Core.Types;
+using PackageManager.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +17,8 @@ namespace PackageManager.Models
     public class NuGetPackage : IPackage
     {
         private readonly IPackageSearchMetadata source;
+        private readonly ILog log;
+        private readonly ILogger nuGetLog;
         private readonly SourceRepository repository;
         private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
 
@@ -30,12 +34,14 @@ namespace PackageManager.Models
         public Uri ProjectUrl => source.ProjectUrl;
         public Uri LicenseUrl => source.LicenseUrl;
 
-        public NuGetPackage(IPackageSearchMetadata source, SourceRepository repository, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetPackage(IPackageSearchMetadata source, SourceRepository repository, ILog log, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
         {
             Ensure.NotNull(source, "source");
             Ensure.NotNull(repository, "repository");
             this.source = source;
             this.repository = repository;
+            this.log = log;
+            this.nuGetLog = new NuGetLogger(log);
             this.frameworkFilter = frameworkFilter;
         }
 
@@ -48,13 +54,13 @@ namespace PackageManager.Models
             using (var sourceCacheContext = new SourceCacheContext())
             {
                 var context = new PackageDownloadContext(sourceCacheContext, Path.GetTempPath(), true);
-                var result = await download.GetDownloadResourceResultAsync(source.Identity, context, String.Empty, NullLogger.Instance, cancellationToken);
+                var result = await download.GetDownloadResourceResultAsync(source.Identity, context, String.Empty, nuGetLog, cancellationToken);
                 if (result.Status == DownloadResourceResultStatus.Cancelled)
                     throw new OperationCanceledException();
                 else if (result.Status == DownloadResourceResultStatus.NotFound)
                     throw Ensure.Exception.InvalidOperation($"Package '{source.Identity.Id}-v{source.Identity.Version}' not found");
                 
-                return new NuGetPackageContent(new PackageArchiveReader(result.PackageStream), frameworkFilter);
+                return new NuGetPackageContent(new PackageArchiveReader(result.PackageStream), log, frameworkFilter);
             }
         }
     }

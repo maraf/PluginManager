@@ -1,6 +1,8 @@
 ﻿using Neptuo;
+using Neptuo.Logging;
 using NuGet.Common;
 using NuGet.Packaging;
+using PackageManager.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,16 +16,21 @@ namespace PackageManager.Models
     public partial class NuGetPackageContent : IPackageContent
     {
         private readonly PackageReaderBase reader;
+        private readonly ILog log;
+        private readonly ILogger nuGetLog;
         private readonly IFrameworkFilter filter;
 
-        public NuGetPackageContent(PackageReaderBase reader, IFrameworkFilter filter = null)
+        public NuGetPackageContent(PackageReaderBase reader, ILog log, IFrameworkFilter filter = null)
         {
             Ensure.NotNull(reader, "reader");
+            Ensure.NotNull(log, "log");
 
             if (filter == null)
                 filter = AnyFrameworkFilter.Instance;
 
             this.reader = reader;
+            this.log = log;
+            this.nuGetLog = new NuGetLogger(log);
             this.filter = filter;
         }
 
@@ -76,7 +83,7 @@ namespace PackageManager.Models
                         }
                     }
 
-                    await reader.CopyFilesAsync(path, content.packagePaths, ExtractFile, NullLogger.Instance, cancellationToken);
+                    await reader.CopyFilesAsync(path, content.packagePaths, ExtractFile, nuGetLog, cancellationToken);
                 },
                 cancellationToken
             );

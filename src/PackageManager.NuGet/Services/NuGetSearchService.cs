@@ -6,8 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Neptuo;
 using Neptuo.Activators;
+using Neptuo.Logging;
 using NuGet.Common;
 using NuGet.Protocol.Core.Types;
+using PackageManager.Logging;
 using PackageManager.Models;
 
 namespace PackageManager.Services
@@ -17,17 +19,22 @@ namespace PackageManager.Services
         public const int PageCountToProbe = 10;
 
         private readonly IFactory<SourceRepository, string> repositoryFactory;
+        private readonly ILog log;
+        private readonly ILogger nuGetLog;
         private readonly INuGetPackageFilter filter;
         private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
 
-        public NuGetSearchService(IFactory<SourceRepository, string> repositoryFactory, INuGetPackageFilter filter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetSearchService(IFactory<SourceRepository, string> repositoryFactory, ILog log, INuGetPackageFilter filter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
+            Ensure.NotNull(log, "log");
 
             if (filter == null)
                 filter = OkNuGetPackageFilter.Instance;
 
             this.repositoryFactory = repositoryFactory;
+            this.log = log;
+            this.nuGetLog = new NuGetLogger(log);
             this.filter = filter;
             this.frameworkFilter = frameworkFilter;
         }
@@ -47,7 +54,7 @@ namespace PackageManager.Services
         }
 
         private Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(PackageSearchResource search, string searchText, SearchOptions options, CancellationToken cancellationToken)
-            => search.SearchAsync(searchText, new SearchFilter(false), options.PageIndex * options.PageSize, options.PageSize, NullLogger.Instance, cancellationToken);
+            => search.SearchAsync(searchText, new SearchFilter(false), options.PageIndex * options.PageSize, options.PageSize, nuGetLog, cancellationToken);
 
         public async Task<IEnumerable<IPackage>> SearchAsync(string packageSourceUrl, string searchText, SearchOptions options = default, CancellationToken cancellationToken = default)
         {
@@ -74,7 +81,7 @@ namespace PackageManager.Services
                     switch (filterResult)
                     {
                         case NuGetPackageFilterResult.Ok:
-                            result.Add(new NuGetPackage(package, repository, frameworkFilter));
+                            result.Add(new NuGetPackage(package, repository, log, frameworkFilter));
                             break;
 
                         case NuGetPackageFilterResult.NotCompatibleVersion:
@@ -106,7 +113,7 @@ namespace PackageManager.Services
                     NuGetPackageFilterResult filterResult = filter.IsPassed(version.PackageSearchMetadata);
                     if (filterResult == NuGetPackageFilterResult.Ok)
                     {
-                        result.Add(new NuGetPackage(version.PackageSearchMetadata, repository, frameworkFilter));
+                        result.Add(new NuGetPackage(version.PackageSearchMetadata, repository, log, frameworkFilter));
                         return;
                     }
                 }

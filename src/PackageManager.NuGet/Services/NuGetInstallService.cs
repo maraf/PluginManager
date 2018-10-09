@@ -7,12 +7,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Neptuo;
 using Neptuo.Activators;
+using Neptuo.Logging;
 using NuGet.Common;
 using NuGet.Frameworks;
 using NuGet.Packaging;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
+using PackageManager.Logging;
 using PackageManager.Models;
 
 namespace PackageManager.Services
@@ -20,17 +22,22 @@ namespace PackageManager.Services
     public class NuGetInstallService : IInstallService
     {
         private readonly IFactory<SourceRepository, string> repositoryFactory;
+        private readonly ILog log;
+        private readonly ILogger nuGetLog;
         private readonly INuGetPackageFilter packageFilter;
         private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
 
         public string Path { get; }
         public string ConfigFilePath => System.IO.Path.Combine(Path, "packages.config");
 
-        public NuGetInstallService(IFactory<SourceRepository, string> repositoryFactory, string path, INuGetPackageFilter packageFilter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetInstallService(IFactory<SourceRepository, string> repositoryFactory, ILog log, string path, INuGetPackageFilter packageFilter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
+            Ensure.NotNull(log, "log");
             Ensure.NotNull(path, "path");
             this.repositoryFactory = repositoryFactory;
+            this.log = log;
+            this.nuGetLog = new NuGetLogger(log);
             Path = path;
             this.frameworkFilter = frameworkFilter;
 
@@ -93,12 +100,12 @@ namespace PackageManager.Services
                     PackageMetadataResource metadataResource = await repository.GetResourceAsync<PackageMetadataResource>(cancellationToken);
                     if (metadataResource != null)
                     {
-                        var metadata = await metadataResource.GetMetadataAsync(package.PackageIdentity, context, NullLogger.Instance, cancellationToken);
+                        var metadata = await metadataResource.GetMetadataAsync(package.PackageIdentity, context, nuGetLog, cancellationToken);
                         if (metadata != null)
                         {
                             NuGetPackageFilterResult filterResult = packageFilter.IsPassed(metadata);
                             result.Add(new NuGetInstalledPackage(
-                                new NuGetPackage(metadata, repository, frameworkFilter),
+                                new NuGetPackage(metadata, repository, log, frameworkFilter),
                                 filterResult == NuGetPackageFilterResult.Ok
                             ));
                         }
