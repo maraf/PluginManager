@@ -68,8 +68,12 @@ namespace PackageManager.Services
             using (PackagesConfigWriter writer = new PackagesConfigWriter(ConfigFilePath, !File.Exists(ConfigFilePath)))
             {
                 if (IsInstalled(package))
+                {
+                    log.Debug($"Removing entry '{package.ToIdentityString()}' from packages.config.");
                     writer.RemovePackageEntry(package.Id, new NuGetVersion(package.Version), NuGetFramework.AnyFramework);
+                }
 
+                log.Debug($"Add entry '{package.ToIdentityString()}' to packages.config.");
                 writer.AddPackageEntry(package.Id, new NuGetVersion(package.Version), NuGetFramework.AnyFramework);
             }
         }
@@ -87,6 +91,8 @@ namespace PackageManager.Services
             if (!File.Exists(ConfigFilePath))
                 return new List<IInstalledPackage>(0);
 
+            log.Debug($"Getting list of installed packages from '{ConfigFilePath}' in repository '{packageSourceUrl}'.");
+
             SourceRepository repository = repositoryFactory.Create(packageSourceUrl);
 
             using (Stream fileContent = new FileStream(ConfigFilePath, FileMode.Open))
@@ -97,12 +103,16 @@ namespace PackageManager.Services
                 PackagesConfigReader reader = new PackagesConfigReader(fileContent);
                 foreach (PackageReference package in reader.GetPackages())
                 {
+                    log.Debug($"Installed package '{package.PackageIdentity}'.");
+
                     PackageMetadataResource metadataResource = await repository.GetResourceAsync<PackageMetadataResource>(cancellationToken);
                     if (metadataResource != null)
                     {
                         var metadata = await metadataResource.GetMetadataAsync(package.PackageIdentity, context, nuGetLog, cancellationToken);
                         if (metadata != null)
                         {
+                            log.Debug($"Package '{package.PackageIdentity}' was found in repository.");
+
                             NuGetPackageFilterResult filterResult = packageFilter.IsPassed(metadata);
                             result.Add(new NuGetInstalledPackage(
                                 new NuGetPackage(metadata, repository, log, frameworkFilter),
@@ -112,6 +122,7 @@ namespace PackageManager.Services
                     }
                 }
 
+                log.Debug($"Returning '{result.Count}' installed packages.");
                 return result;
             }
         }

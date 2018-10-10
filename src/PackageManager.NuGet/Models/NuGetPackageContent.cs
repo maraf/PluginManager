@@ -72,6 +72,8 @@ namespace PackageManager.Models
                         try
                         {
                             string result = MapPackageFilePath(path, content.frameworkFolderName, targetPath);
+                            log.Debug($"Extracting file '{result}'.");
+
                             using (FileStream targetContent = new FileStream(result, FileMode.OpenOrCreate))
                                 sourceContent.CopyTo(targetContent);
 
@@ -98,6 +100,8 @@ namespace PackageManager.Models
                     foreach (string packagePath in content.packagePaths)
                     {
                         string filePath = MapPackageFilePath(path, content.frameworkFolderName, packagePath);
+                        log.Debug($"Deleting file '{filePath}'.");
+
                         try
                         {
                             File.Delete(filePath);
