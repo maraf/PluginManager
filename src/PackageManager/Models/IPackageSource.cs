@@ -17,8 +17,8 @@ namespace PackageManager.Models
         string Name { get; }
 
         /// <summary>
-        /// Gets a URL of package source.
+        /// Gets a URI of package source.
         /// </summary>
-        string Url { get; }
+        Uri Uri { get; }
     }
 }
