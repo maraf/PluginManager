@@ -1,4 +1,5 @@
 ﻿using Neptuo;
+using Neptuo.Activators;
 using NuGet.Configuration;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace PackageManager.Models
         private readonly INuGetPackageSourceProvider provider;
         private readonly List<NuGetPackageSource> sources;
 
-        public IPackageSource Primary => throw new NotImplementedException();
+        public IPackageSource Primary => sources.FirstOrDefault(s => s.Name == provider.ActivePackageSourceName);
         public IReadOnlyCollection<IPackageSource> All => sources;
 
         public NuGetPackageSourceCollection(INuGetPackageSourceProvider provider)
@@ -36,11 +37,12 @@ namespace PackageManager.Models
 
         private PackageSource UnWrap(IPackageSource source, string argumentName = null) => EnsureType(source, argumentName).Original;
 
-        public void Add(IPackageSource source)
+        public IPackageSource Add(string name, Uri uri)
         {
-            NuGetPackageSource target = EnsureType(source);
-            sources.Add(target);
+            var source = new NuGetPackageSource(new PackageSource(uri.ToString(), name));
+            sources.Add(source);
             provider.SavePackageSources(sources.Select(s => s.Original));
+            return source;
         }
 
         public void Remove(IPackageSource source)
