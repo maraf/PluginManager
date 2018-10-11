@@ -5,18 +5,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using INuGetPackageSourceProvider = NuGet.Configuration.IPackageSourceProvider;
 
 namespace PackageManager.Models
 {
     public class NuGetPackageSourceCollection : IPackageSourceCollection
     {
-        private readonly PackageSourceProvider provider;
+        private readonly INuGetPackageSourceProvider provider;
         private readonly List<NuGetPackageSource> sources;
 
         public IPackageSource Primary => throw new NotImplementedException();
         public IReadOnlyCollection<IPackageSource> All => sources;
 
-        public NuGetPackageSourceCollection(PackageSourceProvider provider)
+        public NuGetPackageSourceCollection(INuGetPackageSourceProvider provider)
         {
             Ensure.NotNull(provider, "provider");
             this.provider = provider;
