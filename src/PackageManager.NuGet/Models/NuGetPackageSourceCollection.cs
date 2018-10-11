@@ -24,21 +24,37 @@ namespace PackageManager.Models
             sources = provider.LoadPackageSources().Select(s => new NuGetPackageSource(s)).ToList();
         }
 
-        public void Add(IPackageSource source)
+        private NuGetPackageSource EnsureType(IPackageSource source, string argumentName = null)
         {
-            Ensure.NotNull(source, "source");
-            throw new NotImplementedException();
+            Ensure.NotNull(source, argumentName ?? "source");
+            if (source is NuGetPackageSource target)
+                return target;
+
+            throw new InvalidPackageSourceImplementationException();
         }
 
-        public void MarkAsPrimary(IPackageSource source)
+        private PackageSource UnWrap(IPackageSource source, string argumentName = null) => EnsureType(source, argumentName).Original;
+
+        public void Add(IPackageSource source)
         {
-            throw new NotImplementedException();
+            NuGetPackageSource target = EnsureType(source);
+            sources.Add(target);
+            provider.SavePackageSources(sources.Select(s => s.Original));
         }
 
         public void Remove(IPackageSource source)
         {
-            Ensure.NotNull(source, "source");
-            throw new NotImplementedException();
+            NuGetPackageSource target = EnsureType(source);
+            if (sources.Remove(target))
+                provider.SavePackageSources(sources.Select(s => s.Original));
+        }
+
+        public void MarkAsPrimary(IPackageSource source)
+        {
+            if (source == null)
+                provider.SaveActivePackageSource(null);
+            else
+                provider.SaveActivePackageSource(UnWrap(source));
         }
     }
 }

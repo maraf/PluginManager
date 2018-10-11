@@ -10,15 +10,15 @@ namespace PackageManager.Models
 {
     public class NuGetPackageSource : IPackageSource
     {
-        private readonly PackageSource source;
+        internal PackageSource Original { get; }
 
-        public string Name => source.Name;
-        public Uri Uri => source.SourceUri;
+        public string Name => Original.Name;
+        public Uri Uri => Original.SourceUri;
 
         public NuGetPackageSource(PackageSource source)
         {
             Ensure.NotNull(source, "source");
-            this.source = source;
+            Original = source;
         }
     }
 }
