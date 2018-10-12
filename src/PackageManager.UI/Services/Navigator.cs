@@ -1,4 +1,5 @@
 ﻿using Neptuo;
+using Neptuo.Activators;
 using PackageManager.Views;
 using System;
 using System.Collections.Generic;
@@ -12,11 +13,16 @@ namespace PackageManager.Services
     internal class Navigator
     {
         private readonly App application;
+        private readonly IFactory<PackageSourceWindow> packageSourceFactory;
 
-        public Navigator(App application)
+        private PackageSourceWindow packageSource;
+
+        public Navigator(App application, IFactory<PackageSourceWindow> packageSourceFactory)
         {
             Ensure.NotNull(application, "application");
+            Ensure.NotNull(packageSourceFactory, "packageSourceFactory");
             this.application = application;
+            this.packageSourceFactory = packageSourceFactory;
         }
 
         public void Notify(string title, string message, MessageType type = MessageType.Info)
@@ -45,6 +51,27 @@ namespace PackageManager.Services
             Info,
             Error,
             Warning
+        }
+
+        public void OpenPackageSources()
+        {
+            if (packageSource == null)
+            {
+                packageSource = packageSourceFactory.Create();
+                packageSource.Closed += OnPackageSourceClosed;
+                packageSource.Owner = application.MainWindow;
+                packageSource.ShowDialog();
+            }
+            else
+            {
+                packageSource.BringIntoView();
+            }
+        }
+
+        private void OnPackageSourceClosed(object sender, EventArgs e)
+        {
+            packageSource.Closed -= OnPackageSourceClosed;
+            packageSource = null;
         }
     }
 }

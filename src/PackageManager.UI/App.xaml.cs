@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using Neptuo.Activators;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Logging;
 using NuGet.Packaging;
@@ -23,7 +24,7 @@ using PackageManager.Views.Converters;
 
 namespace PackageManager
 {
-    public partial class App : Application, SelfUpdateService.IApplication, ProcessService.IApplication
+    public partial class App : Application, SelfUpdateService.IApplication, ProcessService.IApplication, IFactory<PackageSourceWindow>
     {
         public Args Args { get; private set; }
         internal ProcessService ProcessService { get; private set; }
@@ -42,7 +43,7 @@ namespace PackageManager
             Args = new Args(e.Args);
 
             ProcessService = new ProcessService(this, Args.ProcessNamesToKillBeforeChange ?? new string[0]);
-            Navigator = new Navigator(this);
+            Navigator = new Navigator(this, this);
             BuildExceptionHandler();
 
             if (!Directory.Exists(Args.Path))
@@ -152,6 +153,11 @@ namespace PackageManager
         {
             ExceptionHandler.Handle(e.Exception);
             e.Handled = true;
+        }
+
+        PackageSourceWindow IFactory<PackageSourceWindow>.Create()
+        {
+            return new PackageSourceWindow(new PackageSourceViewModel(new Views.DesignData.MockPackageSourceCollection()));
         }
     }
 }

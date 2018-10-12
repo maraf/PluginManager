@@ -19,6 +19,8 @@ namespace PackageManager.Views.DesignData
         private static IPackage package;
         private static IInstalledPackage compatiblePackage;
         private static IInstalledPackage incompatiblePackage;
+        private static PackageSourceViewModel packageSources;
+        private static IPackageSourceCollection packageSourceCollection;
 
         public static SelfPackageConfiguration SelfPackageConfiguration
         {
@@ -132,6 +134,31 @@ namespace PackageManager.Views.DesignData
                     incompatiblePackage = new MockInstalledPackage(Package, true);
 
                 return incompatiblePackage;
+            }
+        }
+
+        public static PackageSourceViewModel PackageSources
+        {
+            get
+            {
+                if (packageSources == null)
+                    packageSources = new PackageSourceViewModel(PackageSourceCollection);
+
+                return packageSources;
+            }
+        }
+
+        public static IPackageSourceCollection PackageSourceCollection
+        {
+            get
+            {
+                if (packageSourceCollection == null)
+                {
+                    packageSourceCollection = new MockPackageSourceCollection();
+                    packageSourceCollection.Add("NuGet.org", new Uri("https://www.nuget.org", UriKind.Absolute));
+                }
+
+                return packageSourceCollection;
             }
         }
     }

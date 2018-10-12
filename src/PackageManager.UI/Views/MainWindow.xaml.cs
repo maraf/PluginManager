@@ -75,5 +75,8 @@ namespace PackageManager.Views
 
         public void SelectUpdatesTab()
             => Tabs.SelectedIndex = 2;
+
+        private void PackageSourceSettings_Click(object sender, RoutedEventArgs e) 
+            => navigator.OpenPackageSources();
     }
 }
