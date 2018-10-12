@@ -8,26 +8,34 @@
         mc:Ignorable="d" d:DataContext="{x:Static dd:ViewModelLocator.PackageSources}"
         Title="Package Sources" Height="300" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Icon="{StaticResource DefaultPackageIcon}">
     <Grid Background="{StaticResource BackgroundBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        
-        <ListView ItemsSource="{Binding Sources}" Margin="8">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <Label Content="{Binding Name}" FontWeight="Bold" />
-                        <Label Content="{Binding Uri}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <Grid Margin="8,0,8,8" Grid.Row="1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="8,8,8,0">
+                <Button Content="Create New" Command="{Binding Remove}" Margin="0,0,8,0" />
+                <Button Content="Remove" Command="{Binding Remove}" />
+            </StackPanel>
+
+            <ListView ItemsSource="{Binding Sources}" Margin="8" Grid.Row="1">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <Label Content="{Binding Name}" FontWeight="Bold" />
+                            <Label Content="{Binding Uri}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+        
+        <Grid Margin="8,0,8,8" VerticalAlignment="Center" Visibility="Collapsed" Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -39,6 +47,8 @@
 
             <Label Content="Source:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" />
             <TextBox Text="" Margin="4,4,0,4" Grid.Row="1" Grid.Column="1" />
+
+            <Button Content="Add" Command="{Binding Add}" Margin="8,4,0,4" Grid.Column="2" Grid.RowSpan="2" />
         </Grid>
     </Grid>
 </Window>
