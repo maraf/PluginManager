@@ -34,6 +34,10 @@ namespace PackageManager.Models
             Assert.IsNull(sources.Primary);
             Assert.AreEqual(1, sources.All.Count);
 
+            // Because NuGet.Client by default creates a config with nuget.org source.
+            sources.Remove(sources.All.First());
+            Assert.AreEqual(0, sources.All.Count);
+
             var sourceUri = new Uri("https://wwww.nuget.org", UriKind.Absolute);
             var sourceName = "NuGet.org";
             var source = sources.Add(sourceName, sourceUri);
