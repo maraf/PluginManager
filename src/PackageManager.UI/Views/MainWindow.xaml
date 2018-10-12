@@ -29,7 +29,7 @@
                 <TextBox x:Name="PackageSource" Text="{Binding PackageSourceUrl, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
 
-            <Button x:Name="PackageSourceSettings" Content="Settings" Click="PackageSourceSettings_Click" Margin="8" Grid.Column="1" />
+            <Button x:Name="PackageSourceSettings" Content="Settings" Click="PackageSourceSettings_Click" Margin="8" VerticalAlignment="Bottom" Grid.Column="1" />
         </Grid>
 
         <TabControl x:Name="Tabs" controls:TabControl.IsAutoFocus="True" IsEnabled="{Binding PackageSourceUrl, Converter={StaticResource ValidUrlToTrueConverter}}" Grid.Row="1">
