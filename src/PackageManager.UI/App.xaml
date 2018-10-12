@@ -5,6 +5,8 @@
              DispatcherUnhandledException="OnDispatcherUnhandledException">
     <Application.Resources>
         <BitmapImage x:Key="DefaultPackageIcon" UriSource="/Views/Assets/default-package-icon.png" />
+        <Color x:Key="BackgroundColor">#eee</Color>
+        <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />
 
         <converters:NullValueConverter x:Key="NullToDefaultIconConverter" DefaultValue="{StaticResource DefaultPackageIcon}" />
         <converters:DropNewLineConverter x:Key="DropNewLineConverter" />

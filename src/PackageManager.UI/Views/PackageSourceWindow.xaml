@@ -7,7 +7,38 @@
         xmlns:local="clr-namespace:PackageManager.Views"
         mc:Ignorable="d" d:DataContext="{x:Static dd:ViewModelLocator.PackageSources}"
         Title="Package Sources" Height="300" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Icon="{StaticResource DefaultPackageIcon}">
-    <Grid>
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         
+        <ListView ItemsSource="{Binding Sources}" Margin="8">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <Label Content="{Binding Name}" FontWeight="Bold" />
+                        <Label Content="{Binding Uri}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Grid Margin="8,0,8,8" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Label Content="Name:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" />
+            <TextBox Text="" Margin="4,4,0,4" Grid.Row="0" Grid.Column="1" />
+
+            <Label Content="Source:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" />
+            <TextBox Text="" Margin="4,4,0,4" Grid.Row="1" Grid.Column="1" />
+        </Grid>
     </Grid>
 </Window>

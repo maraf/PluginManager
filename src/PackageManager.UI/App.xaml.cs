@@ -157,7 +157,7 @@ namespace PackageManager
 
         PackageSourceWindow IFactory<PackageSourceWindow>.Create()
         {
-            return new PackageSourceWindow(new PackageSourceViewModel(new Views.DesignData.MockPackageSourceCollection()));
+            return new PackageSourceWindow(Views.DesignData.ViewModelLocator.PackageSources);
         }
     }
 }

@@ -155,7 +155,8 @@ namespace PackageManager.Views.DesignData
                 if (packageSourceCollection == null)
                 {
                     packageSourceCollection = new MockPackageSourceCollection();
-                    packageSourceCollection.Add("NuGet.org", new Uri("https://www.nuget.org", UriKind.Absolute));
+                    packageSourceCollection.Add("NuGet.org", new Uri("https://www.nuget.org/api/v2", UriKind.Absolute));
+                    packageSourceCollection.Add("Neptuo GitExtensions Plugins", new Uri("https://www.myget.org/F/neptuo-gitextensions/api/v2", UriKind.Absolute));
                 }
 
                 return packageSourceCollection;

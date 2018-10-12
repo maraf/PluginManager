@@ -12,7 +12,7 @@
     <Window.Resources>
         <converters:ValidUrlToTrueConverter x:Key="ValidUrlToTrueConverter" />
     </Window.Resources>
-    <Grid Background="#eee">
+    <Grid Background="{StaticResource BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
