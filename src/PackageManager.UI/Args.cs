@@ -13,7 +13,6 @@ namespace PackageManager
         public string Path { get; set; }
         public IReadOnlyCollection<NuGetFramework> Monikers { get; set; }
         public (string id, string version)[] Dependencies { get; set; }
-        public string PackageSourceUrl { get; set; }
         public string SelfPackageId { get; set; }
 
         public bool IsSelfUpdate { get; set; }
@@ -79,9 +78,6 @@ namespace PackageManager
                     return true;
                 case "--dependencies":
                     Dependencies = ParseDependencies(value);
-                    return true;
-                case "--packagesource":
-                    PackageSourceUrl = value;
                     return true;
                 case "--selfpackageid":
                     SelfPackageId = value;
@@ -149,9 +145,6 @@ namespace PackageManager
                 result.Append(" --dependencies ");
                 result.Append(String.Join(",", Dependencies.Select(d => d.id + "-v" + d.version)));
             }
-
-            if (!String.IsNullOrEmpty(PackageSourceUrl))
-                result.Append($" --packagesource {PackageSourceUrl}");
 
             if (!String.IsNullOrEmpty(SelfPackageId))
                 result.Append($" --selfpackageid {SelfPackageId}");

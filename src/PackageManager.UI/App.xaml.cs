@@ -84,7 +84,6 @@ namespace PackageManager
                 selfPackageConfiguration,
                 selfUpdateService
             );
-            viewModel.PackageSourceUrl = Args.PackageSourceUrl;
 
             MainWindow wnd = new MainWindow(viewModel, ProcessService, Navigator);
 
