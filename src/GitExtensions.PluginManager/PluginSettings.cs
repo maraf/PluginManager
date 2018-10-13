@@ -12,11 +12,6 @@ namespace GitExtensions.PluginManager
     internal class PluginSettings : IEnumerable<ISetting>
     {
         /// <summary>
-        /// Gets a property holding path to backup and restore bundle file.
-        /// </summary>
-        public static StringSetting PackageSourceUrlProperty { get; } = new StringSetting("Package Source Url", "Package Source Url", null);
-
-        /// <summary>
         /// Gets a property holding if asking to close git extensions is required.
         /// </summary>
         public static BoolSetting CloseInstancesProperty { get; } = new BoolSetting("CloseInstances", "Close all instances of GitExtensions before starting PluginManager", false);
@@ -24,9 +19,8 @@ namespace GitExtensions.PluginManager
         private readonly ISettingsSource source;
 
         /// <summary>
-        /// Gets current value of <see cref="PackageSourceUrlProperty"/>.
+        /// Gets current value of <see cref="CloseInstancesProperty"/>.
         /// </summary>
-        public string PackageSourceUrl => source.GetValue(PackageSourceUrlProperty.Name, PackageSourceUrlProperty.DefaultValue, t => t);
         public bool CloseInstances => source.GetValue(CloseInstancesProperty.Name, CloseInstancesProperty.DefaultValue, t => Boolean.Parse(t));
 
         public PluginSettings(ISettingsSource source)
@@ -41,9 +35,8 @@ namespace GitExtensions.PluginManager
 
         static PluginSettings()
         {
-            properties = new List<ISetting>(2)
+            properties = new List<ISetting>(1)
             {
-                PackageSourceUrlProperty,
                 CloseInstancesProperty
             };
         }

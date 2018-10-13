@@ -53,9 +53,6 @@ namespace GitExtensions.PluginManager
             args.Add($"--selfpackageid {PackageId}");
             args.Add($"--processnamestokillbeforechange \"{Process.GetCurrentProcess().ProcessName}\"");
 
-            if (Uri.IsWellFormedUriString(Configuration.PackageSourceUrl, UriKind.Absolute))
-                args.Add($"--packagesource {Configuration.PackageSourceUrl}");
-
             ProcessStartInfo info = new ProcessStartInfo()
             {
                 FileName = Path.Combine(pluginsPath, PluginManagerRelativePath),
