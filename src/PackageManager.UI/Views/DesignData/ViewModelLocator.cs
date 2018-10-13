@@ -142,7 +142,10 @@ namespace PackageManager.Views.DesignData
             get
             {
                 if (packageSources == null)
+                {
                     packageSources = new PackageSourceViewModel(PackageSourceCollection);
+                    //packageSources.IsEditActive = true;
+                }
 
                 return packageSources;
             }

@@ -27,5 +27,8 @@ namespace PackageManager.Views
 
             InitializeComponent();
         }
+
+        private void SourceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+            => ViewModel.Remove.RaiseCanExecuteChanged();
     }
 }

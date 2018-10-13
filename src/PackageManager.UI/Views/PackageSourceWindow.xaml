@@ -15,11 +15,11 @@
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="8,8,8,0">
-                <Button Content="Create New" Command="{Binding Remove}" Margin="0,0,8,0" />
-                <Button Content="Remove" Command="{Binding Remove}" />
+                <Button Content="Create New" Command="{Binding Add}" Margin="0,0,8,0" />
+                <Button Content="Remove" Command="{Binding Remove}" CommandParameter="{Binding SelectedItem, ElementName=SourceList}" />
             </StackPanel>
 
-            <ListView ItemsSource="{Binding Sources}" Margin="8" Grid.Row="1">
+            <ListView x:Name="SourceList" ItemsSource="{Binding Sources}" SelectionChanged="SourceList_SelectionChanged" Margin="8" Grid.Row="1">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
@@ -30,25 +30,31 @@
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
-        
-        <Grid Margin="8,0,8,8" VerticalAlignment="Center" Visibility="Collapsed" Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
 
-            <Label Content="Name:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" />
-            <TextBox Text="" Margin="4,4,0,4" Grid.Row="0" Grid.Column="1" />
+        <Grid Visibility="{Binding IsEditActive, Converter={StaticResource TrueToVisibleConverter}}">
+            <Grid Background="{StaticResource BackgroundBrush}" Opacity=".9" />
+            <Grid Margin="8,0,8,8" VerticalAlignment="Center" Background="{StaticResource BackgroundBrush}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-            <Label Content="Source:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" />
-            <TextBox Text="" Margin="4,4,0,4" Grid.Row="1" Grid.Column="1" />
+                <Label Content="Name:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" />
+                <TextBox Text="{Binding Save.Name, UpdateSourceTrigger=PropertyChanged}" Margin="4,4,0,4" Grid.Row="0" Grid.Column="1" />
 
-            <Button Content="Add" Command="{Binding Add}" Margin="8,4,0,4" Grid.Column="2" Grid.RowSpan="2" />
+                <Label Content="Url:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" />
+                <TextBox Text="{Binding Save.Url, UpdateSourceTrigger=PropertyChanged}" Margin="4,4,0,4" Grid.Row="1" Grid.Column="1" />
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="2" Grid.Row="2">
+                    <Button Content="Save" Command="{Binding Save}" Margin="8,4,0,4" />
+                    <Button Content="Cancel" Command="{Binding Cancel}" Margin="8,4,0,4" />
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </Window>
