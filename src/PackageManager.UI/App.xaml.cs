@@ -13,6 +13,7 @@ using System.Windows.Threading;
 using Neptuo.Activators;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Logging;
+using NuGet.Configuration;
 using NuGet.Packaging;
 using NuGet.Protocol.Core.Types;
 using PackageManager.Exceptions;
@@ -31,6 +32,7 @@ namespace PackageManager
         internal IExceptionHandler ExceptionHandler { get; private set; }
         internal Navigator Navigator { get; private set; }
         internal ILogFactory LogFactory { get; private set; }
+        internal IPackageSourceCollection PackageSources { get; private set; }
 
         SelfUpdateService.IArgs SelfUpdateService.IApplication.Args => Args;
         object ProcessService.IApplication.Args => Args;
@@ -54,6 +56,8 @@ namespace PackageManager
             }
 
             base.OnStartup(e);
+
+            PackageSources = new NuGetPackageSourceCollection(new PackageSourceProvider(new Settings(Environment.CurrentDirectory)));
 
             NuGetSourceRepositoryFactory repositoryFactory = new NuGetSourceRepositoryFactory();
             INuGetPackageFilter packageFilter = null;
@@ -156,8 +160,6 @@ namespace PackageManager
         }
 
         PackageSourceWindow IFactory<PackageSourceWindow>.Create()
-        {
-            return new PackageSourceWindow(Views.DesignData.ViewModelLocator.PackageSources);
-        }
+            => new PackageSourceWindow(new PackageSourceViewModel(PackageSources));
     }
 }
