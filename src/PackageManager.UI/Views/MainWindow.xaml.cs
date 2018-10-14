@@ -65,14 +65,6 @@ namespace PackageManager.Views
             return Task.FromResult(true);
         }
 
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            base.OnSourceInitialized(e);
-
-            if (String.IsNullOrEmpty(ViewModel.PackageSourceUrl))
-                PackageSource.Focus();
-        }
-
         public void SelectUpdatesTab()
             => Tabs.SelectedIndex = 2;
 

@@ -11,7 +11,7 @@ namespace PackageManager.Views.DesignData
 {
     internal class MockSearchService : ISearchService
     {
-        public Task<IEnumerable<IPackage>> SearchAsync(string packageSourceUrl, string searchText, SearchOptions options = default, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<IPackage>> SearchAsync(IEnumerable<IPackageSource> packageSources, string searchText, SearchOptions options = default, CancellationToken cancellationToken = default)
         {
             return Task.FromResult<IEnumerable<IPackage>>(new List<IPackage>()
             {
@@ -19,7 +19,7 @@ namespace PackageManager.Views.DesignData
             });
         }
 
-        public Task<IPackage> FindLatestVersionAsync(string packageSourceUrl, IPackage package, CancellationToken cancellationToken = default)
+        public Task<IPackage> FindLatestVersionAsync(IEnumerable<IPackageSource> packageSources, IPackage package, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(ViewModelLocator.Package);
         }

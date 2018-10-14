@@ -9,8 +9,8 @@ namespace PackageManager.Views.DesignData
 {
     public class MockPackageSource : IPackageSource
     {
-        public string Name { get; set; }
-        public Uri Uri { get; set; }
+        public string Name { get; }
+        public Uri Uri { get; }
 
         public MockPackageSource(string name, Uri uri)
         {

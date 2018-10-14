@@ -79,6 +79,7 @@ namespace PackageManager
             EnsureSelfPackageInstalled(installService);
 
             MainViewModel viewModel = new MainViewModel(
+                PackageSources,
                 searchService,
                 installService,
                 selfPackageConfiguration,
@@ -145,7 +146,7 @@ namespace PackageManager
                 if (package != null)
                     await wnd.ViewModel.Updates.Update.ExecuteAsync(package);
                 else
-                    Navigator.Notify("Self Update Error", $"Unnable to find update package for PackageManager in feed '{wnd.ViewModel.PackageSourceUrl}'.", Navigator.MessageType.Error);
+                    Navigator.Notify("Self Update Error", $"Unnable to find update package for PackageManager.", Navigator.MessageType.Error);
 
                 Shutdown();
             };

@@ -22,7 +22,7 @@ namespace PackageManager.Views.DesignData
         public void Uninstall(IPackage package)
         { }
 
-        public Task<IReadOnlyCollection<IInstalledPackage>> GetInstalledAsync(string packageSourceUrl, CancellationToken cancellationToken)
+        public Task<IReadOnlyCollection<IInstalledPackage>> GetInstalledAsync(IEnumerable<IPackageSource> packageSources, CancellationToken cancellationToken)
         {
             return Task.FromResult<IReadOnlyCollection<IInstalledPackage>>(
                 new List<IInstalledPackage>()

@@ -17,11 +17,7 @@ namespace PackageManager.Views.DesignData
 
         public IPackageSource Add(string name, Uri uri)
         {
-            var source = new MockPackageSource()
-            {
-                Name = name,
-                Uri = uri
-            };
+            var source = new MockPackageSource(name, uri);
             all.Add(source);
             return source;
         }
