@@ -53,7 +53,7 @@ namespace PackageManager.ViewModels.Commands
         }
 
         public override bool CanExecute()
-            => !string.IsNullOrEmpty(Url) && Uri.TryCreate(Url, UriKind.RelativeOrAbsolute, out _);
+            => !string.IsNullOrEmpty(Name) && !sources.Any(s => s.Name == Name) && !string.IsNullOrEmpty(Url) && Uri.TryCreate(Url, UriKind.RelativeOrAbsolute, out _);
 
         public override void Execute()
         {
