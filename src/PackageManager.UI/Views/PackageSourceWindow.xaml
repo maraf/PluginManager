@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PackageManager.Views"
         mc:Ignorable="d" d:DataContext="{x:Static dd:ViewModelLocator.PackageSources}"
-        Title="Package Sources" Height="300" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Icon="{StaticResource DefaultPackageIcon}">
+        Title="Package Sources" Height="300" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Icon="{StaticResource DefaultPackageIcon}">
     <Grid Background="{StaticResource BackgroundBrush}">
         <Grid>
             <Grid.RowDefinitions>
