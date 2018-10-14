@@ -20,7 +20,7 @@ namespace PackageManager.ViewModels
         public UpdateCommand Update { get; }
         public UpdateAllCommand UpdateAll { get; }
 
-        public UpdatesViewModel(IPackageSourceProvider packageSource, IInstallService installService, ISearchService searchService, SelfPackageConfiguration selfPackageConfiguration, ISelfUpdateService selfUpdate)
+        public UpdatesViewModel(IPackageSourceSelector packageSource, IInstallService installService, ISearchService searchService, SelfPackageConfiguration selfPackageConfiguration, ISelfUpdateService selfUpdate)
         {
             Ensure.NotNull(installService, "service");
             Ensure.NotNull(searchService, "searchService");

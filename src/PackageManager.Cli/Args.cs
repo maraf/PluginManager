@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PackageManager
 {
-    public partial class Args : IPackageSourceProvider, SelfUpdateService.IArgs
+    public partial class Args : IPackageSourceSelector, SelfUpdateService.IArgs
     {
         public string Path { get; set; }
         public string PackageSourceUrl { get; set; }
@@ -22,7 +22,7 @@ namespace PackageManager
         public bool IsSelfUpdate { get; set; }
         public string SelfOriginalPath { get; set; }
 
-        string IPackageSourceProvider.Url => PackageSourceUrl;
+        string IPackageSourceSelector.Url => PackageSourceUrl;
 
         public Args(string[] args)
         {

@@ -1,4 +1,5 @@
 ﻿using Neptuo.Observables;
+using PackageManager.Models;
 using PackageManager.Services;
 using PackageManager.ViewModels.Commands;
 using System;
@@ -9,23 +10,9 @@ using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels
 {
-    public class MainViewModel : ObservableModel, IPackageSourceProvider
+    public class MainViewModel : ObservableModel
     {
-        private string packageSourceUrl;
-        public string PackageSourceUrl
-        {
-            get { return packageSourceUrl; }
-            set
-            {
-                if (packageSourceUrl != value)
-                {
-                    packageSourceUrl = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
-        string IPackageSourceProvider.Url => PackageSourceUrl;
+        public PackageSourceSelectorViewModel SourceSelector { get; }
 
         public BrowserViewModel Browser { get; }
         public InstalledViewModel Installed { get; }
@@ -47,11 +34,13 @@ namespace PackageManager.ViewModels
             }
         }
 
-        public MainViewModel(ISearchService search, IInstallService install, SelfPackageConfiguration selfPackageConfiguration, ISelfUpdateService selfUpdate)
+        public MainViewModel(IPackageSourceProvider sources, ISearchService search, IInstallService install, SelfPackageConfiguration selfPackageConfiguration, ISelfUpdateService selfUpdate)
         {
-            Browser = new BrowserViewModel(this, search, install, selfPackageConfiguration);
-            Installed = new InstalledViewModel(this, install, selfPackageConfiguration);
-            Updates = new UpdatesViewModel(this, install, search, selfPackageConfiguration, selfUpdate);
+            SourceSelector = new PackageSourceSelectorViewModel(sources);
+
+            Browser = new BrowserViewModel(SourceSelector, search, install, selfPackageConfiguration);
+            Installed = new InstalledViewModel(SourceSelector, install, selfPackageConfiguration);
+            Updates = new UpdatesViewModel(SourceSelector, install, search, selfPackageConfiguration, selfUpdate);
 
             Cancel = new CancelCommand(
                 Browser.Search, 

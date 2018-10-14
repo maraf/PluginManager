@@ -21,7 +21,7 @@ namespace PackageManager.Services
 {
     public class NuGetInstallService : IInstallService
     {
-        private readonly IFactory<SourceRepository, string> repositoryFactory;
+        private readonly IFactory<SourceRepository, IPackageSource> repositoryFactory;
         private readonly ILog log;
         private readonly ILogger nuGetLog;
         private readonly INuGetPackageFilter packageFilter;
@@ -30,7 +30,7 @@ namespace PackageManager.Services
         public string Path { get; }
         public string ConfigFilePath => System.IO.Path.Combine(Path, "packages.config");
 
-        public NuGetInstallService(IFactory<SourceRepository, string> repositoryFactory, ILog log, string path, INuGetPackageFilter packageFilter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetInstallService(IFactory<SourceRepository, IPackageSource> repositoryFactory, ILog log, string path, INuGetPackageFilter packageFilter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
             Ensure.NotNull(log, "log");
@@ -86,45 +86,51 @@ namespace PackageManager.Services
                 writer.RemovePackageEntry(package.Id, new NuGetVersion(package.Version), NuGetFramework.AnyFramework);
         }
 
-        public async Task<IReadOnlyCollection<IInstalledPackage>> GetInstalledAsync(string packageSourceUrl, CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<IInstalledPackage>> GetInstalledAsync(IEnumerable<IPackageSource> packageSources, CancellationToken cancellationToken)
         {
+            log.Debug($"Getting list of installed packages from '{ConfigFilePath}'.");
+
             if (!File.Exists(ConfigFilePath))
                 return new List<IInstalledPackage>(0);
 
-            log.Debug($"Getting list of installed packages from '{ConfigFilePath}' in repository '{packageSourceUrl}'.");
-
-            SourceRepository repository = repositoryFactory.Create(packageSourceUrl);
+            List<IInstalledPackage> result = new List<IInstalledPackage>();
 
             using (Stream fileContent = new FileStream(ConfigFilePath, FileMode.Open))
             using (SourceCacheContext context = new SourceCacheContext())
             {
-                List<IInstalledPackage> result = new List<IInstalledPackage>();
-
                 PackagesConfigReader reader = new PackagesConfigReader(fileContent);
                 foreach (PackageReference package in reader.GetPackages())
                 {
                     log.Debug($"Installed package '{package.PackageIdentity}'.");
 
-                    PackageMetadataResource metadataResource = await repository.GetResourceAsync<PackageMetadataResource>(cancellationToken);
-                    if (metadataResource != null)
+                    foreach (IPackageSource packageSource in packageSources)
                     {
-                        var metadata = await metadataResource.GetMetadataAsync(package.PackageIdentity, context, nuGetLog, cancellationToken);
-                        if (metadata != null)
-                        {
-                            log.Debug($"Package '{package.PackageIdentity}' was found in repository.");
+                        log.Debug($"Lookin in repository '{packageSource.Uri}'.");
+                        SourceRepository repository = repositoryFactory.Create(packageSource);
 
-                            NuGetPackageFilterResult filterResult = packageFilter.IsPassed(metadata);
-                            result.Add(new NuGetInstalledPackage(
-                                new NuGetPackage(metadata, repository, log, frameworkFilter),
-                                filterResult == NuGetPackageFilterResult.Ok
-                            ));
+                        PackageMetadataResource metadataResource = await repository.GetResourceAsync<PackageMetadataResource>(cancellationToken);
+                        if (metadataResource != null)
+                        {
+                            var metadata = await metadataResource.GetMetadataAsync(package.PackageIdentity, context, nuGetLog, cancellationToken);
+                            if (metadata != null)
+                            {
+                                log.Debug($"Package '{package.PackageIdentity}' was found.");
+
+                                NuGetPackageFilterResult filterResult = packageFilter.IsPassed(metadata);
+                                result.Add(new NuGetInstalledPackage(
+                                    new NuGetPackage(metadata, repository, log, frameworkFilter),
+                                    filterResult == NuGetPackageFilterResult.Ok
+                                ));
+
+                                break;
+                            }
                         }
                     }
                 }
-
-                log.Debug($"Returning '{result.Count}' installed packages.");
-                return result;
             }
+
+            log.Debug($"Returning '{result.Count}' installed packages.");
+            return result;
         }
     }
 }

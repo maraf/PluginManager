@@ -1,6 +1,8 @@
-﻿using Neptuo.Activators;
+﻿using Neptuo;
+using Neptuo.Activators;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
+using PackageManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +11,16 @@ using System.Threading.Tasks;
 
 namespace PackageManager.Services
 {
-    public class NuGetSourceRepositoryFactory : IFactory<SourceRepository, string>
+    public class NuGetSourceRepositoryFactory : IFactory<SourceRepository, IPackageSource>
     {
-        private SourceRepository repository;
-
-        public SourceRepository Create(string packageSourceUrl)
+        public SourceRepository Create(IPackageSource packageSource)
         {
-            if (repository == null || repository.PackageSource.Source != packageSourceUrl)
-                repository = Repository.CreateSource(Repository.Provider.GetCoreV3(), packageSourceUrl);
+            Ensure.NotNull(packageSource, "packageSource");
 
-            return repository;
+            if (packageSource is NuGetPackageSource nuget)
+                return Repository.CreateSource(Repository.Provider.GetCoreV3(), nuget.Original);
+
+            return Repository.CreateSource(Repository.Provider.GetCoreV3(), packageSource.Uri.ToString());
         }
     }
 }

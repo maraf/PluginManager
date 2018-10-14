@@ -14,14 +14,14 @@ namespace PackageManager.ViewModels.Commands
     public class RefreshUpdatesCommand : AsyncCommand
     {
         private readonly UpdatesViewModel viewModel;
-        private readonly IPackageSourceProvider packageSource;
+        private readonly IPackageSourceSelector packageSource;
         private readonly IInstallService installService;
         private readonly ISearchService searchService;
         private readonly SelfPackageConfiguration selfPackageConfiguration;
 
         public event Action Completed;
 
-        public RefreshUpdatesCommand(UpdatesViewModel viewModel, IPackageSourceProvider packageSource, IInstallService installService, ISearchService searchService, SelfPackageConfiguration selfPackageConfiguration)
+        public RefreshUpdatesCommand(UpdatesViewModel viewModel, IPackageSourceSelector packageSource, IInstallService installService, ISearchService searchService, SelfPackageConfiguration selfPackageConfiguration)
         {
             Ensure.NotNull(viewModel, "viewModel");
             Ensure.NotNull(packageSource, "packageSource");
@@ -42,9 +42,9 @@ namespace PackageManager.ViewModels.Commands
         {
             viewModel.Packages.Clear();
 
-            foreach (IInstalledPackage current in await installService.GetInstalledAsync(packageSource.Url, cancellationToken))
+            foreach (IInstalledPackage current in await installService.GetInstalledAsync(packageSource.Sources, cancellationToken))
             {
-                IPackage latest = await searchService.FindLatestVersionAsync(packageSource.Url, current.Definition, cancellationToken);
+                IPackage latest = await searchService.FindLatestVersionAsync(packageSource.Sources, current.Definition, cancellationToken);
 
                 // TODO: Compare versions.
                 if (latest.Version != current.Definition.Version)

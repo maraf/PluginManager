@@ -39,7 +39,7 @@ namespace PackageManager.Views.DesignData
             {
                 if (main == null)
                 {
-                    main = new MainViewModel(new MockSearchService(), new MockInstallService(), SelfPackageConfiguration, new MockSelfUpdateService());
+                    main = new MainViewModel(PackageSourceCollection, new MockSearchService(), new MockInstallService(), SelfPackageConfiguration, new MockSelfUpdateService());
                     main.Browser.Search.Execute();
                 }
 

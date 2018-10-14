@@ -18,13 +18,13 @@ namespace PackageManager.Services
     {
         public const int PageCountToProbe = 10;
 
-        private readonly IFactory<SourceRepository, string> repositoryFactory;
+        private readonly IFactory<SourceRepository, IPackageSource> repositoryFactory;
         private readonly ILog log;
         private readonly ILogger nuGetLog;
         private readonly INuGetPackageFilter filter;
         private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
 
-        public NuGetSearchService(IFactory<SourceRepository, string> repositoryFactory, ILog log, INuGetPackageFilter filter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetSearchService(IFactory<SourceRepository, IPackageSource> repositoryFactory, ILog log, INuGetPackageFilter filter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
             Ensure.NotNull(log, "log");
@@ -56,16 +56,11 @@ namespace PackageManager.Services
         private Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(PackageSearchResource search, string searchText, SearchOptions options, CancellationToken cancellationToken)
             => search.SearchAsync(searchText, new SearchFilter(false), options.PageIndex * options.PageSize, options.PageSize, nuGetLog, cancellationToken);
 
-        public async Task<IEnumerable<IPackage>> SearchAsync(string packageSourceUrl, string searchText, SearchOptions options = default, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<IPackage>> SearchAsync(IEnumerable<IPackageSource> packageSources, string searchText, SearchOptions options = default, CancellationToken cancellationToken = default)
         {
-            log.Debug($"Searching '{searchText}' in '{packageSourceUrl}'.");
+            log.Debug($"Searching '{searchText}'.");
 
             options = EnsureOptions(options);
-
-            SourceRepository repository = repositoryFactory.Create(packageSourceUrl);
-            PackageSearchResource search = await repository.GetResourceAsync<PackageSearchResource>(cancellationToken);
-            if (search == null)
-                return Enumerable.Empty<IPackage>();
 
             List<IPackage> result = new List<IPackage>();
 
@@ -75,31 +70,44 @@ namespace PackageManager.Services
                 log.Debug($"Loading page '{options.PageIndex}'.");
 
                 bool hasItems = false;
-                foreach (IPackageSearchMetadata package in await SearchAsync(search, searchText, options, cancellationToken))
+                foreach (IPackageSource packageSource in packageSources)
                 {
-                    log.Debug($"Found '{package.Identity}'.");
+                    log.Debug($"Searching in '{packageSource.Uri}'.");
 
-                    hasItems = true;
-                    if (result.Count >= options.PageSize)
-                        break;
-
-                    NuGetPackageFilterResult filterResult = filter.IsPassed(package);
-                    switch (filterResult)
+                    SourceRepository repository = repositoryFactory.Create(packageSource);
+                    PackageSearchResource search = await repository.GetResourceAsync<PackageSearchResource>(cancellationToken);
+                    if (search == null)
                     {
-                        case NuGetPackageFilterResult.Ok:
-                            log.Debug("Package added.");
-                            result.Add(new NuGetPackage(package, repository, log, frameworkFilter));
-                            break;
-
-                        case NuGetPackageFilterResult.NotCompatibleVersion:
-                            log.Debug("Loading order versions.");
-                            await TryAddOlderVersionOfPackageAsync(result, package, repository);
-                            break;
-
-                        default:
-                            log.Debug("Package skipped.");
-                            break;
+                        log.Debug("Source skipped.");
+                        continue;
                     }
+
+                    foreach (IPackageSearchMetadata package in await SearchAsync(search, searchText, options, cancellationToken))
+                    {
+                        log.Debug($"Found '{package.Identity}'.");
+
+                        hasItems = true;
+                        if (result.Count >= options.PageSize)
+                            break;
+
+                        NuGetPackageFilterResult filterResult = filter.IsPassed(package);
+                        switch (filterResult)
+                        {
+                            case NuGetPackageFilterResult.Ok:
+                                log.Debug("Package added.");
+                                result.Add(new NuGetPackage(package, repository, log, frameworkFilter));
+                                break;
+
+                            case NuGetPackageFilterResult.NotCompatibleVersion:
+                                log.Debug("Loading order versions.");
+                                await TryAddOlderVersionOfPackageAsync(result, package, repository);
+                                break;
+
+                            default:
+                                log.Debug("Package skipped.");
+                                break;
+                        }
+                    } 
                 }
 
                 if (!hasItems)
@@ -141,13 +149,13 @@ namespace PackageManager.Services
             }
         }
 
-        public async Task<IPackage> FindLatestVersionAsync(string packageSourceUrl, IPackage package, CancellationToken cancellationToken = default)
+        public async Task<IPackage> FindLatestVersionAsync(IEnumerable<IPackageSource> packageSources, IPackage package, CancellationToken cancellationToken = default)
         {
             Ensure.NotNull(package, "package");
 
-            log.Debug($"Finding latest version of '{package.Id}' in '{packageSourceUrl}'.");
+            log.Debug($"Finding latest version of '{package.Id}'.");
 
-            IEnumerable<IPackage> packages = await SearchAsync(packageSourceUrl, package.Id, new SearchOptions() { PageSize = 1 }, cancellationToken);
+            IEnumerable<IPackage> packages = await SearchAsync(packageSources, package.Id, new SearchOptions() { PageSize = 1 }, cancellationToken);
             IPackage latest = packages.FirstOrDefault();
             if (latest != null && latest.Id == package.Id)
             {

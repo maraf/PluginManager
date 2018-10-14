@@ -11,5 +11,11 @@ namespace PackageManager.Views.DesignData
     {
         public string Name { get; set; }
         public Uri Uri { get; set; }
+
+        public MockPackageSource(string name, Uri uri)
+        {
+            Name = name;
+            Uri = uri;
+        }
     }
 }

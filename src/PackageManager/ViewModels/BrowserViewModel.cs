@@ -34,7 +34,7 @@ namespace PackageManager.ViewModels
         public ReinstallCommand Reinstall { get; }
         public UninstallCommand Uninstall { get; }
 
-        public BrowserViewModel(IPackageSourceProvider packageSource, ISearchService search, IInstallService install, SelfPackageConfiguration selfPackageConfiguration)
+        public BrowserViewModel(IPackageSourceSelector packageSource, ISearchService search, IInstallService install, SelfPackageConfiguration selfPackageConfiguration)
         {
             Packages = new ObservableCollection<IPackage>();
             Search = new SearchCommand(this, packageSource, search);

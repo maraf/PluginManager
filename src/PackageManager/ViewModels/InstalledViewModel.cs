@@ -23,7 +23,7 @@ namespace PackageManager.ViewModels
         public UninstallCommand Uninstall { get; }
         public UninstallAllCommand UninstallAll { get; }
 
-        public InstalledViewModel(IPackageSourceProvider packageSource, IInstallService service, SelfPackageConfiguration selfPackageConfiguration)
+        public InstalledViewModel(IPackageSourceSelector packageSource, IInstallService service, SelfPackageConfiguration selfPackageConfiguration)
         {
             Ensure.NotNull(service, "service");
             this.service = service;
