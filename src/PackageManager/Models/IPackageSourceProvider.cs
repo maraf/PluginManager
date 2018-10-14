@@ -22,5 +22,10 @@ namespace PackageManager.Models
         /// Gets a collection of all defined sources.
         /// </summary>
         IReadOnlyCollection<IPackageSource> All { get; }
+
+        /// <summary>
+        /// An event raised when state of this provider has changed.
+        /// </summary>
+        event Action Changed;
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels
 {
-    public class MainViewModel : ObservableModel
+    public class MainViewModel : ObservableModel, IDisposable
     {
         public PackageSourceSelectorViewModel SourceSelector { get; }
 
@@ -66,5 +66,10 @@ namespace PackageManager.ViewModels
 
         private void OnInstalledChanged()
             => Browser.Packages.Clear();
+
+        public void Dispose()
+        {
+            SourceSelector.Dispose();
+        }
     }
 }

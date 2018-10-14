@@ -10,10 +10,12 @@ using INuGetPackageSourceProvider = NuGet.Configuration.IPackageSourceProvider;
 
 namespace PackageManager.Models
 {
-    public class NuGetPackageSourceCollection : IPackageSourceCollection
+    public class NuGetPackageSourceCollection : DisposableBase, IPackageSourceCollection
     {
         private readonly INuGetPackageSourceProvider provider;
         private readonly List<NuGetPackageSource> sources;
+
+        public event Action Changed;
 
         public IPackageSource Primary => sources.FirstOrDefault(s => s.Name == provider.ActivePackageSourceName);
         public IReadOnlyCollection<IPackageSource> All => sources;
@@ -23,8 +25,19 @@ namespace PackageManager.Models
             Ensure.NotNull(provider, "provider");
             this.provider = provider;
 
+            provider.PackageSourcesChanged += OnProviderChanged;
             sources = provider.LoadPackageSources().Select(s => new NuGetPackageSource(s)).ToList();
         }
+
+        protected override void DisposeManagedResources()
+        {
+            base.DisposeManagedResources();
+
+            provider.PackageSourcesChanged -= OnProviderChanged;
+        }
+
+        private void OnProviderChanged(object sender, EventArgs e) 
+            => Changed?.Invoke();
 
         private NuGetPackageSource EnsureType(IPackageSource source, string argumentName = null)
         {
@@ -35,7 +48,8 @@ namespace PackageManager.Models
             throw new InvalidPackageSourceImplementationException();
         }
 
-        private PackageSource UnWrap(IPackageSource source, string argumentName = null) => EnsureType(source, argumentName).Original;
+        private PackageSource UnWrap(IPackageSource source, string argumentName = null) 
+            => EnsureType(source, argumentName).Original;
 
         public IPackageSource Add(string name, Uri uri)
         {

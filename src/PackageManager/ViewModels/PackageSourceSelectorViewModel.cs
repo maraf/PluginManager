@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels
 {
-    public class PackageSourceSelectorViewModel : ObservableModel, IPackageSourceSelector
+    public class PackageSourceSelectorViewModel : ObservableModel, IPackageSourceSelector, IDisposable
     {
         public const string AllFeedName = "All Feeds";
 
@@ -55,16 +55,38 @@ namespace PackageManager.ViewModels
         {
             Ensure.NotNull(service, "service");
             this.service = service;
-
             SourceNames = new ObservableCollection<string>();
-            if (service.All.Count > 1)
+
+            service.Changed += OnServiceChanged;
+            OnServiceChanged();
+        }
+
+        private void OnServiceChanged()
+        {
+            SourceNames.Clear();
+
+            bool isSelectedNameContained = false;
+            void Add(string name)
             {
-                SourceNames.Add(AllFeedName);
-                foreach (IPackageSource source in service.All)
-                    SourceNames.Add(source.Name);
+                if (!isSelectedNameContained)
+                    isSelectedNameContained = name == SelectedName;
+
+                SourceNames.Add(name);
             }
 
-            SelectedName = SourceNames.FirstOrDefault();
+            if (service.All.Count > 1)
+                Add(AllFeedName);
+
+            foreach (IPackageSource source in service.All)
+                Add(source.Name);
+
+            if (!isSelectedNameContained)
+                SelectedName = SourceNames.FirstOrDefault();
+        }
+
+        public void Dispose()
+        {
+            service.Changed -= OnServiceChanged;
         }
     }
 }
