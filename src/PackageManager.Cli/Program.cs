@@ -1,4 +1,6 @@
 ﻿using Neptuo.Logging;
+using NuGet.Configuration;
+using PackageManager.Models;
 using PackageManager.Services;
 using PackageManager.ViewModels;
 using System;
@@ -24,12 +26,6 @@ namespace PackageManager.Cli
             if (!Directory.Exists(Args.Path))
             {
                 Console.WriteLine("Missing argument '--path' - a target path to install packages to.");
-                return;
-            }
-
-            if (!Uri.IsWellFormedUriString(Args.PackageSourceUrl, UriKind.Absolute))
-            {
-                Console.WriteLine("Missing argument '--packagesource' - a package repository URL.");
                 return;
             }
 
@@ -63,13 +59,16 @@ namespace PackageManager.Cli
         {
             var log = new DefaultLog();
 
+            var packageSources = new NuGetPackageSourceCollection(new PackageSourceProvider(new Settings(Environment.CurrentDirectory)));
+            var packageSourceSelector = new AllPackageSourceSelector(packageSources);
+
             var repositoryFactory = new NuGetSourceRepositoryFactory();
             var installService = new NuGetInstallService(repositoryFactory, log, Args.Path);
             var searchService = new NuGetSearchService(repositoryFactory, log);
             var selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
             var selfUpdateService = new SelfUpdateService(this, new ProcessService(this));
 
-            UpdatesViewModel viewModel = new UpdatesViewModel(Args, installService, searchService, selfPackageConfiguration, selfUpdateService);
+            UpdatesViewModel viewModel = new UpdatesViewModel(packageSourceSelector, installService, searchService, selfPackageConfiguration, selfUpdateService);
             return viewModel;
         }
 

@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace PackageManager
 {
-    public partial class Args : IPackageSourceSelector, SelfUpdateService.IArgs
+    public partial class Args : SelfUpdateService.IArgs
     {
         public string Path { get; set; }
-        public string PackageSourceUrl { get; set; }
         public string SelfPackageId { get; set; }
 
         public bool IsUpdateCount { get; set; }
@@ -21,8 +20,6 @@ namespace PackageManager
 
         public bool IsSelfUpdate { get; set; }
         public string SelfOriginalPath { get; set; }
-
-        string IPackageSourceSelector.Url => PackageSourceUrl;
 
         public Args(string[] args)
         {
@@ -82,9 +79,6 @@ namespace PackageManager
                 case "--path":
                     Path = value;
                     return true;
-                case "--packagesource":
-                    PackageSourceUrl = value;
-                    return true;
                 case "--selfpackageid":
                     SelfPackageId = value;
                     return true;
@@ -104,9 +98,6 @@ namespace PackageManager
 
             if (!String.IsNullOrEmpty(Path))
                 result.Append($"--path \"{Path}\"");
-
-            if (!String.IsNullOrEmpty(PackageSourceUrl))
-                result.Append($" --packagesource {PackageSourceUrl}");
 
             if (!String.IsNullOrEmpty(SelfPackageId))
                 result.Append($" --selfpackageid {SelfPackageId}");
