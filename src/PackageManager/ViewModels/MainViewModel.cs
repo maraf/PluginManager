@@ -34,7 +34,7 @@ namespace PackageManager.ViewModels
             }
         }
 
-        public MainViewModel(IPackageSourceProvider sources, ISearchService search, IInstallService install, SelfPackageConfiguration selfPackageConfiguration, ISelfUpdateService selfUpdate)
+        public MainViewModel(IPackageSourceCollection sources, ISearchService search, IInstallService install, SelfPackageConfiguration selfPackageConfiguration, ISelfUpdateService selfUpdate)
         {
             SourceSelector = new PackageSourceSelectorViewModel(sources);
 

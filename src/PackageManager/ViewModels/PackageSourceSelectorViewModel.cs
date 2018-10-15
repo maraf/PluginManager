@@ -14,7 +14,7 @@ namespace PackageManager.ViewModels
     {
         public const string AllFeedName = "All Feeds";
 
-        private readonly IPackageSourceProvider service;
+        private readonly IPackageSourceCollection service;
         private IEnumerable<IPackageSource> selectedSources;
 
         IEnumerable<IPackageSource> IPackageSourceSelector.Sources
@@ -47,11 +47,16 @@ namespace PackageManager.ViewModels
                     RaisePropertyChanged();
 
                     selectedSources = null;
+
+                    if (value == null)
+                        service.MarkAsPrimary(null);
+                    else
+                        service.MarkAsPrimary(service.All.FirstOrDefault(s => s.Name == value));
                 }
             }
         }
 
-        public PackageSourceSelectorViewModel(IPackageSourceProvider service)
+        public PackageSourceSelectorViewModel(IPackageSourceCollection service)
         {
             Ensure.NotNull(service, "service");
             this.service = service;
@@ -83,6 +88,8 @@ namespace PackageManager.ViewModels
 
             if (isSelectedNameContained)
                 SelectedName = selectedName;
+            else if(service.Primary != null)
+                SelectedName = SourceNames.FirstOrDefault(s => s == service.Primary.Name);
             else
                 SelectedName = SourceNames.FirstOrDefault();
         }

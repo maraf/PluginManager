@@ -68,6 +68,9 @@ namespace PackageManager.Models
 
         public void MarkAsPrimary(IPackageSource source)
         {
+            if (provider.ActivePackageSourceName == source?.Name)
+                return;
+
             if (source == null)
                 provider.SaveActivePackageSource(null);
             else
