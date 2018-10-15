@@ -143,7 +143,7 @@ namespace PackageManager
             if (Dependencies.Length > 0)
             {
                 result.Append(" --dependencies ");
-                result.Append(String.Join(",", Dependencies.Select(d => d.id + "-v" + d.version)));
+                result.Append(String.Join(",", Dependencies.Select(d => d.id + (d.version != null ? "-v" + d.version : ""))));
             }
 
             if (!String.IsNullOrEmpty(SelfPackageId))
