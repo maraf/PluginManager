@@ -63,13 +63,14 @@ namespace PackageManager.ViewModels
 
         private void OnServiceChanged()
         {
+            string selectedName = SelectedName;
             SourceNames.Clear();
 
             bool isSelectedNameContained = false;
             void Add(string name)
             {
                 if (!isSelectedNameContained)
-                    isSelectedNameContained = name == SelectedName;
+                    isSelectedNameContained = name == selectedName;
 
                 SourceNames.Add(name);
             }
@@ -80,7 +81,9 @@ namespace PackageManager.ViewModels
             foreach (IPackageSource source in service.All)
                 Add(source.Name);
 
-            if (!isSelectedNameContained)
+            if (isSelectedNameContained)
+                SelectedName = selectedName;
+            else
                 SelectedName = SourceNames.FirstOrDefault();
         }
 
