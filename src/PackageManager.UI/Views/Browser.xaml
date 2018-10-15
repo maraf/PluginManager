@@ -63,6 +63,12 @@
                     <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
 
                     <Grid Margin="0,8,0,0">
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                            </Style>
+                        </Grid.Resources>
+                        
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition/>
