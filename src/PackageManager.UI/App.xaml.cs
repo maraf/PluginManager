@@ -44,7 +44,7 @@ namespace PackageManager
         {
             MemoryLogSerializer = new MemoryLogSerializer(new DefaultLogFormatter());
 
-            LogFactory = new DefaultLogFactory()
+            LogFactory = new DefaultLogFactory("root")
                 .AddConsole()
                 .AddSerializer(MemoryLogSerializer);
 

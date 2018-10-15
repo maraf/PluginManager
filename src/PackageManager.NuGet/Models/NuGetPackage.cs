@@ -40,8 +40,8 @@ namespace PackageManager.Models
             Ensure.NotNull(repository, "repository");
             this.source = source;
             this.repository = repository;
-            this.log = log;
-            this.nuGetLog = new NuGetLogger(log);
+            this.log = log.Factory.Scope("Package");
+            this.nuGetLog = new NuGetLogger(this.log);
             this.frameworkFilter = frameworkFilter;
         }
 

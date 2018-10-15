@@ -83,7 +83,10 @@ namespace PackageManager.Services
             Ensure.NotNull(package, "package");
 
             using (PackagesConfigWriter writer = new PackagesConfigWriter(ConfigFilePath, !File.Exists(ConfigFilePath)))
+            {
+                log.Debug($"Removing entry '{package.ToIdentityString()}' from packages.config.");
                 writer.RemovePackageEntry(package.Id, new NuGetVersion(package.Version), NuGetFramework.AnyFramework);
+            }
         }
 
         public async Task<IReadOnlyCollection<IInstalledPackage>> GetInstalledAsync(IEnumerable<IPackageSource> packageSources, CancellationToken cancellationToken)
@@ -105,7 +108,7 @@ namespace PackageManager.Services
 
                     foreach (IPackageSource packageSource in packageSources)
                     {
-                        log.Debug($"Lookin in repository '{packageSource.Uri}'.");
+                        log.Debug($"Looking in repository '{packageSource.Uri}'.");
                         SourceRepository repository = repositoryFactory.Create(packageSource);
 
                         PackageMetadataResource metadataResource = await repository.GetResourceAsync<PackageMetadataResource>(cancellationToken);
