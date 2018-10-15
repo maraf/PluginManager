@@ -100,7 +100,7 @@ namespace PackageManager.Services
 
                             case NuGetPackageFilterResult.NotCompatibleVersion:
                                 log.Debug("Loading order versions.");
-                                await TryAddOlderVersionOfPackageAsync(result, package, repository);
+                                await TryAddOlderVersionOfPackageAsync(result, package, repository, cancellationToken);
                                 break;
 
                             default:
@@ -124,28 +124,36 @@ namespace PackageManager.Services
             return result;
         }
 
-        private async Task TryAddOlderVersionOfPackageAsync(List<IPackage> result, IPackageSearchMetadata package, SourceRepository repository)
+        private async Task TryAddOlderVersionOfPackageAsync(List<IPackage> result, IPackageSearchMetadata package, SourceRepository repository, CancellationToken cancellationToken)
         {
-            IEnumerable<VersionInfo> versions = await package.GetVersionsAsync();
-            foreach (VersionInfo version in versions)
+            try
             {
-                if (version.Version != package.Identity.Version)
+                IEnumerable<VersionInfo> versions = await package.GetVersionsAsync();
+                foreach (VersionInfo version in versions)
                 {
-                    log.Debug($"Found '{version.PackageSearchMetadata.Identity}'.");
-
-                    NuGetPackageFilterResult filterResult = filter.IsPassed(version.PackageSearchMetadata);
-                    switch (filterResult)
+                    if (version.Version != package.Identity.Version)
                     {
-                        case NuGetPackageFilterResult.Ok:
-                            log.Debug("Package added.");
-                            result.Add(new NuGetPackage(version.PackageSearchMetadata, repository, log, frameworkFilter));
-                            return;
+                        log.Debug($"Found '{version.PackageSearchMetadata.Identity}'.");
 
-                        default:
-                            log.Debug("Package skipped.");
-                            break;
+                        NuGetPackageFilterResult filterResult = filter.IsPassed(version.PackageSearchMetadata);
+                        switch (filterResult)
+                        {
+                            case NuGetPackageFilterResult.Ok:
+                                log.Debug("Package added.");
+                                result.Add(new NuGetPackage(version.PackageSearchMetadata, repository, log, frameworkFilter));
+                                return;
+
+                            default:
+                                log.Debug("Package skipped.");
+                                break;
+                        }
                     }
                 }
+            }
+            catch (FatalProtocolException e) when (e.InnerException is TaskCanceledException)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                throw e;
             }
         }
 
