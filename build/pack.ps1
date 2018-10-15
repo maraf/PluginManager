@@ -46,7 +46,7 @@ function Copy-PluginManager {
     $targetPath = "..\artifacts\GitExtensions.PluginManager"
     
     $soourcePackageManagerPath = Copy-PackageManager
-    $targetPackageManagerPath = $targetPath + "\PluginManager";
+    $targetPackageManagerPath = $targetPath + "\PackageManager";
 
     Ensure-Path $targetPath;
     Ensure-Path $targetPackageManagerPath;
