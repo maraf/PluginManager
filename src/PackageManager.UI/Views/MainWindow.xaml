@@ -32,17 +32,20 @@
             <Button x:Name="PackageSourceSettings" Content="Settings" Click="PackageSourceSettings_Click" Margin="8" VerticalAlignment="Bottom" Grid.Column="1" />
         </Grid>
 
-        <TabControl x:Name="Tabs" controls:TabControl.IsAutoFocus="True" IsEnabled="{Binding PackageSourceUrl, Converter={StaticResource ValidUrlToTrueConverter}}" Grid.Row="1">
-            <TabItem Header="Browse" Padding="8,4">
-                <views:Browser x:Name="Browser" ViewModel="{Binding Browser}" />
-            </TabItem>
-            <TabItem Header="Installed">
-                <views:Installed x:Name="Installed" ViewModel="{Binding Installed}" />
-            </TabItem>
-            <TabItem Header="Updates">
-                <views:Updates x:Name="Updates" ViewModel="{Binding Updates}" />
-            </TabItem>
-        </TabControl>
+        <Grid Grid.Row="1">
+            <TabControl x:Name="Tabs" controls:TabControl.IsAutoFocus="True" IsEnabled="{Binding PackageSourceUrl, Converter={StaticResource ValidUrlToTrueConverter}}">
+                <TabItem Header="Browse" Padding="8,4">
+                    <views:Browser x:Name="Browser" ViewModel="{Binding Browser}" />
+                </TabItem>
+                <TabItem Header="Installed">
+                    <views:Installed x:Name="Installed" ViewModel="{Binding Installed}" />
+                </TabItem>
+                <TabItem Header="Updates">
+                    <views:Updates x:Name="Updates" ViewModel="{Binding Updates}" />
+                </TabItem>
+            </TabControl>
+            <Button x:Name="ShowLog" Content="Log" Click="ShowLog_Click" Style="{StaticResource LinkButtonStyle}" Margin="10,4" HorizontalAlignment="Right" VerticalAlignment="Top" />
+        </Grid>
         <views:Loading CancelCommand="{Binding Cancel}" Visibility="{Binding IsLoading, Converter={StaticResource TrueToVisibleConverter}}" Grid.RowSpan="2" />
     </Grid>
 </Window>

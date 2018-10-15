@@ -14,15 +14,19 @@ namespace PackageManager.Services
     {
         private readonly App application;
         private readonly IFactory<PackageSourceWindow> packageSourceFactory;
+        private readonly IFactory<LogWindow> logFactory;
 
         private PackageSourceWindow packageSource;
+        private LogWindow log;
 
-        public Navigator(App application, IFactory<PackageSourceWindow> packageSourceFactory)
+        public Navigator(App application, IFactory<PackageSourceWindow> packageSourceFactory, IFactory<LogWindow> logFactory)
         {
             Ensure.NotNull(application, "application");
             Ensure.NotNull(packageSourceFactory, "packageSourceFactory");
+            Ensure.NotNull(logFactory, "logFactory");
             this.application = application;
             this.packageSourceFactory = packageSourceFactory;
+            this.logFactory = logFactory;
         }
 
         public void Notify(string title, string message, MessageType type = MessageType.Info)
@@ -72,6 +76,27 @@ namespace PackageManager.Services
         {
             packageSource.Closed -= OnPackageSourceClosed;
             packageSource = null;
+        }
+
+        public void OpenLog()
+        {
+            if (log == null)
+            {
+                log = logFactory.Create();
+                log.Closed += OnLogClosed;
+                log.Owner = application.MainWindow;
+                log.ShowDialog();
+            }
+            else
+            {
+                log.BringIntoView();
+            }
+        }
+
+        private void OnLogClosed(object sender, EventArgs e)
+        {
+            log.Closed -= OnLogClosed;
+            log = null;
         }
     }
 }

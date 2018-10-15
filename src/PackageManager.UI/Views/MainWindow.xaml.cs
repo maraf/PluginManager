@@ -70,5 +70,8 @@ namespace PackageManager.Views
 
         private void PackageSourceSettings_Click(object sender, RoutedEventArgs e) 
             => navigator.OpenPackageSources();
+
+        private void ShowLog_Click(object sender, RoutedEventArgs e)
+            => navigator.OpenLog();
     }
 }

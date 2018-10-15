@@ -60,6 +60,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\LogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\PackageSourceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -90,6 +94,7 @@
     <Compile Include="Exceptions\PackageInstallExceptionHandler.cs" />
     <Compile Include="Exceptions\UnauthorizedExceptionHandler.cs" />
     <Compile Include="Exceptions\ShutdownExceptionHandler.cs" />
+    <Compile Include="Logging\Serialization\MemoryLogSerializer.cs" />
     <Compile Include="Models\NuGetFrameworkFilter.cs" />
     <Compile Include="Models\SelfPackage.cs" />
     <Compile Include="Properties\VersionInfo.cs" />
@@ -124,6 +129,9 @@
     <Compile Include="Views\DesignData\MockSelfUpdateService.cs" />
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
     <Compile Include="Views\IAutoFocus.cs" />
+    <Compile Include="Views\LogWindow.xaml.cs">
+      <DependentUpon>LogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PackageSourceWindow.xaml.cs">
       <DependentUpon>PackageSourceWindow.xaml</DependentUpon>
     </Compile>

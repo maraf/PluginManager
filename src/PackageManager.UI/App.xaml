@@ -41,5 +41,25 @@
         <Style TargetType="Button">
             <Setter Property="Padding" Value="8,4" />
         </Style>
+        <Style x:Key="LinkButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="15" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <TextBlock x:Name="content" Text="{TemplateBinding Content}" Foreground="#4A9AD4" TextDecorations="Underline" Cursor="Hand" ToolTip="{TemplateBinding ToolTip}" Margin="0" Padding="0" />
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="content" Property="Foreground" Value="Red" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="content" Property="Foreground" Value="Red" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

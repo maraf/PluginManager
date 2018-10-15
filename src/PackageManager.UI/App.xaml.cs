@@ -13,10 +13,12 @@ using System.Windows.Threading;
 using Neptuo.Activators;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Logging;
+using Neptuo.Logging.Serialization.Formatters;
 using NuGet.Configuration;
 using NuGet.Packaging;
 using NuGet.Protocol.Core.Types;
 using PackageManager.Exceptions;
+using PackageManager.Logging.Serialization;
 using PackageManager.Models;
 using PackageManager.Services;
 using PackageManager.ViewModels;
@@ -25,7 +27,7 @@ using PackageManager.Views.Converters;
 
 namespace PackageManager
 {
-    public partial class App : Application, SelfUpdateService.IApplication, ProcessService.IApplication, IFactory<PackageSourceWindow>
+    public partial class App : Application, SelfUpdateService.IApplication, ProcessService.IApplication, IFactory<PackageSourceWindow>, IFactory<LogWindow>
     {
         public Args Args { get; private set; }
         internal ProcessService ProcessService { get; private set; }
@@ -33,19 +35,23 @@ namespace PackageManager
         internal Navigator Navigator { get; private set; }
         internal ILogFactory LogFactory { get; private set; }
         internal IPackageSourceCollection PackageSources { get; private set; }
+        internal MemoryLogSerializer MemoryLogSerializer { get; private set; }
 
         SelfUpdateService.IArgs SelfUpdateService.IApplication.Args => Args;
         object ProcessService.IApplication.Args => Args;
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            MemoryLogSerializer = new MemoryLogSerializer(new DefaultLogFormatter());
+
             LogFactory = new DefaultLogFactory()
-                .AddConsole();
+                .AddConsole()
+                .AddSerializer(MemoryLogSerializer);
 
             Args = new Args(e.Args);
 
             ProcessService = new ProcessService(this, Args.ProcessNamesToKillBeforeChange ?? new string[0]);
-            Navigator = new Navigator(this, this);
+            Navigator = new Navigator(this, this, this);
             BuildExceptionHandler();
 
             if (!Directory.Exists(Args.Path))
@@ -161,5 +167,8 @@ namespace PackageManager
 
         PackageSourceWindow IFactory<PackageSourceWindow>.Create()
             => new PackageSourceWindow(new PackageSourceViewModel(PackageSources));
+
+        LogWindow IFactory<LogWindow>.Create()
+            => new LogWindow(MemoryLogSerializer);
     }
 }
