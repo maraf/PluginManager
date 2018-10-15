@@ -33,17 +33,22 @@ namespace PackageManager.Services
             {
                 if (frameworks.Contains(group.TargetFramework))
                 {
+                    NuGetPackageFilterResult result = NuGetPackageFilterResult.Ok;
+
+                    // Dependency filtering:
+                    // - When incompatible dependency version is found there is a chance that previous version has the right one.
+                    // - When all dependencies are missing, don't even try previous versions.
                     foreach (var dependency in dependencies)
                     {
                         PackageDependency packageDependency = group.Packages.FirstOrDefault(p => p.Id == dependency.id);
                         if (packageDependency == null)
-                            return NuGetPackageFilterResult.NotCompatibleVersion;
+                            result = NuGetPackageFilterResult.NotCompatible;
 
                         if (dependency.version != null && !packageDependency.VersionRange.Satisfies(new NuGetVersion(dependency.version)))
                             return NuGetPackageFilterResult.NotCompatibleVersion;
                     }
 
-                    return NuGetPackageFilterResult.Ok;
+                    return result;
                 }
             }
 
