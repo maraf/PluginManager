@@ -47,7 +47,7 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <Border BorderThickness="1" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" Margin="4,4,8,8" Grid.Column="1">
+            <Border BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Margin="4,4,8,8" Grid.Column="1">
                 <StackPanel Margin="8" DataContext="{Binding SelectedItem, ElementName=lvwPackages}" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Package}}" Visibility="{Binding Converter={StaticResource NullToCollapsedConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
