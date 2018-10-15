@@ -63,7 +63,7 @@ namespace PackageManager
 
             base.OnStartup(e);
 
-            PackageSources = new NuGetPackageSourceCollection(new PackageSourceProvider(new Settings(Environment.CurrentDirectory)));
+            PackageSources = new NuGetPackageSourceCollection(new PackageSourceProvider(new Settings(Args.Path)));
 
             NuGetSourceRepositoryFactory repositoryFactory = new NuGetSourceRepositoryFactory();
             INuGetPackageFilter packageFilter = null;
