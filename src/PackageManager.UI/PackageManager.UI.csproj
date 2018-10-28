@@ -89,6 +89,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Args.cs" />
+    <Compile Include="Args.Partial.cs" />
     <Compile Include="Exceptions\MessageExceptionHandler.cs" />
     <Compile Include="Exceptions\NuGetFatalProtocolExceptionHandler.cs" />
     <Compile Include="Exceptions\PackageInstallExceptionHandler.cs" />

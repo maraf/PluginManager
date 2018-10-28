@@ -13,7 +13,7 @@ namespace PackageManager.Services
         private readonly IApplication application;
         private readonly IReadOnlyCollection<string> toKillNames;
 
-        public ProcessService(IApplication application, params string[] toKillNames)
+        public ProcessService(IApplication application, IReadOnlyCollection<string> toKillNames)
         {
             Ensure.NotNull(application, "application");
             Ensure.NotNull(toKillNames, "toKillNames");
@@ -46,6 +46,7 @@ namespace PackageManager.Services
             Process.Start(processStart);
         }
 
-        public ProcessKillContext PrepareContextForProcessesKillBeforeChange() => new ProcessKillContext(toKillNames);
+        public ProcessKillContext PrepareContextForProcessesKillBeforeChange() 
+            => new ProcessKillContext(toKillNames);
     }
 }

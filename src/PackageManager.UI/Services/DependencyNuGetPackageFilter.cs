@@ -13,10 +13,10 @@ namespace PackageManager.Services
 {
     public class DependencyNuGetPackageFilter : INuGetPackageFilter
     {
-        private readonly (string id, string version)[] dependencies;
+        private readonly IReadOnlyCollection<(string id, string version)> dependencies;
         private readonly IReadOnlyCollection<NuGetFramework> frameworks;
 
-        public DependencyNuGetPackageFilter((string id, string version)[] dependencies, IReadOnlyCollection<NuGetFramework> frameworks)
+        public DependencyNuGetPackageFilter(IReadOnlyCollection<(string id, string version)> dependencies, IReadOnlyCollection<NuGetFramework> frameworks)
         {
             Ensure.NotNull(dependencies, "dependencies");
             Ensure.NotNull(frameworks, "frameworks");

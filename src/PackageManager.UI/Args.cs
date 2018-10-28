@@ -1,6 +1,4 @@
-﻿using NuGet.Frameworks;
-using PackageManager.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,23 +6,27 @@ using System.Threading.Tasks;
 
 namespace PackageManager
 {
-    public class Args : SelfUpdateService.IArgs
+    public partial class Args
     {
         public string Path { get; set; }
-        public IReadOnlyCollection<NuGetFramework> Monikers { get; set; }
-        public (string id, string version)[] Dependencies { get; set; }
+        public IReadOnlyCollection<string> Monikers { get; set; }
+        public IReadOnlyCollection<(string id, string version)> Dependencies { get; set; }
         public string SelfPackageId { get; set; }
 
         public bool IsSelfUpdate { get; set; }
         public string SelfOriginalPath { get; set; }
 
-        public string[] ProcessNamesToKillBeforeChange { get; set; }
+        public IReadOnlyCollection<string> ProcessNamesToKillBeforeChange { get; set; }
+
+        public Args()
+        {
+            Monikers = Array.Empty<string>();
+            Dependencies = Array.Empty<(string id, string version)>();
+        }
 
         public Args(string[] args)
+            : this()
         {
-            Monikers = Array.Empty<NuGetFramework>();
-            Dependencies = Array.Empty<(string id, string version)>();
-
             ParseParameters(args);
 
             if (ProcessNamesToKillBeforeChange == null)
@@ -55,15 +57,6 @@ namespace PackageManager
                     ParseParameter(name, value);
                 }
             }
-
-            if (Monikers.Count == 0)
-            {
-                Monikers = new List<NuGetFramework>()
-                {
-                    NuGetFramework.AnyFramework,
-                    FrameworkConstants.CommonFrameworks.Net461
-                };
-            }
         }
 
         private bool ParseParameter(string name, string value)
@@ -74,7 +67,7 @@ namespace PackageManager
                     Path = value;
                     return true;
                 case "--monikers":
-                    Monikers = ParseMonikers(value);
+                    Monikers = value.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                     return true;
                 case "--dependencies":
                     Dependencies = ParseDependencies(value);
@@ -112,19 +105,6 @@ namespace PackageManager
             return result;
         }
 
-        private IReadOnlyCollection<NuGetFramework> ParseMonikers(string arg)
-        {
-            string[] values = arg.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            List<NuGetFramework> result = new List<NuGetFramework>();
-            foreach (string value in values)
-            {
-                NuGetFramework framework = NuGetFramework.Parse(value, DefaultFrameworkNameProvider.Instance);
-                result.Add(framework);
-            }
-
-            return result;
-        }
-
         #endregion
 
         public override string ToString()
@@ -137,10 +117,10 @@ namespace PackageManager
             if (Monikers.Count > 0)
             {
                 result.Append($" --monikers ");
-                result.Append(String.Join(",", Monikers.Select(m => m.GetShortFolderName(DefaultFrameworkNameProvider.Instance))));
+                result.Append(String.Join(",", Monikers));
             }
 
-            if (Dependencies.Length > 0)
+            if (Dependencies.Count > 0)
             {
                 result.Append(" --dependencies ");
                 result.Append(String.Join(",", Dependencies.Select(d => d.id + (d.version != null ? "-v" + d.version : ""))));
@@ -155,7 +135,7 @@ namespace PackageManager
             if (!String.IsNullOrEmpty(SelfOriginalPath))
                 result.Append($" --selforiginalpath \"{SelfOriginalPath}\"");
 
-            if (ProcessNamesToKillBeforeChange != null && ProcessNamesToKillBeforeChange.Length > 0)
+            if (ProcessNamesToKillBeforeChange != null && ProcessNamesToKillBeforeChange.Count > 0)
                 result.Append($" --processnamestokillbeforechange \"{String.Join(",", ProcessNamesToKillBeforeChange)}\"");
 
             return result.ToString();

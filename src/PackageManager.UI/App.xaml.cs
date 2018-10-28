@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -15,6 +10,7 @@ using Neptuo.Exceptions.Handlers;
 using Neptuo.Logging;
 using Neptuo.Logging.Serialization.Formatters;
 using NuGet.Configuration;
+using NuGet.Frameworks;
 using NuGet.Packaging;
 using NuGet.Protocol.Core.Types;
 using PackageManager.Exceptions;
@@ -68,14 +64,15 @@ namespace PackageManager
 
             PackageSources = new NuGetPackageSourceCollection(new PackageSourceProvider(new Settings(Args.Path)));
 
+            IReadOnlyCollection<NuGetFramework> frameworks = ParseMonikers(Args.Monikers);
             NuGetSourceRepositoryFactory repositoryFactory = new NuGetSourceRepositoryFactory();
             INuGetPackageFilter packageFilter = null;
             if (Args.Dependencies.Any())
-                packageFilter = new DependencyNuGetPackageFilter(Args.Dependencies, Args.Monikers);
+                packageFilter = new DependencyNuGetPackageFilter(Args.Dependencies, frameworks);
 
             NuGetPackageContent.IFrameworkFilter frameworkFilter = null;
             if (Args.Monikers.Any())
-                frameworkFilter = new NuGetFrameworkFilter(Args.Monikers);
+                frameworkFilter = new NuGetFrameworkFilter(frameworks);
 
             SelfPackageConfiguration selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
 
@@ -166,6 +163,24 @@ namespace PackageManager
         {
             ExceptionHandler.Handle(e.Exception);
             e.Handled = true;
+        }
+
+        private IReadOnlyCollection<NuGetFramework> ParseMonikers(IReadOnlyCollection<string> values)
+        {
+            List<NuGetFramework> result = new List<NuGetFramework>();
+            foreach (string value in values)
+            {
+                NuGetFramework framework = NuGetFramework.Parse(value, DefaultFrameworkNameProvider.Instance);
+                result.Add(framework);
+            }
+
+            if (result.Count == 0)
+            {
+                result.Add(NuGetFramework.AnyFramework);
+                result.Add(FrameworkConstants.CommonFrameworks.Net461);
+            }
+
+            return result;
         }
 
         PackageSourceWindow IFactory<PackageSourceWindow>.Create()

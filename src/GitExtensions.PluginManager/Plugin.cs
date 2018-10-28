@@ -1,5 +1,6 @@
 ﻿using GitExtensions.PluginManager.Properties;
 using GitUIPluginInterfaces;
+using PackageManager;
 using ResourceManager;
 using System;
 using System.Collections.Generic;
@@ -48,12 +49,12 @@ namespace GitExtensions.PluginManager
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
             string pluginsPath = Path.Combine(basePath, "Plugins");
 
-            List<string> args = new List<string>();
-            args.Add($"--path \"{pluginsPath}\"");
-            args.Add($"--dependencies GitExtensions.Plugins");
-            args.Add($"--monikers {String.Join(",", FrameworkMonikers)}");
-            args.Add($"--selfpackageid {PackageId}");
-            args.Add($"--processnamestokillbeforechange \"{Process.GetCurrentProcess().ProcessName}\"");
+            Args args = new Args();
+            args.Path = pluginsPath;
+            args.Dependencies = new List<(string, string)>() { ("GitExtensions.Plugins", null) };
+            args.Monikers = FrameworkMonikers;
+            args.SelfPackageId = PackageId;
+            args.ProcessNamesToKillBeforeChange = new[] { Process.GetCurrentProcess().ProcessName };
 
             ProcessStartInfo info = new ProcessStartInfo()
             {

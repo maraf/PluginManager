@@ -14,6 +14,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\PackageManager.UI\Args.cs" Link="Args.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Neptuo" Version="6.0.0" />
   </ItemGroup>
 
