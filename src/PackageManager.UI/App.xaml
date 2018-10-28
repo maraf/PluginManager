@@ -4,6 +4,7 @@
              xmlns:converters="clr-namespace:PackageManager.Views.Converters"
              DispatcherUnhandledException="OnDispatcherUnhandledException">
     <Application.Resources>
+        <BitmapImage x:Key="AppIcon" UriSource="/Views/Assets/box-search-result.png" />
         <BitmapImage x:Key="DefaultPackageIcon" UriSource="/Views/Assets/default-package-icon.png" />
         <Color x:Key="BackgroundColor">#eee</Color>
         <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />

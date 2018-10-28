@@ -1,4 +1,5 @@
-﻿using GitUIPluginInterfaces;
+﻿using GitExtensions.PluginManager.Properties;
+using GitUIPluginInterfaces;
 using ResourceManager;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace GitExtensions.PluginManager
         {
             Name = "Plugin Manager";
             Description = "Plugin Manager";
+            Icon = Resources.Icon;
         }
 
         public override void Register(IGitUICommands commands)

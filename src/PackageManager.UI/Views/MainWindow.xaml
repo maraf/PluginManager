@@ -8,7 +8,7 @@
         xmlns:converters="clr-namespace:PackageManager.Views.Converters"
         xmlns:views="clr-namespace:PackageManager.Views"
         mc:Ignorable="d" d:DataContext="{x:Static dd:ViewModelLocator.Main}"
-        Title="Packages" Height="600" Width="800" Icon="{StaticResource DefaultPackageIcon}">
+        Title="Packages" Height="600" Width="800" Icon="{StaticResource AppIcon}">
     <Window.Resources>
         <converters:ValidUrlToTrueConverter x:Key="ValidUrlToTrueConverter" />
     </Window.Resources>
