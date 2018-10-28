@@ -18,6 +18,6 @@
             </StackPanel>
         </Border>
 
-        <TextBox x:Name="Content" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" BorderThickness="0,0,0,0" Grid.Row="1" />
+        <TextBox x:Name="Content" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" FontFamily="Consolas, Courier New" VerticalScrollBarVisibility="Auto" BorderThickness="0,0,0,0" Grid.Row="1" />
     </Grid>
 </Window>
