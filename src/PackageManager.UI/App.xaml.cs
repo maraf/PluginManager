@@ -48,6 +48,9 @@ namespace PackageManager
                 .AddConsole()
                 .AddSerializer(MemoryLogSerializer);
 
+            ILog log = LogFactory.Scope("Startup");
+            log.Debug($"Startup arguments: {Environment.NewLine}{String.Join(" ", e.Args)}");
+
             Args = new Args(e.Args);
 
             ProcessService = new ProcessService(this, Args.ProcessNamesToKillBeforeChange ?? new string[0]);
