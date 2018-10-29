@@ -17,6 +17,8 @@ namespace PackageManager.ViewModels.Commands
         private readonly IPackageSourceSelector packageSource;
         private readonly ISearchService search;
 
+        private string lastSearchText;
+
         public event Action Completed;
 
         public SearchCommand(BrowserViewModel viewModel, IPackageSourceSelector packageSource, ISearchService search)
@@ -34,9 +36,17 @@ namespace PackageManager.ViewModels.Commands
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            IEnumerable<IPackage> packages = await Task.Run(() => search.SearchAsync(packageSource.Sources, viewModel.SearchText, cancellationToken: cancellationToken));
+            if (lastSearchText != viewModel.SearchText)
+            {
+                lastSearchText = viewModel.SearchText;
+                viewModel.Paging.CurrentIndex = 0;
+            }
+
+            IEnumerable<IPackage> packages = await Task.Run(() => search.SearchAsync(packageSource.Sources, viewModel.SearchText, new SearchOptions(viewModel.Paging.CurrentIndex), cancellationToken));
             viewModel.Packages.Clear();
             viewModel.Packages.AddRange(packages);
+
+            viewModel.Paging.IsNextAvailable = viewModel.Packages.Count != 0;
 
             Completed?.Invoke();
         }

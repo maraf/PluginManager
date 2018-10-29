@@ -24,6 +24,10 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
             
             <ListView x:Name="lvwPackages" ItemsSource="{Binding Packages}" SelectionChanged="lvwPackages_SelectionChanged" Margin="8,4,4,8" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListView.ItemTemplate>
@@ -46,6 +50,12 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DataContext="{Binding Paging}" Margin="8,0,8,8" Grid.Row="1">
+                <Button Content="Prev" Command="{Binding Prev}" />
+                <TextBlock Text="{Binding CurrentNumber}" Margin="8,0" VerticalAlignment="Center" />
+                <Button Content="Next" Command="{Binding Next}" />
+            </StackPanel>
 
             <Border BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Margin="4,4,8,8" Grid.Column="1">
                 <StackPanel Margin="8" DataContext="{Binding SelectedItem, ElementName=lvwPackages}" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Package}}" Visibility="{Binding Converter={StaticResource NullToCollapsedConverter}}">
