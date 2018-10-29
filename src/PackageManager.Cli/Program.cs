@@ -66,7 +66,7 @@ namespace PackageManager.Cli
             var installService = new NuGetInstallService(repositoryFactory, log, Args.Path);
             var searchService = new NuGetSearchService(repositoryFactory, log);
             var selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
-            var selfUpdateService = new SelfUpdateService(this, new ProcessService(this));
+            var selfUpdateService = new SelfUpdateService(this, new ProcessService(this, Array.Empty<string>()));
 
             UpdatesViewModel viewModel = new UpdatesViewModel(packageSourceSelector, installService, searchService, selfPackageConfiguration, selfUpdateService);
             return viewModel;
