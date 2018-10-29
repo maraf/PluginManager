@@ -63,6 +63,8 @@ namespace PackageManager.Services
             options = EnsureOptions(options);
 
             List<IPackage> result = new List<IPackage>();
+            List<IPackageSource> sources = new List<IPackageSource>(packageSources);
+            List<IPackageSource> sourcesToSkip = new List<IPackageSource>();
 
             // Try to find N results passing filter (until zero results is returned).
             while (result.Count < options.PageSize && options.PageIndex < PageCountToProbe)
@@ -70,7 +72,7 @@ namespace PackageManager.Services
                 log.Debug($"Loading page '{options.PageIndex}'.");
 
                 bool hasItems = false;
-                foreach (IPackageSource packageSource in packageSources)
+                foreach (IPackageSource packageSource in sources)
                 {
                     log.Debug($"Searching in '{packageSource.Uri}'.");
 
@@ -78,10 +80,11 @@ namespace PackageManager.Services
                     PackageSearchResource search = await repository.GetResourceAsync<PackageSearchResource>(cancellationToken);
                     if (search == null)
                     {
-                        log.Debug("Source skipped.");
+                        log.Debug($"Source skipped, because it doesn't provide '{nameof(PackageSearchResource)}'.");
                         continue;
                     }
 
+                    int sourceSearchPackageCount = 0;
                     foreach (IPackageSearchMetadata package in await SearchAsync(search, searchText, options, cancellationToken))
                     {
                         log.Debug($"Found '{package.Identity}'.");
@@ -107,7 +110,13 @@ namespace PackageManager.Services
                                 log.Debug("Package skipped.");
                                 break;
                         }
-                    } 
+
+                        sourceSearchPackageCount++;
+                    }
+
+                    // If package source reached end, skip it from next probing.
+                    if (sourceSearchPackageCount < options.PageSize)
+                        sourcesToSkip.Add(packageSource);
                 }
 
                 if (!hasItems)
@@ -118,6 +127,9 @@ namespace PackageManager.Services
                     PageIndex = options.PageIndex + 1,
                     PageSize = options.PageSize
                 };
+
+                foreach (IPackageSource source in sourcesToSkip)
+                    sources.Remove(source);
             }
 
             log.Debug($"Search completed. Found '{result.Count}' items.");
