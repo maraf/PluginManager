@@ -37,8 +37,13 @@
                                 <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
                                 <StackPanel>
                                     <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        
                                         <TextBlock Text="{Binding Id}" FontWeight="Bold" />
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <StackPanel Orientation="Horizontal" Margin="4,0,0,0" Grid.Column="1">
                                             <TextBlock Text="v" />
                                             <TextBlock Text="{Binding Version}" />
                                         </StackPanel>
