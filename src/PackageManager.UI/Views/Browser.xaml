@@ -28,39 +28,49 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            
-            <ListView x:Name="lvwPackages" ItemsSource="{Binding Packages}" SelectionChanged="lvwPackages_SelectionChanged" Margin="8,4,4,8" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Border Padding="8">
-                            <DockPanel>
-                                <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
-                                <StackPanel>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        
-                                        <TextBlock Text="{Binding Id}" FontWeight="Bold" />
-                                        <StackPanel Orientation="Horizontal" Margin="4,0,0,0" Grid.Column="1">
-                                            <TextBlock Text="v" />
-                                            <TextBlock Text="{Binding Version}" />
-                                        </StackPanel>
-                                    </Grid>
-                                    <TextBlock Text="{Binding Description, Converter={StaticResource DropNewLineConverter}}" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
-                                </StackPanel>
-                            </DockPanel>
-                        </Border>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DataContext="{Binding Paging}" Margin="8,0,8,8" Grid.Row="1">
-                <Button Content="Prev" Command="{Binding Prev}" />
-                <TextBlock Text="{Binding CurrentNumber}" Margin="8,0" VerticalAlignment="Center" />
-                <Button Content="Next" Command="{Binding Next}" />
-            </StackPanel>
+            <Border BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Margin="8,4,4,8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ListView x:Name="lvwPackages" ItemsSource="{Binding Packages}" SelectionChanged="lvwPackages_SelectionChanged" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="8">
+                                    <DockPanel>
+                                        <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
+                                        <StackPanel>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Text="{Binding Id}" FontWeight="Bold" />
+                                                <StackPanel Orientation="Horizontal" Margin="4,0,0,0" Grid.Column="1">
+                                                    <TextBlock Text="v" />
+                                                    <TextBlock Text="{Binding Version}" />
+                                                </StackPanel>
+                                            </Grid>
+                                            <TextBlock Text="{Binding Description, Converter={StaticResource DropNewLineConverter}}" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
+                                        </StackPanel>
+                                    </DockPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Grid Background="White" Grid.Row="1">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DataContext="{Binding Paging}" Margin="8">
+                            <Button Content="Prev" Command="{Binding Prev}" />
+                            <TextBlock Text="{Binding CurrentNumber}" Margin="8,0" VerticalAlignment="Center" />
+                            <Button Content="Next" Command="{Binding Next}" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
 
             <Border BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Margin="4,4,8,8" Grid.Column="1">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
@@ -130,7 +140,7 @@
 
                             <!-- Tags -->
                             <Label Grid.Row="5" Grid.Column="0" Content="Tags:" />
-                            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Tags, Mode=OneWay}" />
+                            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Tags, Mode=OneWay}" Margin="0,0,0,8" />
                         </Grid>
                     </StackPanel>
                 </ScrollViewer>
