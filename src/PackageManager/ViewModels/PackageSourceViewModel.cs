@@ -21,8 +21,8 @@ namespace PackageManager.ViewModels
         public DelegateCommand<IPackageSource> Edit { get; }
         public RemoveSourceCommand Remove { get; }
 
-        public MoveUpCommand MoveUp { get; }
-        public MoveDownCommand MoveDown { get; }
+        public MoveCommand<IPackageSource> MoveUp { get; }
+        public MoveCommand<IPackageSource> MoveDown { get; }
 
         public SaveSourceCommand Save { get; }
         public Command Cancel { get; }
@@ -52,8 +52,8 @@ namespace PackageManager.ViewModels
             Edit = new DelegateCommand<IPackageSource>(OnEdit, CanEdit);
             Remove = new RemoveSourceCommand(Sources, service);
 
-            MoveUp = new MoveUpCommand(Sources, service);
-            MoveDown = new MoveDownCommand(Sources, service);
+            MoveUp = new MoveCommand<IPackageSource>(Sources, source => service.MoveUp(source), source => Sources.IndexOf(source) > 0);
+            MoveDown = new MoveCommand<IPackageSource>(Sources, source => service.MoveDown(source), source => Sources.IndexOf(source) < Sources.Count - 1);
 
             Save = new SaveSourceCommand(Sources, service);
             Save.Executed += () => IsEditActive = false;
