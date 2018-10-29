@@ -124,6 +124,7 @@
     <Compile Include="Views\DesignData\MockInstallService.cs" />
     <Compile Include="Views\DesignData\MockPackage.cs" />
     <Compile Include="Views\DesignData\MockPackageSource.cs" />
+    <Compile Include="Views\DesignData\MockPackageSourceBuilder.cs" />
     <Compile Include="Views\DesignData\MockPackageSourceCollection.cs" />
     <Compile Include="Views\DesignData\MockPackageSourceProvider.cs" />
     <Compile Include="Views\DesignData\MockSearchService.cs" />

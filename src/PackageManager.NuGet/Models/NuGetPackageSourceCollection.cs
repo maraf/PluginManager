@@ -12,28 +12,28 @@ namespace PackageManager.Models
 {
     public class NuGetPackageSourceCollection : DisposableBase, IPackageSourceCollection
     {
-        private readonly INuGetPackageSourceProvider provider;
-        private readonly List<NuGetPackageSource> sources;
+        internal INuGetPackageSourceProvider Provider { get; }
+        internal List<NuGetPackageSource> Sources { get; }
 
         public event Action Changed;
 
-        public IPackageSource Primary => sources.FirstOrDefault(s => s.Name == provider.ActivePackageSourceName);
-        public IReadOnlyCollection<IPackageSource> All => sources;
+        public IPackageSource Primary => Sources.FirstOrDefault(s => s.Name == Provider.ActivePackageSourceName);
+        public IReadOnlyCollection<IPackageSource> All => Sources;
 
         public NuGetPackageSourceCollection(INuGetPackageSourceProvider provider)
         {
             Ensure.NotNull(provider, "provider");
-            this.provider = provider;
+            this.Provider = provider;
 
             provider.PackageSourcesChanged += OnProviderChanged;
-            sources = provider.LoadPackageSources().Select(s => new NuGetPackageSource(s)).ToList();
+            Sources = provider.LoadPackageSources().Select(s => new NuGetPackageSource(s)).ToList();
         }
 
         protected override void DisposeManagedResources()
         {
             base.DisposeManagedResources();
 
-            provider.PackageSourcesChanged -= OnProviderChanged;
+            Provider.PackageSourcesChanged -= OnProviderChanged;
         }
 
         private void OnProviderChanged(object sender, EventArgs e) 
@@ -51,30 +51,31 @@ namespace PackageManager.Models
         private PackageSource UnWrap(IPackageSource source, string argumentName = null) 
             => EnsureType(source, argumentName).Original;
 
-        public IPackageSource Add(string name, Uri uri)
-        {
-            var source = new NuGetPackageSource(new PackageSource(uri.ToString(), name));
-            sources.Add(source);
-            provider.SavePackageSources(sources.Select(s => s.Original));
-            return source;
-        }
+        public IPackageSourceBuilder Add()
+            => new NuGetPackageSourceBuilder(this);
+
+        public IPackageSourceBuilder Edit(IPackageSource source)
+            => new NuGetPackageSourceBuilder(this, EnsureType(source));
 
         public void Remove(IPackageSource source)
         {
             NuGetPackageSource target = EnsureType(source);
-            if (sources.Remove(target))
-                provider.SavePackageSources(sources.Select(s => s.Original));
+            if (Sources.Remove(target))
+                SavePackageSources();
         }
 
         public void MarkAsPrimary(IPackageSource source)
         {
-            if (provider.ActivePackageSourceName == source?.Name)
+            if (Provider.ActivePackageSourceName == source?.Name)
                 return;
 
             if (source == null)
-                provider.SaveActivePackageSource(null);
+                Provider.SaveActivePackageSource(null);
             else
-                provider.SaveActivePackageSource(UnWrap(source));
+                Provider.SaveActivePackageSource(UnWrap(source));
         }
+
+        internal void SavePackageSources()
+            => Provider.SavePackageSources(Sources.Select(s => s.Original));
     }
 }

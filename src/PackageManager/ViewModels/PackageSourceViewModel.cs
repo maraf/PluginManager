@@ -17,8 +17,10 @@ namespace PackageManager.ViewModels
         private readonly IPackageSourceCollection service;
 
         public ObservableCollection<IPackageSource> Sources { get; }
-        public RemoveSourceCommand Remove { get; }
         public Command Add { get; }
+        public DelegateCommand<IPackageSource> Edit { get; }
+        public RemoveSourceCommand Remove { get; }
+
         public SaveSourceCommand Save { get; }
         public Command Cancel { get; }
 
@@ -43,11 +45,43 @@ namespace PackageManager.ViewModels
 
             Sources = new ObservableCollection<IPackageSource>(service.All);
 
-            Add = new DelegateCommand(() => IsEditActive = true);
+            Add = new DelegateCommand(OnAdd);
+            Edit = new DelegateCommand<IPackageSource>(OnEdit, CanEdit);
             Remove = new RemoveSourceCommand(Sources, service);
+
             Save = new SaveSourceCommand(Sources, service);
             Save.Executed += () => IsEditActive = false;
             Cancel = new DelegateCommand(() => IsEditActive = false);
+        }
+
+        private void OnAdd()
+        {
+            Save.New();
+            IsEditActive = true;
+        }
+
+        private bool CanEdit(IPackageSource source)
+            => source != null;
+
+        private void OnEdit(IPackageSource source)
+        {
+            if (CanEdit(source))
+            {
+                Save.Edit(source);
+                IsEditActive = true;
+            }
+        }
+
+
+        // TODO: Fix with update of Neptuo.Observables.
+        public class DelegateCommand<T> : Neptuo.Observables.Commands.DelegateCommand<T>
+        {
+            public DelegateCommand(Action<T> execute, Func<T, bool> canExecute) 
+                : base(execute, canExecute)
+            { }
+
+            public new void RaiseCanExecuteChanged()
+                => base.RaiseCanExecuteChanged();
         }
     }
 }

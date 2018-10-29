@@ -9,7 +9,7 @@ namespace PackageManager.Views.DesignData
 {
     public class MockPackageSourceCollection : IPackageSourceCollection
     {
-        private readonly List<MockPackageSource> all = new List<MockPackageSource>();
+        internal readonly List<MockPackageSource> all = new List<MockPackageSource>();
         private IPackageSource primary;
 
         public IPackageSource Primary => primary;
@@ -17,7 +17,7 @@ namespace PackageManager.Views.DesignData
 
         public event Action Changed;
 
-        private void RaiseChanged() => Changed?.Invoke();
+        internal void RaiseChanged() => Changed?.Invoke();
 
         public IPackageSource Add(string name, Uri uri)
         {
@@ -26,6 +26,12 @@ namespace PackageManager.Views.DesignData
             RaiseChanged();
             return source;
         }
+
+        public IPackageSourceBuilder Add()
+            => new MockPackageSourceBuilder(this);
+
+        public IPackageSourceBuilder Edit(IPackageSource source)
+            => new MockPackageSourceBuilder(this);
 
         public void MarkAsPrimary(IPackageSource source)
         {

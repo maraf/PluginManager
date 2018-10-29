@@ -48,13 +48,15 @@ namespace PackageManager.Models
             sources.Remove(sources.All.First());
             Assert.AreEqual(0, sources.All.Count);
 
+            // Create.
             var sourceUri = new Uri("https://wwww.nuget.org", UriKind.Absolute);
             var sourceName = "NuGet.org";
-            var source = sources.Add(sourceName, sourceUri);
+            var source = sources.Add().Name(sourceName).Uri(sourceUri).Save();
             Assert.AreEqual(sourceName, source.Name);
             Assert.AreEqual(sourceUri, source.Uri);
             Assert.AreEqual(1, sources.All.Count);
 
+            // Mark As Primary.
             sources.MarkAsPrimary(source);
             Assert.IsNotNull(sources.Primary);
 
@@ -66,9 +68,22 @@ namespace PackageManager.Models
             Assert.AreEqual(sourceName, source.Name);
             Assert.AreEqual(sourceUri, source.Uri);
 
+            // "Remove" As Primary.
             sources.MarkAsPrimary(null);
             Assert.IsNull(sources.Primary);
 
+            // Edit
+            source = sources.Edit(sources.All.First()).Name("NuGet").Save();
+            Assert.AreEqual(1, sources.All.Count);
+            Assert.AreEqual("NuGet", source.Name);
+            Assert.AreEqual(sourceUri, source.Uri);
+
+            sources = CreateSourceCollection();
+            Assert.AreEqual("NuGet", source.Name);
+            Assert.AreEqual(sourceUri, source.Uri);
+
+            // Remove.
+            source = sources.All.First();
             sources.Remove(source);
             Assert.AreEqual(0, sources.All.Count);
 
