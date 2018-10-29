@@ -77,5 +77,33 @@ namespace PackageManager.Models
 
         internal void SavePackageSources()
             => Provider.SavePackageSources(Sources.Select(s => s.Original));
+
+        public int MoveUp(IPackageSource source)
+        {
+            NuGetPackageSource target = EnsureType(source);
+            int index = Sources.IndexOf(target);
+            if (index > 0)
+            {
+                Sources.RemoveAt(index);
+                Sources.Insert(--index, target);
+                SavePackageSources();
+            }
+
+            return index;
+        }
+
+        public int MoveDown(IPackageSource source)
+        {
+            NuGetPackageSource target = EnsureType(source);
+            int index = Sources.IndexOf(target);
+            if (index < Sources.Count - 1)
+            {
+                Sources.RemoveAt(index);
+                Sources.Insert(++index, target);
+                SavePackageSources();
+            }
+
+            return index;
+        }
     }
 }

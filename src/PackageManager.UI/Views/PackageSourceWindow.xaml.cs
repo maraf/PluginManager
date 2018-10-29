@@ -32,6 +32,8 @@ namespace PackageManager.Views
         { 
             ViewModel.Edit.RaiseCanExecuteChanged();
             ViewModel.Remove.RaiseCanExecuteChanged();
+            ViewModel.MoveUp.RaiseCanExecuteChanged();
+            ViewModel.MoveDown.RaiseCanExecuteChanged();
         }
     }
 }

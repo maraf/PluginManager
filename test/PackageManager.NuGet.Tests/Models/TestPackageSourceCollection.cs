@@ -91,5 +91,50 @@ namespace PackageManager.Models
             Assert.IsNull(sources.Primary);
             Assert.AreEqual(0, sources.All.Count);
         }
+
+        [TestMethod]
+        public void Move()
+        {
+            EnsureConfigDeleted();
+
+            var sources = CreateSourceCollection();
+            sources.Remove(sources.All.First());
+            var test1 = sources.Add().Name("Test1").Uri(new Uri("http://test1")).Save();
+            var test2 = sources.Add().Name("Test2").Uri(new Uri("http://test1")).Save();
+
+            sources = CreateSourceCollection();
+            test1 = sources.All.First();
+            test2 = sources.All.Last();
+            Assert.AreEqual("Test1", test1.Name);
+            Assert.AreEqual("Test2", test2.Name);
+
+            // Failed move down.
+            int index = sources.MoveDown(test2);
+            Assert.AreEqual(1, index);
+
+            // Success move up.
+            index = sources.MoveUp(test2);
+            Assert.AreEqual(0, index);
+
+            sources = CreateSourceCollection();
+            test1 = sources.All.Last();
+            test2 = sources.All.First();
+            Assert.AreEqual("Test1", test1.Name);
+            Assert.AreEqual("Test2", test2.Name);
+
+            // Failed move up.
+            index = sources.MoveUp(test2);
+            Assert.AreEqual(0, index);
+
+            // Success move up.
+            index = sources.MoveDown(test2);
+            Assert.AreEqual(1, index);
+
+            sources = CreateSourceCollection();
+            test1 = sources.All.First();
+            test2 = sources.All.Last();
+            Assert.AreEqual("Test1", test1.Name);
+            Assert.AreEqual("Test2", test2.Name);
+        }
     }
 }

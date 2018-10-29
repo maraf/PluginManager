@@ -35,5 +35,19 @@ namespace PackageManager.Models
         /// </summary>
         /// <param name="source">A source to remove.</param>
         void Remove(IPackageSource source);
+
+        /// <summary>
+        /// Moves <paramref name="source"/> by one up.
+        /// </summary>
+        /// <param name="source">A source to move up.</param>
+        /// <returns>A new index.</returns>
+        int MoveUp(IPackageSource source);
+
+        /// <summary>
+        /// Moves <paramref name="source"/> by one down.
+        /// </summary>
+        /// <param name="source">A source to move down.</param>
+        /// <returns>A new index.</returns>
+        int MoveDown(IPackageSource source);
     }
 }

@@ -1,4 +1,5 @@
-﻿using PackageManager.Models;
+﻿using Neptuo;
+using PackageManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,5 +45,11 @@ namespace PackageManager.Views.DesignData
             all.Remove((MockPackageSource)source);
             RaiseChanged();
         }
+
+        public int MoveUp(IPackageSource source) 
+            => throw Ensure.Exception.NotSupported();
+
+        public int MoveDown(IPackageSource source) 
+            => throw Ensure.Exception.NotSupported();
     }
 }
