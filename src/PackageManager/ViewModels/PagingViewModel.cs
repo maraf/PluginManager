@@ -79,16 +79,5 @@ namespace PackageManager.ViewModels
             CurrentIndex--;
             searchCommand.Execute();
         }
-
-        // TODO: Fix with update of Neptuo.Observables.
-        private class DelegateCommand : Neptuo.Observables.Commands.DelegateCommand
-        {
-            public DelegateCommand(Action execute, Func<bool> canExecute) 
-                : base(execute, canExecute)
-            { }
-
-            public new void RaiseCanExecuteChanged()
-                => base.RaiseCanExecuteChanged();
-        }
     }
 }

@@ -77,17 +77,5 @@ namespace PackageManager.ViewModels
                 IsEditActive = true;
             }
         }
-
-
-        // TODO: Fix with update of Neptuo.Observables.
-        public class DelegateCommand<T> : Neptuo.Observables.Commands.DelegateCommand<T>
-        {
-            public DelegateCommand(Action<T> execute, Func<T, bool> canExecute) 
-                : base(execute, canExecute)
-            { }
-
-            public new void RaiseCanExecuteChanged()
-                => base.RaiseCanExecuteChanged();
-        }
     }
 }

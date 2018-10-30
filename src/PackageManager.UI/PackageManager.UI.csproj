@@ -190,7 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Costura.Fody">
-      <Version>3.1.0</Version>
+      <Version>3.1.6</Version>
     </PackageReference>
     <PackageReference Include="Neptuo.Exceptions">
       <Version>1.2.1</Version>
