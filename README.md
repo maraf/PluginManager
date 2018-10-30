@@ -8,3 +8,4 @@ Repository with some example plugins - https://www.myget.org/F/neptuo-gitextensi
 ### Icons
 
 Some icons by Yusuke [Kamiyamane](http://p.yusukekamiyamane.com).
+Some other by [Material Desial](https://material.io/tools/icons).
