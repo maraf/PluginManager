@@ -8,7 +8,7 @@
         xmlns:converters="clr-namespace:PackageManager.Views.Converters"
         xmlns:views="clr-namespace:PackageManager.Views"
         mc:Ignorable="d" d:DataContext="{x:Static dd:ViewModelLocator.Main}"
-        Title="Packages" Height="600" Width="800" Icon="{StaticResource AppIcon}">
+        Title="Packages" Height="600" Width="800" Icon="{StaticResource AppIcon}" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converters:ValidUrlToTrueConverter x:Key="ValidUrlToTrueConverter" />
     </Window.Resources>
@@ -29,7 +29,7 @@
                 <ComboBox ItemsSource="{Binding SourceSelector.SourceNames}" SelectedItem="{Binding SourceSelector.SelectedName}" />
             </StackPanel>
 
-            <Button x:Name="PackageSourceSettings" controls:Button.Image="{StaticResource SettingsIcon}" controls:Button.ImageSize="16" ToolTip="Package Source Settings"
+            <Button x:Name="PackageSourceSettings" controls:Button.Image="{StaticResource SettingsIcon}" ToolTip="Package Source Settings"
              Click="PackageSourceSettings_Click" Margin="8" VerticalAlignment="Bottom" Grid.Column="1" />
         </Grid>
 

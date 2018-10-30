@@ -148,7 +148,7 @@ namespace PackageManager.Views.Controls
                 if (view.Style == null)
                     view.Style = (Style)Application.Current.Resources["ImageButtonStyle"];
 
-                image.Width = image.Height = GetImageSize(view) ?? 22;
+                image.Width = image.Height = GetImageSize(view) ?? 16;
                 view.Content = image;
             }
             else if (text != null)
