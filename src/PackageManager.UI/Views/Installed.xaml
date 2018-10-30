@@ -9,7 +9,7 @@
     <DockPanel x:Name="MainPanel">
         <Grid DockPanel.Dock="Top">
             <StackPanel Margin="8" Orientation="Horizontal">
-                <Button Content="Refresh" Command="{Binding Refresh}" />
+                <Button Command="{Binding Refresh}" Style="{StaticResource RefreshButtonStyle}" />
             </StackPanel>
             <StackPanel Margin="8" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="Uninstall All" Command="{Binding UninstallAll}" Margin="8,0,0,0" />

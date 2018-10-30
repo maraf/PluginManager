@@ -218,5 +218,8 @@
   <ItemGroup>
     <Resource Include="Views\Assets\settings.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\baseline_refresh_black_18dp.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
