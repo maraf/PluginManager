@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:dd="clr-namespace:PackageManager.Views.DesignData"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PackageManager.Views"
+        xmlns:controls="clr-namespace:PackageManager.Views.Controls"
         mc:Ignorable="d" d:DataContext="{x:Static dd:ViewModelLocator.PackageSources}"
         Title="Package Sources" Height="300" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Icon="{StaticResource AppIcon}">
     <Grid Background="{StaticResource BackgroundBrush}">
@@ -16,13 +16,13 @@
 
             <Grid Margin="8,8,8,0">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Create New" Command="{Binding Add}" Margin="0,0,8,0" />
+                    <Button Command="{Binding Add}" controls:Button.Image="{StaticResource AddIcon}" ToolTip="Add a new feed" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="Move Up" Command="{Binding MoveUp}" CommandParameter="{Binding SelectedItem, ElementName=lvwSources}" Margin="0,0,8,0" />
-                    <Button Content="Move Down" Command="{Binding MoveDown}" CommandParameter="{Binding SelectedItem, ElementName=lvwSources}" Margin="0,0,8,0" />
-                    <Button Content="Edit" Command="{Binding Edit}" CommandParameter="{Binding SelectedItem, ElementName=lvwSources}" Margin="0,0,8,0" />
-                    <Button Content="Remove" Command="{Binding Remove}" CommandParameter="{Binding SelectedItem, ElementName=lvwSources}" />
+                    <Button Command="{Binding MoveUp}" CommandParameter="{Binding SelectedItem, ElementName=lvwSources}" Margin="0,0,8,0" controls:Button.Image="{StaticResource MoveUpIcon}" ToolTip="Move selected feed up" />
+                    <Button Command="{Binding MoveDown}" CommandParameter="{Binding SelectedItem, ElementName=lvwSources}" Margin="0,0,8,0" controls:Button.Image="{StaticResource MoveDownIcon}" ToolTip="Move selected feed down" />
+                    <Button Command="{Binding Edit}" CommandParameter="{Binding SelectedItem, ElementName=lvwSources}" Margin="0,0,8,0" controls:Button.Image="{StaticResource EditIcon}" ToolTip="Edit selected feed" />
+                    <Button Command="{Binding Remove}" CommandParameter="{Binding SelectedItem, ElementName=lvwSources}" controls:Button.Image="{StaticResource RemoveIcon}" ToolTip="Remove selected feed" />
                 </StackPanel>
             </Grid>
 
@@ -57,9 +57,9 @@
                 <Label Content="Url:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" />
                 <TextBox Text="{Binding Save.Url, UpdateSourceTrigger=PropertyChanged}" Margin="4,4,0,4" Grid.Row="1" Grid.Column="1" />
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="2" Grid.Row="2">
-                    <Button Content="Save" Command="{Binding Save}" Margin="8,4,0,4" />
-                    <Button Content="Cancel" Command="{Binding Cancel}" Margin="8,4,0,4" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,4" Grid.ColumnSpan="2" Grid.Row="2">
+                    <Button Command="{Binding Save}" Margin="8,0,0,0" controls:Button.Image="{StaticResource DoneIcon}" controls:Button.Text="Save" />
+                    <Button Command="{Binding Cancel}" Margin="8,0,0,0" controls:Button.Image="{StaticResource RemoveIcon}" controls:Button.Text="Cancel" />
                 </StackPanel>
             </Grid>
         </Grid>

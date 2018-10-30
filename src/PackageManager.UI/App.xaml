@@ -6,6 +6,14 @@
     <Application.Resources>
         <BitmapImage x:Key="AppIcon" UriSource="/Views/Assets/box-search-result.png" />
         <BitmapImage x:Key="DefaultPackageIcon" UriSource="/Views/Assets/default-package-icon.png" />
+        
+        <BitmapImage x:Key="AddIcon" UriSource="/Views/Assets/baseline_add_black_18dp.png" />
+        <BitmapImage x:Key="RemoveIcon" UriSource="/Views/Assets/baseline_clear_black_18dp.png" />
+        <BitmapImage x:Key="EditIcon" UriSource="/Views/Assets/baseline_edit_black_18dp.png" />
+        <BitmapImage x:Key="MoveUpIcon" UriSource="/Views/Assets/baseline_arrow_upward_black_18dp.png" />
+        <BitmapImage x:Key="MoveDownIcon" UriSource="/Views/Assets/baseline_arrow_downward_black_18dp.png" />
+        <BitmapImage x:Key="DoneIcon" UriSource="/Views/Assets/baseline_done_black_18dp.png" />
+        
         <Color x:Key="BackgroundColor">#eee</Color>
         <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />
         <SolidColorBrush x:Key="BorderBrush" Color="{x:Static SystemColors.ActiveBorderColor}" />
@@ -48,6 +56,9 @@
         </Style>
         <Style TargetType="Button">
             <Setter Property="Padding" Value="8,4" />
+        </Style>
+        <Style x:Key="ImageButton" TargetType="Button">
+            <Setter Property="Padding" Value="4" />
         </Style>
         <Style x:Key="LinkButtonStyle" TargetType="Button">
             <Setter Property="Height" Value="15" />

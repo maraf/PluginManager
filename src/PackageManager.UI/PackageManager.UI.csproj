@@ -110,6 +110,7 @@
     <Compile Include="Views\Browser.xaml.cs">
       <DependentUpon>Browser.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\Button.cs" />
     <Compile Include="Views\Controls\CompatibilityLabel.cs" />
     <Compile Include="Views\Controls\TabControl.cs" />
     <Compile Include="Views\Converters\BoolConverter.cs" />
@@ -199,13 +200,17 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Views\Assets\default-package-icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Views\Assets\default-package-icon.png" />
     <Resource Include="Views\Assets\box-search-result.png" />
+    <Resource Include="Views\Assets\baseline_arrow_downward_black_18dp.png" />
+    <Resource Include="Views\Assets\baseline_arrow_upward_black_18dp.png" />
+    <Resource Include="Views\Assets\baseline_add_black_18dp.png" />
+    <Resource Include="Views\Assets\baseline_clear_black_18dp.png" />
+    <Resource Include="Views\Assets\baseline_edit_black_18dp.png" />
+    <Resource Include="Views\Assets\baseline_done_black_18dp.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
