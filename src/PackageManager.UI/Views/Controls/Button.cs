@@ -34,7 +34,8 @@ namespace PackageManager.Views.Controls
             if (size != null)
             {
                 ContentControl view = (ContentControl)d;
-                if ((view.Content is Image image) || (view.Content is StackPanel panel && (image = panel.Children.OfType<Image>().FirstOrDefault()) != null))
+                Image image = FindImage(view);
+                if (image != null)
                     image.Width = image.Height = size.Value;
             }
         }
@@ -87,13 +88,27 @@ namespace PackageManager.Views.Controls
         }
 
 
+        private static Image FindImage(ContentControl view)
+        {
+            if (view.Content is Image image)
+                return image;
+
+            if (view.Content is StackPanel panel)
+                return image = panel.Children.OfType<Image>().FirstOrDefault();
+
+            return null;
+        }
+
         private static void UpdateContent(ContentControl view, Image image, TextBlock text)
         {
+
             if (image == null)
             {
                 ImageSource imageSource = GetImage(view);
                 if (imageSource != null)
                 {
+                    view.IsEnabledChanged += OnEnabledChangedUpdateImage;
+
                     image = new Image()
                     {
                         SnapsToDevicePixels = true,
@@ -140,6 +155,14 @@ namespace PackageManager.Views.Controls
             {
                 view.Content = text;
             }
+        }
+
+        private static void OnEnabledChangedUpdateImage(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ContentControl view = (ContentControl)sender;
+            Image image = FindImage(view);
+            if (image != null)
+                image.Opacity = view.IsEnabled ? 1 : 0.6;
         }
     }
 }
