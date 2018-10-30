@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dd="clr-namespace:PackageManager.Views.DesignData"
+             xmlns:controls="clr-namespace:PackageManager.Views.Controls"
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Browser}}" Background="White">
     <DockPanel x:Name="MainPanel">
         <StackPanel Margin="8" DockPanel.Dock="Top">
@@ -15,7 +16,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBox x:Name="tbxSearch" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="tbxSearch_PreviewKeyDown" />
-                <Button x:Name="btnSearch" Content="Search" Command="{Binding Search}" Grid.Column="1" Margin="8,0,0,0" />
+                <Button x:Name="btnSearch" controls:Button.Image="{StaticResource SearchIcon}" controls:Button.Text="Search" Command="{Binding Search}" Grid.Column="1" Margin="8,0,0,0" />
             </Grid>
         </StackPanel>
 
@@ -64,9 +65,9 @@
                     </ListView>
                     <Grid Background="White" Grid.Row="1">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DataContext="{Binding Paging}" Margin="8">
-                            <Button Content="Prev" Command="{Binding Prev}" />
+                            <Button controls:Button.Image="{StaticResource LeftIcon}" Command="{Binding Prev}" Padding="0" />
                             <TextBlock Text="{Binding CurrentNumber}" Margin="8,0" VerticalAlignment="Center" />
-                            <Button Content="Next" Command="{Binding Next}" />
+                            <Button controls:Button.Image="{StaticResource RightIcon}" Command="{Binding Next}" Padding="0" />
                         </StackPanel>
                     </Grid>
                 </Grid>

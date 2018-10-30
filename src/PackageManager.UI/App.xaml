@@ -6,13 +6,17 @@
     <Application.Resources>
         <BitmapImage x:Key="AppIcon" UriSource="/Views/Assets/box-search-result.png" />
         <BitmapImage x:Key="DefaultPackageIcon" UriSource="/Views/Assets/default-package-icon.png" />
-        
+
+        <BitmapImage x:Key="SettingsIcon" UriSource="/Views/Assets/settings.png" />
         <BitmapImage x:Key="AddIcon" UriSource="/Views/Assets/baseline_add_black_18dp.png" />
         <BitmapImage x:Key="RemoveIcon" UriSource="/Views/Assets/baseline_clear_black_18dp.png" />
         <BitmapImage x:Key="EditIcon" UriSource="/Views/Assets/baseline_edit_black_18dp.png" />
         <BitmapImage x:Key="MoveUpIcon" UriSource="/Views/Assets/baseline_arrow_upward_black_18dp.png" />
         <BitmapImage x:Key="MoveDownIcon" UriSource="/Views/Assets/baseline_arrow_downward_black_18dp.png" />
+        <BitmapImage x:Key="SearchIcon" UriSource="/Views/Assets/baseline_search_black_18dp.png" />
         <BitmapImage x:Key="DoneIcon" UriSource="/Views/Assets/baseline_done_black_18dp.png" />
+        <BitmapImage x:Key="LeftIcon" UriSource="/Views/Assets/baseline_chevron_left_black_18dp.png" />
+        <BitmapImage x:Key="RightIcon" UriSource="/Views/Assets/baseline_chevron_right_black_18dp.png" />
         
         <Color x:Key="BackgroundColor">#eee</Color>
         <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />

@@ -210,7 +210,13 @@
     <Resource Include="Views\Assets\baseline_add_black_18dp.png" />
     <Resource Include="Views\Assets\baseline_clear_black_18dp.png" />
     <Resource Include="Views\Assets\baseline_edit_black_18dp.png" />
+    <Resource Include="Views\Assets\baseline_chevron_left_black_18dp.png" />
+    <Resource Include="Views\Assets\baseline_chevron_right_black_18dp.png" />
     <Resource Include="Views\Assets\baseline_done_black_18dp.png" />
+    <Resource Include="Views\Assets\baseline_search_black_18dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\settings.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

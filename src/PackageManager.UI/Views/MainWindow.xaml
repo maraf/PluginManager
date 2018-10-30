@@ -29,7 +29,8 @@
                 <ComboBox ItemsSource="{Binding SourceSelector.SourceNames}" SelectedItem="{Binding SourceSelector.SelectedName}" />
             </StackPanel>
 
-            <Button x:Name="PackageSourceSettings" Content="Settings" Click="PackageSourceSettings_Click" Margin="8" VerticalAlignment="Bottom" Grid.Column="1" />
+            <Button x:Name="PackageSourceSettings" controls:Button.Image="{StaticResource SettingsIcon}" controls:Button.ImageSize="16" ToolTip="Package Source Settings"
+             Click="PackageSourceSettings_Click" Margin="8" VerticalAlignment="Bottom" Grid.Column="1" />
         </Grid>
 
         <Grid Grid.Row="1">

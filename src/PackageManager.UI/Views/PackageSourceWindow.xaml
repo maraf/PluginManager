@@ -16,7 +16,7 @@
 
             <Grid Margin="8,8,8,0">
                 <StackPanel Orientation="Horizontal">
-                    <Button Command="{Binding Add}" controls:Button.Image="{StaticResource AddIcon}" ToolTip="Add a new feed" />
+                    <Button Command="{Binding Add}" controls:Button.Image="{StaticResource AddIcon}" ToolTip="Add a New Feed" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Command="{Binding MoveUp}" CommandParameter="{Binding SelectedItem, ElementName=lvwSources}" Margin="0,0,8,0" controls:Button.Image="{StaticResource MoveUpIcon}" ToolTip="Move selected feed up" />

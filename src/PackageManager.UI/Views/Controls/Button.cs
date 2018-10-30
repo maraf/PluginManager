@@ -11,6 +11,34 @@ namespace PackageManager.Views.Controls
 {
     public class Button
     {
+        public static double? GetImageSize(DependencyObject obj)
+        {
+            return (double?)obj.GetValue(ImageSizeProperty);
+        }
+
+        public static void SetImageSize(DependencyObject obj, double? value)
+        {
+            obj.SetValue(ImageSizeProperty, value);
+        }
+
+        public static readonly DependencyProperty ImageSizeProperty = DependencyProperty.RegisterAttached(
+            "ImageSize",
+            typeof(double?),
+            typeof(Button),
+            new PropertyMetadata(null, OnImageSizeChanged)
+        );
+
+        private static void OnImageSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            double? size = GetImageSize(d);
+            if (size != null)
+            {
+                ContentControl view = (ContentControl)d;
+                if ((view.Content is Image image) || (view.Content is StackPanel panel && (image = panel.Children.OfType<Image>().FirstOrDefault()) != null))
+                    image.Width = image.Height = size.Value;
+            }
+        }
+
         public static ImageSource GetImage(DependencyObject obj)
         {
             return (ImageSource)obj.GetValue(ImageProperty);
@@ -94,7 +122,7 @@ namespace PackageManager.Views.Controls
                 };
                 view.Content = panel;
 
-                image.Height = 16;
+                image.Width = image.Height = GetImageSize(view) ?? 16;
                 panel.Children.Add(image);
 
                 text.Margin = new Thickness(4, 0, 0, 0);
@@ -105,7 +133,7 @@ namespace PackageManager.Views.Controls
                 if (view.Style == null)
                     view.Style = (Style)Application.Current.Resources["ImageButton"];
 
-                image.Height = 22;
+                image.Width = image.Height = GetImageSize(view) ?? 22;
                 view.Content = image;
             }
             else if (text != null)
