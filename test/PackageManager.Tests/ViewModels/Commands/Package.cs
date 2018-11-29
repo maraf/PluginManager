@@ -16,7 +16,7 @@ namespace PackageManager.ViewModels.Commands
         public CallCounter RemoveFromAsyncCalled { get; } = new CallCounter();
         public IPackage Object { get; }
 
-        public Package(string extractPath, string id)
+        public Package(string extractPath, string id, string version = null)
         {
             Mock<IPackageContent> contentMock = new Mock<IPackageContent>();
             contentMock
@@ -38,6 +38,13 @@ namespace PackageManager.ViewModels.Commands
             mock
                 .SetupGet(p => p.Id)
                 .Returns(id);
+
+            if (version != null)
+            {
+                mock
+                    .SetupGet(p => p.Version)
+                    .Returns(version);
+            }
 
             Object = mock.Object;
         }
