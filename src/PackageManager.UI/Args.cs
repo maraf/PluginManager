@@ -10,7 +10,7 @@ namespace PackageManager
     {
         public string Path { get; set; }
         public IReadOnlyCollection<string> Monikers { get; set; }
-        public IReadOnlyCollection<(string id, string version)> Dependencies { get; set; }
+        public IReadOnlyCollection<Dependency> Dependencies { get; set; }
         public string SelfPackageId { get; set; }
 
         public bool IsSelfUpdate { get; set; }
@@ -21,7 +21,7 @@ namespace PackageManager
         public Args()
         {
             Monikers = Array.Empty<string>();
-            Dependencies = Array.Empty<(string id, string version)>();
+            Dependencies = Array.Empty<Dependency>();
         }
 
         public Args(string[] args)
@@ -86,10 +86,10 @@ namespace PackageManager
             }
         }
 
-        private (string id, string version)[] ParseDependencies(string arg)
+        private Dependency[] ParseDependencies(string arg)
         {
             string[] dependencies = arg.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            (string id, string version)[] result = new (string id, string version)[dependencies.Length];
+            Dependency[] result = new Dependency[dependencies.Length];
 
             for (int i = 0; i < dependencies.Length; i++)
             {
@@ -97,9 +97,9 @@ namespace PackageManager
 
                 string[] parts = dependency.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length == 1)
-                    result[i] = (parts[0], null);
+                    result[i] = new Dependency(parts[0]);
                 else
-                    result[i] = (parts[0], parts[1][0] == 'v' ? parts[1].Substring(1) : parts[1]);
+                    result[i] = new Dependency(parts[0], parts[1][0] == 'v' ? parts[1].Substring(1) : parts[1]);
             }
 
             return result;
@@ -123,7 +123,7 @@ namespace PackageManager
             if (Dependencies.Count > 0)
             {
                 result.Append(" --dependencies ");
-                result.Append(String.Join(",", Dependencies.Select(d => d.id + (d.version != null ? "-v" + d.version : ""))));
+                result.Append(String.Join(",", Dependencies.Select(d => d.Id + (d.Version != null ? "-v" + d.Version : ""))));
             }
 
             if (!String.IsNullOrEmpty(SelfPackageId))
@@ -139,6 +139,43 @@ namespace PackageManager
                 result.Append($" --processnamestokillbeforechange \"{String.Join(",", ProcessNamesToKillBeforeChange)}\"");
 
             return result.ToString();
+        }
+
+        public class Dependency
+        {
+            public string Id { get; }
+            public string Version { get; }
+
+            public Dependency(string id)
+            {
+                Id = id;
+            }
+
+            public Dependency(string id, string version)
+            {
+                Id = id;
+                Version = version;
+            }
+
+            public override bool Equals(object obj)
+            {
+                Dependency other = obj as Dependency;
+                if (other == null)
+                    return false;
+
+                if (Id != other.Id)
+                    return false;
+
+                if (Version != other.Version)
+                    return false;
+
+                return true;
+            }
+
+            public override int GetHashCode()
+            {
+                return 3 * Id.GetHashCode() + 3 * Version?.GetHashCode() ?? 42;
+            }
         }
     }
 }

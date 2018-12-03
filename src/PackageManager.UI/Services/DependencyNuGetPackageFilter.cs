@@ -13,10 +13,10 @@ namespace PackageManager.Services
 {
     public class DependencyNuGetPackageFilter : INuGetPackageFilter
     {
-        private readonly IReadOnlyCollection<(string id, string version)> dependencies;
+        private readonly IReadOnlyCollection<Args.Dependency> dependencies;
         private readonly IReadOnlyCollection<NuGetFramework> frameworks;
 
-        public DependencyNuGetPackageFilter(IReadOnlyCollection<(string id, string version)> dependencies, IReadOnlyCollection<NuGetFramework> frameworks)
+        public DependencyNuGetPackageFilter(IReadOnlyCollection<Args.Dependency> dependencies, IReadOnlyCollection<NuGetFramework> frameworks)
         {
             Ensure.NotNull(dependencies, "dependencies");
             Ensure.NotNull(frameworks, "frameworks");
@@ -40,11 +40,11 @@ namespace PackageManager.Services
                     // - When all dependencies are missing, don't even try previous versions.
                     foreach (var dependency in dependencies)
                     {
-                        PackageDependency packageDependency = group.Packages.FirstOrDefault(p => p.Id == dependency.id);
+                        PackageDependency packageDependency = group.Packages.FirstOrDefault(p => p.Id == dependency.Id);
                         if (packageDependency == null)
                             result = NuGetPackageFilterResult.NotCompatible;
 
-                        if (dependency.version != null && !packageDependency.VersionRange.Satisfies(new NuGetVersion(dependency.version)))
+                        if (dependency.Version != null && !packageDependency.VersionRange.Satisfies(new NuGetVersion(dependency.Version)))
                             return NuGetPackageFilterResult.NotCompatibleVersion;
                     }
 
