@@ -1,5 +1,4 @@
 ﻿using GitUIPluginInterfaces;
-using Neptuo;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,8 +24,7 @@ namespace GitExtensions.PluginManager
 
         public PluginSettings(ISettingsSource source)
         {
-            Ensure.NotNull(source, "source");
-            this.source = source;
+            this.source = source ?? throw new ArgumentNullException(nameof(source));
         }
 
         #region IEnumerable<ISetting>

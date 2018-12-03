@@ -18,10 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Neptuo" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="GitUI">
       <HintPath>..\..\references\GitExtensions-3.00.00.01\GitUI.dll</HintPath>
     </Reference>
