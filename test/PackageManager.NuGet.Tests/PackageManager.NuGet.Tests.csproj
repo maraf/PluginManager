@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\src\PackageManager.UI\Args.cs" Link="Services\Args.cs" />
     <Compile Include="..\..\src\PackageManager.UI\Models\NuGetFrameworkFilter.cs" Link="Services\NuGetFrameworkFilter.cs" />
     <Compile Include="..\..\src\PackageManager.UI\Services\DependencyNuGetPackageFilter.cs" Link="Services\DependencyNuGetPackageFilter.cs" />
     <Compile Include="..\PackageManager.Tests\ViewModels\Commands\CallCounter.cs" Link="Services\CallCounter.cs" />

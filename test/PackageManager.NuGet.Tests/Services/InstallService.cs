@@ -31,7 +31,7 @@ namespace PackageManager.Services
                 new DefaultLog(),
                 extractPath,
                 new DependencyNuGetPackageFilter(
-                    new List<(string, string)>() { ("GitExtensions.Plugins", null) },
+                    new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Plugins", null) },
                     frameworks
                 ),
                 new NuGetFrameworkFilter(frameworks)

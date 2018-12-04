@@ -30,7 +30,7 @@ namespace PackageManager.Services
                 new NuGetSourceRepositoryFactory(),
                 new DefaultLog(),
                 new DependencyNuGetPackageFilter(
-                    new List<(string, string)>() { ("GitExtensions.Plugins", null) },
+                    new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Plugins", null) },
                     frameworks
                 ),
                 new NuGetFrameworkFilter(frameworks)
