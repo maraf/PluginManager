@@ -55,7 +55,7 @@ namespace PackageManager
 
             if (!Directory.Exists(Args.Path))
             {
-                Navigator.Notify("Missing argument '--path' - a target path to install packages to.", "Packages", Navigator.MessageType.Error);
+                Navigator.Notify("Packages", "Missing argument '--path' - a target path to install packages to.", Navigator.MessageType.Error);
                 Shutdown();
                 return;
             }

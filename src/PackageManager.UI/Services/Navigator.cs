@@ -30,10 +30,20 @@ namespace PackageManager.Services
         }
 
         public void Notify(string title, string message, MessageType type = MessageType.Info)
-            => MessageBox.Show(application.MainWindow, message, title, MessageBoxButton.OK, MapTypeToImage(type));
+        {
+            if (application.MainWindow != null)
+                MessageBox.Show(application.MainWindow, message, title, MessageBoxButton.OK, MapTypeToImage(type));
+            else
+                MessageBox.Show(message, title, MessageBoxButton.OK, MapTypeToImage(type));
+        }
 
         public bool Confirm(string title, string message, MessageType type = MessageType.Info)
-            => MessageBox.Show(application.MainWindow, message, title, MessageBoxButton.YesNo, MapTypeToImage(type)) == MessageBoxResult.Yes;
+        {
+            if (application.MainWindow != null)
+                return MessageBox.Show(application.MainWindow, message, title, MessageBoxButton.YesNo, MapTypeToImage(type)) == MessageBoxResult.Yes;
+            else
+                return MessageBox.Show(message, title, MessageBoxButton.YesNo, MapTypeToImage(type)) == MessageBoxResult.Yes;
+        }
 
         private MessageBoxImage MapTypeToImage(MessageType type)
         {
