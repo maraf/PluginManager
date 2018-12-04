@@ -25,8 +25,8 @@ namespace PackageManager
             string path = @"C:\Temp";
             string moniker1 = "A";
             string moniker2 = "B";
-            var dependency1 = ("A", "v1.0.0");
-            var dependency2 = ("B", "v2.0.0");
+            var dependency1 = new Args.Dependency("A", "v1.0.0");
+            var dependency2 = new Args.Dependency("B", "v2.0.0");
             string selfPackageId = "C";
             string processToKill1 = "D.exe";
             string processToKill2 = "E.exe";
@@ -36,7 +36,7 @@ namespace PackageManager
             var args = new Args();
             args.Path = path;
             args.Monikers = new List<string>() { moniker1, moniker2 };
-            args.Dependencies = new List<(string, string)>() { dependency1, dependency2 };
+            args.Dependencies = new List<Args.Dependency>() { dependency1, dependency2 };
             args.SelfPackageId = selfPackageId;
             args.ProcessNamesToKillBeforeChange = new List<string>() { processToKill1, processToKill2 };
             args.SelfOriginalPath = selfOriginalPath;
