@@ -1,11 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
-
-    <IsPackable>false</IsPackable>
-
-    <RootNamespace>PackageManager</RootNamespace>
     <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
 
@@ -15,14 +10,6 @@
     <Compile Include="..\..\src\PackageManager.UI\Services\DependencyNuGetPackageFilter.cs" Link="Services\DependencyNuGetPackageFilter.cs" />
     <Compile Include="..\PackageManager.Tests\ViewModels\Commands\CallCounter.cs" Link="Services\CallCounter.cs" />
     <Compile Include="..\PackageManager.Tests\ViewModels\Commands\Package.cs" Link="Services\Package.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
-    <PackageReference Include="Moq" Version="4.10.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="1.3.2" />
-    <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
-    <PackageReference Include="NuGet.PackageManagement" Version="4.8.0" />
   </ItemGroup>
 
   <ItemGroup>
