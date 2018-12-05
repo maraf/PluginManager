@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net471</TargetFramework>
     <LangVersion>latest</LangVersion>
 
     <IsPackable>false</IsPackable>
 
     <RootNamespace>PackageManager</RootNamespace>
+    <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
