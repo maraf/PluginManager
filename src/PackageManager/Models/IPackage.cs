@@ -10,18 +10,8 @@ namespace PackageManager.Models
     /// <summary>
     /// A package.
     /// </summary>
-    public interface IPackage
+    public interface IPackage : IPackageIdentity
     {
-        /// <summary>
-        /// Gets an unique package identifier.
-        /// </summary>
-        string Id { get; }
-
-        /// <summary>
-        /// Gets a package version.
-        /// </summary>
-        string Version { get; }
-
         /// <summary>
         /// Gets a package description.
         /// </summary>

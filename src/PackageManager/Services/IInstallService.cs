@@ -12,10 +12,10 @@ namespace PackageManager.Services
     {
         string Path { get; }
 
-        bool IsInstalled(IPackage package);
+        bool IsInstalled(IPackageIdentity package);
 
-        void Install(IPackage package);
-        void Uninstall(IPackage package);
+        void Install(IPackageIdentity package);
+        void Uninstall(IPackageIdentity package);
 
         Task<IReadOnlyCollection<IInstalledPackage>> GetInstalledAsync(IEnumerable<IPackageSource> packageSources, CancellationToken cancellationToken);
     }

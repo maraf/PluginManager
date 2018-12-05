@@ -13,13 +13,13 @@ namespace PackageManager.Views.DesignData
     {
         public string Path => @"C:\Temp";
 
-        public bool IsInstalled(IPackage package)
+        public bool IsInstalled(IPackageIdentity package)
             => false;
 
-        public void Install(IPackage package)
+        public void Install(IPackageIdentity package)
         { }
 
-        public void Uninstall(IPackage package)
+        public void Uninstall(IPackageIdentity package)
         { }
 
         public Task<IReadOnlyCollection<IInstalledPackage>> GetInstalledAsync(IEnumerable<IPackageSource> packageSources, CancellationToken cancellationToken)

@@ -47,7 +47,7 @@ namespace PackageManager.Services
             this.packageFilter = packageFilter;
         }
 
-        public bool IsInstalled(IPackage package)
+        public bool IsInstalled(IPackageIdentity package)
         {
             Ensure.NotNull(package, "package");
 
@@ -61,7 +61,7 @@ namespace PackageManager.Services
             }
         }
 
-        public void Install(IPackage package)
+        public void Install(IPackageIdentity package)
         {
             Ensure.NotNull(package, "package");
 
@@ -78,7 +78,7 @@ namespace PackageManager.Services
             }
         }
 
-        public void Uninstall(IPackage package)
+        public void Uninstall(IPackageIdentity package)
         {
             Ensure.NotNull(package, "package");
 
