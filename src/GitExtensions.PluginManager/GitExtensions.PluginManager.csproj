@@ -8,6 +8,12 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageManagerTargetPath>PackageManager\PackageManager.UI.exe</PackageManagerTargetPath>
+    <PackageManagerSourcePath>$(SolutionDir)src\PackageManager.UI\bin\$(Configuration)\$(TargetFramework)\PackageManager.UI.exe</PackageManagerSourcePath>
+    <GitExtensionsDebugPluginsPath>..\..\references\GitExtensions\Plugins\</GitExtensionsDebugPluginsPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\PackageManager.UI\Args.cs" Link="Args.cs" />
   </ItemGroup>
@@ -38,11 +44,16 @@
     </EmbeddedResource>
   </ItemGroup>
   
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Copy SourceFiles="$(TargetDir)\PackageManager\PackageManager.UI.exe" DestinationFolder="..\..\references\GitExtensions\Plugins\PackageManager" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="..\..\references\GitExtensions\Plugins" />
-  </Target>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFolder="$(TargetDir)PackageManager" />
     <Exec Command="powershell.exe ..\..\tools\Download-GitExtensions.ps1" />
+  </Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Copy SourceFiles="$(TargetDir)$(PackageManagerTargetPath)" DestinationFolder="$(GitExtensionsDebugPluginsPath)PackageManager" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(GitExtensionsDebugPluginsPath)" />
+  </Target>
+  <Target Name="PreClean" BeforeTargets="Clean">
+    <Message Text="Deleting PackageManager" Importance="high" />
+    <Delete Files="$(TargetDir)$(PackageManagerTargetPath)" ContinueOnError="true" />
   </Target>
 </Project>
