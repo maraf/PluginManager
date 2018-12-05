@@ -5,6 +5,7 @@
     <Description>NuGet-based Plugin Manager for GitExtensions</Description>
     <PackageTags>Neptuo GitExtensions</PackageTags>
     <PackageProjectUrl>http://www.neptuo.com/project/dev/gitextensions.pluginmanager</PackageProjectUrl>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,18 +14,18 @@
 
   <ItemGroup>
     <Reference Include="GitUI">
-      <HintPath>..\..\references\GitExtensions-3.00.00.01\GitUI.dll</HintPath>
+      <HintPath>..\..\references\GitExtensions\GitUI.dll</HintPath>
     </Reference>
     <Reference Include="GitUIPluginInterfaces">
-      <HintPath>..\..\references\GitExtensions-3.00.00.01\GitUIPluginInterfaces.dll</HintPath>
+      <HintPath>..\..\references\GitExtensions\GitUIPluginInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="ResourceManager">
-      <HintPath>..\..\references\GitExtensions-3.00.00.01\ResourceManager.dll</HintPath>
+      <HintPath>..\..\references\GitExtensions\ResourceManager.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -36,4 +37,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(TargetDir)Neptuo.dll&quot; &quot;..\..\references\GitExtensions\Plugins\Neptuo.dll&quot;&#xD;&#xA;copy &quot;$(TargetPath)&quot; &quot;..\..\references\GitExtensions\Plugins\$(TargetFileName)&quot;" />
+  </Target>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="powershell.exe ..\..\tools\Download-GitExtensions.ps1" />
+  </Target>
 </Project>
