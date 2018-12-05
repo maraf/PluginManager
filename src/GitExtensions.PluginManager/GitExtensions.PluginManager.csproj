@@ -39,9 +39,9 @@
   </ItemGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy &quot;$(TargetDir)Neptuo.dll&quot; &quot;..\..\references\GitExtensions\Plugins\Neptuo.dll&quot;&#xD;&#xA;copy &quot;$(TargetPath)&quot; &quot;..\..\references\GitExtensions\Plugins\$(TargetFileName)&quot;" />
+    <Copy SourceFiles="$(TargetDir)\PackageManager\PackageManager.UI.exe" DestinationFolder="..\..\references\GitExtensions\Plugins\PackageManager" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="..\..\references\GitExtensions\Plugins" />
   </Target>
-
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="powershell.exe ..\..\tools\Download-GitExtensions.ps1" />
   </Target>
