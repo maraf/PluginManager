@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,12 +9,6 @@ namespace PackageManager
 {
     public static class VersionInfo
     {
-        internal const string Version = "0.7.2";
-        internal const string Preview = null; //-beta1
-
-        public static Version GetVersion()
-        {
-            return new Version(Version);
-        }
+        public static string Version => typeof(VersionInfo).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
     }
 }

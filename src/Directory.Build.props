@@ -1,0 +1,13 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <PropertyGroup>
+    <Authors>Maraf</Authors>
+    <Company>Neptuo</Company>
+    <RepositoryUrl>https://github.com/maraf/GitExtensions.PluginManager</RepositoryUrl>
+    <LangVersion>latest</LangVersion>
+
+    <VersionPrefix>0.8.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+  </PropertyGroup>
+
+</Project>

@@ -2,15 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
-    <Authors>Maraf</Authors>
-    <Company>Neptuo</Company>
     <Description>NuGet-based Plugin Manager for GitExtensions</Description>
-    <RepositoryUrl>https://github.com/maraf/GitExtensions.PluginManager</RepositoryUrl>
     <PackageTags>Neptuo GitExtensions</PackageTags>
     <PackageProjectUrl>http://www.neptuo.com/project/dev/gitextensions.pluginmanager</PackageProjectUrl>
-    <LangVersion>latest</LangVersion>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,9 +31,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
