@@ -31,12 +31,12 @@ namespace PackageManager.Views
 
         private async void RefreshContent()
         {
-            Content.Text = log.GetContent();
-            if (String.IsNullOrEmpty(Content.Text))
-                Content.Text = "No entries.";
+            TextContent.Text = log.GetContent();
+            if (String.IsNullOrEmpty(TextContent.Text))
+                TextContent.Text = "No entries.";
 
             await Task.Delay(50);
-            Content.ScrollToEnd();
+            TextContent.ScrollToEnd();
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
@@ -46,6 +46,6 @@ namespace PackageManager.Views
         }
 
         private void GoToBottom_Click(object sender, RoutedEventArgs e)
-            => Content.ScrollToEnd();
+            => TextContent.ScrollToEnd();
     }
 }
