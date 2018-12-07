@@ -22,5 +22,5 @@
     <ProjectReference Include="..\PackageManager\PackageManager.csproj" />
   </ItemGroup>
 
-  <Import Project="$(SolutionDir)\build\Wpf.Build.targets" />
+  <Import Project="$(MSBuildProjectDirectory)..\..\..\build\Wpf.Build.targets" />
 </Project>
