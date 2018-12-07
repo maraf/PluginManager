@@ -6,6 +6,8 @@
     <PackageTags>Neptuo GitExtensions</PackageTags>
     <PackageProjectUrl>http://www.neptuo.com/project/dev/gitextensions.pluginmanager</PackageProjectUrl>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <NuspecFile>$(MSBuildThisFileDirectory)$(MSBuildProjectName).nuspec</NuspecFile>
+    <NoWarn>1701;1702;NU5100</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -59,5 +61,25 @@
   <Target Name="PreClean" BeforeTargets="Clean">
     <Message Text="Deleting PackageManager" Importance="high" />
     <Delete Files="$(TargetDir)$(PackageManagerTargetPath)" ContinueOnError="true" />
+  </Target>
+
+  <Target Name="SetPackageProperties" BeforeTargets="GenerateNuspec">
+    <PropertyGroup>
+      <NuspecProperties>
+        id=$(PackageId);
+        version=$(PackageVersion);
+        configuration=$(Configuration);
+        tags=$(PackageTags.Replace(';',' '));
+        projectUrl=$(PackageProjectUrl);
+        iconUrl=$(PackageIconUrl);
+        repositoryUrl=$(RepositoryUrl);
+        repositoryType=$(RepositoryType);
+        repositoryCommit=$(RepositoryCommit);
+        author=$(Authors);
+        copyright=$(Copyright);
+        description=$(Description);
+        targetDir=$(TargetDir);
+      </NuspecProperties>
+    </PropertyGroup>
   </Target>
 </Project>
