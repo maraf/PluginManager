@@ -1,6 +1,7 @@
 param([string] $Version, [string] $Configuration = 'Release')
 
-If (-not($Version)) { 
+If (-not($Version)) 
+{ 
     Throw "Parameter -Version is required";
 }
 
@@ -9,7 +10,7 @@ Push-Location $PSScriptRoot;
 $sourceBasePath = "..\src\GitExtensions.PluginManager\bin\" + $Configuration;
 
 $name = "GitExtensions.PluginManager-" + $Version;
-$target = $sourceBasePath + "\GitExtensions.PluginManager-" + $Version + ".zip";
+$target = $sourceBasePath + "\GitExtensions.PluginManager." + $Version + ".zip";
 
 $tempPath = Join-Path $env:TEMP -ChildPath $name;
 $tempPmPath = Join-Path $tempPath -ChildPath "PackageMananger";
@@ -20,6 +21,7 @@ Copy-Item -Force ($sourceBasePath + "\net461\GitExtensions.PluginManager.dll") $
 Copy-Item -Force ($sourceBasePath + "\net461\PackageManager\PackageManager.UI.exe") $tempPmPath | Out-Null;
 
 Compress-Archive -Path ($tempPath + "\*") -DestinationPath $target -Force;
+Write-Host ("Created release zip at '" + $target + "'");
 
 Remove-Item -Force -Recurse $tempPath;
 

@@ -1,12 +1,9 @@
 version: '{build}'
 image: Visual Studio 2017
-configuration: Release
-before_build:
-- cmd: dotnet restore GitExtensions.PluginManager.sln
-build:
-  verbosity: minimal
+build_script:
+- ps: .\tools\Prepare-Release.ps1
 test_script:
-- cmd: >-
-    dotnet test .\test\PackageManager.NuGet.Tests\PackageManager.NuGet.Tests.csproj -c Release --no-build --test-adapter-path:. --logger:Appveyor /property:Platform=AnyCPU
-    
-    dotnet test .\test\PackageManager.Tests\PackageManager.Tests.csproj -c Release --no-build --test-adapter-path:. --logger:Appveyor /property:Platform=AnyCPU
+- ps: .\tools\Run-Tests.ps1
+artifacts:
+- path: .\*.zip
+- path: .\*.nupkg

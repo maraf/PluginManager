@@ -52,6 +52,6 @@
   <Import Project="$(MSBuildProjectDirectory)\..\..\build\Wpf.Build.targets" />
 
   <Target Name="Zip" AfterTargets="Pack">
-    <Exec Command="powershell $(MSBuildProjectDirectory)\..\..\tools\Zip-PackageManager.ps1 -Version v$(PackageVersion) -Configuration $(Configuration)" />
+    <Exec Command="powershell $(MSBuildProjectDirectory)\..\..\tools\Zip-PackageManager.ps1 -Version $(PackageVersion) -Configuration $(Configuration)" />
   </Target>
 </Project>
