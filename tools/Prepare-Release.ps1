@@ -1,17 +1,32 @@
-Push-Location $PSScriptRoot;
+Push-Location '.\tools';
 
 $targetPath = '..\';
 
-If (!($True -eq $env:APPVEYOR) -Or ($True -eq $env:APPVEYOR_REPO_TAG))
+$isAppveyor = $True -eq $env:APPVEYOR;
+$isTag = 'true' -eq $env:APPVEYOR_REPO_TAG;
+
+If (!$isAppveyor)
 {
+    Write-Host "Running a local build";
+
     $targetPath = Join-Path $targetPath 'artifacts';
-    $versionSuffix = $null;
+    $versionSuffix = $Null;
 }
-else 
+Elseif (!$isTag)
 {
+    Write-Host "Running an Appveyor commit build";
+
     $buildNumber = "build{0:D4}" -f [convert]::ToInt32($env:APPVEYOR_BUILD_NUMBER, 10);
     $commitHash = ($env:APPVEYOR_REPO_COMMIT).Substring(0, 10);
     $versionSuffix = $buildNumber + "+" + $commitHash;
+
+    Write-Host ("Version suffix: " + $versionSuffix);
+}
+Else
+{
+    Write-Host ("Running an Appveyor release (tag '" + $env:APPVEYOR_REPO_TAG_NAME + "') build");
+
+    $versionSuffix = $null;
 }
 
 dotnet restore ..\GitExtensions.PluginManager.sln
