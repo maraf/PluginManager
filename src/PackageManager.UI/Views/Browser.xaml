@@ -21,130 +21,145 @@
         </StackPanel>
 
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+            <Grid Visibility="{Binding Packages.Count, Converter={StaticResource GreaterThanZeroToVisibleConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-            <Border BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Margin="8,4,4,8">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                <Border BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Margin="8,4,4,8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                    <ListView x:Name="lvwPackages" ItemsSource="{Binding Packages}" SelectionChanged="lvwPackages_SelectionChanged" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Border Padding="8">
-                                    <DockPanel>
-                                        <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
-                                        <StackPanel>
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                </Grid.ColumnDefinitions>
+                        <ListView x:Name="lvwPackages" ItemsSource="{Binding Packages}" SelectionChanged="lvwPackages_SelectionChanged" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="8">
+                                        <DockPanel>
+                                            <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
+                                            <StackPanel>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
 
-                                                <TextBlock Text="{Binding Id}" FontWeight="Bold" />
-                                                <StackPanel Orientation="Horizontal" Margin="4,0,0,0" Grid.Column="1">
-                                                    <TextBlock Text="v" />
-                                                    <TextBlock Text="{Binding Version}" />
-                                                </StackPanel>
-                                            </Grid>
-                                            <TextBlock Text="{Binding Description, Converter={StaticResource DropNewLineConverter}}" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
-                                        </StackPanel>
-                                    </DockPanel>
-                                </Border>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                    <Grid Background="White" Grid.Row="1">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DataContext="{Binding Paging}" Margin="8">
-                            <Button controls:Button.Image="{StaticResource LeftIcon}" Command="{Binding Prev}" Padding="0" />
-                            <TextBlock Text="{Binding CurrentNumber}" Margin="8,0" VerticalAlignment="Center" />
-                            <Button controls:Button.Image="{StaticResource RightIcon}" Command="{Binding Next}" Padding="0" />
-                        </StackPanel>
-                    </Grid>
-                </Grid>
-            </Border>
-
-            <Border BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Margin="4,4,8,8" Grid.Column="1">
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="8" DataContext="{Binding SelectedItem, ElementName=lvwPackages}" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Package}}" Visibility="{Binding Converter={StaticResource NullToCollapsedConverter}}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
-                            <TextBox Text="{Binding Id, Mode=OneWay}" Style="{StaticResource ReadOnlyTextBoxStyle}" FontSize="20" VerticalAlignment="Center" />
-                        </StackPanel>
-
-                        <StackPanel Margin="0,8" Orientation="Horizontal">
-                            <Button Content="Install" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Install}" CommandParameter="{Binding}" />
-                            <Button Content="Uninstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Uninstall}" CommandParameter="{Binding}" Margin="8,0,0,0" />
-                            <Button Content="Reinstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Reinstall}" CommandParameter="{Binding}" Margin="8,0,0,0" />
-                        </StackPanel>
-
-                        <TextBox Text="{Binding Description, Mode=OneWay}" Style="{StaticResource ReadOnlyTextBoxStyle}" TextWrapping="Wrap" />
-
-                        <Grid Margin="0,8,0,0">
-                            <Grid.Resources>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="TextWrapping" Value="Wrap" />
-                                </Style>
-                            </Grid.Resources>
-                        
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.5*"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-
-                            <!-- Version -->
-                            <Label Grid.Row="0" Grid.Column="0" Content="Version:" />
-                            <TextBlock Grid.Row="0" Grid.Column="1">
-                                <Run Text="v" /><Run Text="{Binding Version, Mode=OneWay}" />
-                            </TextBlock>
-
-                            <!-- Authors -->
-                            <Label Grid.Row="1" Grid.Column="0" Content="Authors:" />
-                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Authors, Mode=OneWay}" />
-
-                            <!-- License URL -->
-                            <Label Grid.Row="2" Grid.Column="0" Content="License URL:" />
-                            <TextBlock Grid.Row="2" Grid.Column="1">
-                                <Hyperlink NavigateUri="{Binding LicenseUrl, Mode=OneWay}" ToolTip="{Binding LicenseUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
-                                    <Run Text="{Binding LicenseUrl, Mode=OneWay}"/>
-                                </Hyperlink>
-                            </TextBlock>
-
-                            <!-- Published Date -->
-                            <Label Grid.Row="3" Grid.Column="0" Content="Published Date:" />
-                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Published, Mode=OneWay}"  />
-
-                            <!-- Project URL -->
-                            <Label Grid.Row="4" Grid.Column="0" Content="Project URL:" />
-                            <TextBlock Grid.Row="4" Grid.Column="1">
-                                <Hyperlink NavigateUri="{Binding ProjectUrl, Mode=OneWay}" ToolTip="{Binding ProjectUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
-                                    <Run Text="{Binding ProjectUrl, Mode=OneWay}"/>
-                                </Hyperlink>
-                            </TextBlock>
-
-                            <!-- Tags -->
-                            <Label Grid.Row="5" Grid.Column="0" Content="Tags:" />
-                            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Tags, Mode=OneWay}" Margin="0,0,0,8" />
+                                                    <TextBlock Text="{Binding Id}" FontWeight="Bold" />
+                                                    <StackPanel Orientation="Horizontal" Margin="4,0,0,0" Grid.Column="1">
+                                                        <TextBlock Text="v" />
+                                                        <TextBlock Text="{Binding Version}" />
+                                                    </StackPanel>
+                                                </Grid>
+                                                <TextBlock Text="{Binding Description, Converter={StaticResource DropNewLineConverter}}" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
+                                            </StackPanel>
+                                        </DockPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Grid Background="White" Grid.Row="1">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DataContext="{Binding Paging}" Margin="8">
+                                <Button controls:Button.Image="{StaticResource LeftIcon}" Command="{Binding Prev}" Padding="0" />
+                                <TextBlock Text="{Binding CurrentNumber}" Margin="8,0" VerticalAlignment="Center" />
+                                <Button controls:Button.Image="{StaticResource RightIcon}" Command="{Binding Next}" Padding="0" />
+                            </StackPanel>
                         </Grid>
+                    </Grid>
+                </Border>
+
+                <Border BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Margin="4,4,8,8" Grid.Column="1">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="8" DataContext="{Binding SelectedItem, ElementName=lvwPackages}" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Package}}" Visibility="{Binding Converter={StaticResource NullToCollapsedConverter}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
+                                <TextBox Text="{Binding Id, Mode=OneWay}" Style="{StaticResource ReadOnlyTextBoxStyle}" FontSize="20" VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <StackPanel Margin="0,8" Orientation="Horizontal">
+                                <Button Content="Install" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Install}" CommandParameter="{Binding}" />
+                                <Button Content="Uninstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Uninstall}" CommandParameter="{Binding}" Margin="8,0,0,0" />
+                                <Button Content="Reinstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Reinstall}" CommandParameter="{Binding}" Margin="8,0,0,0" />
+                            </StackPanel>
+
+                            <TextBox Text="{Binding Description, Mode=OneWay}" Style="{StaticResource ReadOnlyTextBoxStyle}" TextWrapping="Wrap" />
+
+                            <Grid Margin="0,8,0,0">
+                                <Grid.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="TextWrapping" Value="Wrap" />
+                                    </Style>
+                                </Grid.Resources>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.5*"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Version -->
+                                <Label Grid.Row="0" Grid.Column="0" Content="Version:" />
+                                <TextBlock Grid.Row="0" Grid.Column="1">
+                                    <Run Text="v" /><Run Text="{Binding Version, Mode=OneWay}" />
+                                </TextBlock>
+
+                                <!-- Authors -->
+                                <Label Grid.Row="1" Grid.Column="0" Content="Authors:" />
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Authors, Mode=OneWay}" />
+
+                                <!-- License URL -->
+                                <Label Grid.Row="2" Grid.Column="0" Content="License URL:" />
+                                <TextBlock Grid.Row="2" Grid.Column="1">
+                                    <Hyperlink NavigateUri="{Binding LicenseUrl, Mode=OneWay}" ToolTip="{Binding LicenseUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{Binding LicenseUrl, Mode=OneWay}"/>
+                                    </Hyperlink>
+                                </TextBlock>
+
+                                <!-- Published Date -->
+                                <Label Grid.Row="3" Grid.Column="0" Content="Published Date:" />
+                                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Published, Mode=OneWay}"  />
+
+                                <!-- Project URL -->
+                                <Label Grid.Row="4" Grid.Column="0" Content="Project URL:" />
+                                <TextBlock Grid.Row="4" Grid.Column="1">
+                                    <Hyperlink NavigateUri="{Binding ProjectUrl, Mode=OneWay}" ToolTip="{Binding ProjectUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{Binding ProjectUrl, Mode=OneWay}"/>
+                                    </Hyperlink>
+                                </TextBlock>
+
+                                <!-- Tags -->
+                                <Label Grid.Row="5" Grid.Column="0" Content="Tags:" />
+                                <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Tags, Mode=OneWay}" Margin="0,0,0,8" />
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+
+            <Border BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Margin="8" Visibility="{Binding Packages.Count, Converter={StaticResource LowerOrZeroToVisibleConverter}}">
+                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel x:Name="stpNothing">
+                        <TextBlock Text="Nothing" FontSize="32" HorizontalAlignment="Center" />
+                        <TextBlock Text="found in the selected feed" FontSize="18" HorizontalAlignment="Center" />
                     </StackPanel>
-                </ScrollViewer>
+                    <StackPanel x:Name="stpInitial">
+                        <TextBlock Text="Start by" FontSize="32" HorizontalAlignment="Center" />
+                        <TextBlock Text="searching for packages" FontSize="18" HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Grid>
             </Border>
         </Grid>
     </DockPanel>

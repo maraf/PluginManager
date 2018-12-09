@@ -41,6 +41,7 @@ namespace PackageManager.Views
         public Browser()
         {
             InitializeComponent();
+            UpdateInitialMessage(true);
         }
 
         private void OnViewModelChanged(BrowserViewModel oldValue, BrowserViewModel newValue)
@@ -74,6 +75,7 @@ namespace PackageManager.Views
         {
             lvwPackages.Focus();
             lvwPackages.SelectedIndex = 0;
+            UpdateInitialMessage(false);
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -84,6 +86,20 @@ namespace PackageManager.Views
 
         private void lvwPackages_SelectionChanged(object sender, SelectionChangedEventArgs e)
             => RaiseCanExecuteChangedOnCommands();
+
+        private void UpdateInitialMessage(bool isInitial)
+        {
+            if (isInitial)
+            {
+                stpNothing.Visibility = Visibility.Collapsed;
+                stpInitial.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                stpNothing.Visibility = Visibility.Visible;
+                stpInitial.Visibility = Visibility.Collapsed;
+            }
+        }
 
         private void RaiseCanExecuteChangedOnCommands()
         {
