@@ -42,13 +42,13 @@ namespace PackageManager.ViewModels.Commands
                 viewModel.Paging.CurrentIndex = 0;
             }
 
-            List<IPackage> packages = await Task.Run(() => SearchAsync(cancellationToken));
-            if (packages.Count > 0)
+            (List<IPackage> packages, int pageSize) = await Task.Run(() => SearchAsync(cancellationToken));
+            if (packages.Count > 0 || viewModel.Paging.CurrentIndex == 0)
             {
                 viewModel.Packages.Clear();
                 viewModel.Packages.AddRange(packages);
 
-                viewModel.Paging.IsNextAvailable = viewModel.Packages.Count != 0;
+                viewModel.Paging.IsNextAvailable = viewModel.Packages.Count == pageSize;
             }
             else
             {
@@ -59,10 +59,11 @@ namespace PackageManager.ViewModels.Commands
             Completed?.Invoke();
         }
 
-        private async Task<List<IPackage>> SearchAsync(CancellationToken cancellationToken)
+        private async Task<(List<IPackage> packages, int pageSize)> SearchAsync(CancellationToken cancellationToken)
         {
-            IEnumerable<IPackage> packages = await search.SearchAsync(packageSource.Sources, viewModel.SearchText, new SearchOptions(viewModel.Paging.CurrentIndex), cancellationToken);
-            return packages.ToList();
+            SearchOptions options = new SearchOptions(viewModel.Paging.CurrentIndex);
+            IEnumerable<IPackage> packages = await search.SearchAsync(packageSource.Sources, viewModel.SearchText, options, cancellationToken);
+            return (packages.ToList(), options.PageSize);
         }
     }
 }
