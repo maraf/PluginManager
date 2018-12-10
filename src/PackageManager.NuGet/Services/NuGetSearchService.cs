@@ -9,6 +9,7 @@ using Neptuo.Activators;
 using Neptuo.Logging;
 using NuGet.Common;
 using NuGet.Protocol.Core.Types;
+using NuGet.Versioning;
 using PackageManager.Logging;
 using PackageManager.Models;
 
@@ -140,33 +141,83 @@ namespace PackageManager.Services
         {
             try
             {
-                IEnumerable<VersionInfo> versions = await package.GetVersionsAsync();
-                foreach (VersionInfo version in versions)
-                {
-                    if (version.Version != package.Identity.Version)
-                    {
-                        log.Debug($"Found '{version.PackageSearchMetadata.Identity}'.");
+                if (await SearchOlderVersionsDirectly(result, package, repository))
+                    return;
 
-                        NuGetPackageFilterResult filterResult = filter.IsPassed(version.PackageSearchMetadata);
-                        switch (filterResult)
-                        {
-                            case NuGetPackageFilterResult.Ok:
-                                log.Debug("Package added.");
-                                result.Add(new NuGetPackage(version.PackageSearchMetadata, repository, log, frameworkFilter));
-                                return;
-
-                            default:
-                                log.Debug("Package skipped.");
-                                break;
-                        }
-                    }
-                }
+                if (await SearchOlderVersionsUsingMetadataResource(result, package, repository, cancellationToken))
+                    return;
             }
             catch (FatalProtocolException e) when (e.InnerException is TaskCanceledException)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 throw e;
             }
+        }
+
+        private async Task<bool> SearchOlderVersionsDirectly(List<IPackage> result, IPackageSearchMetadata package, SourceRepository repository)
+        {
+            IEnumerable<VersionInfo> versions = await package.GetVersionsAsync();
+            foreach (VersionInfo version in versions)
+            {
+                if (version.PackageSearchMetadata != null && version.Version != package.Identity.Version)
+                {
+                    if (ProcessOlderVersion(result, repository, version.PackageSearchMetadata))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private async Task<bool> SearchOlderVersionsUsingMetadataResource(List<IPackage> result, IPackageSearchMetadata package, SourceRepository repository, CancellationToken cancellationToken)
+        {
+            PackageMetadataResource metadataResource = await repository.GetResourceAsync<PackageMetadataResource>(cancellationToken);
+            if (metadataResource == null)
+                return false;
+
+            using (var sourceCacheContext = new SourceCacheContext())
+            {
+                IEnumerable<IPackageSearchMetadata> versions = await metadataResource?.GetMetadataAsync(
+                    package.Identity.Id,
+                    false,
+                    false,
+                    sourceCacheContext,
+                    nuGetLog,
+                    cancellationToken
+                );
+
+                versions = versions.OrderByDescending(p => p.Identity.Version, VersionComparer.Default);
+                foreach (IPackageSearchMetadata version in versions)
+                {
+                    if (version.Identity.Version != package.Identity.Version)
+                    {
+                        if (ProcessOlderVersion(result, repository, version))
+                            return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        private bool ProcessOlderVersion(List<IPackage> result, SourceRepository repository, IPackageSearchMetadata version)
+        {
+            log.Debug($"Found '{version.Identity}'.");
+
+            NuGetPackageFilterResult filterResult = filter.IsPassed(version);
+            switch (filterResult)
+            {
+                case NuGetPackageFilterResult.Ok:
+                    log.Debug("Package added.");
+                    result.Add(new NuGetPackage(version, repository, log, frameworkFilter));
+                    return true;
+
+                default:
+                    log.Debug("Package skipped.");
+                    break;
+            }
+
+            return false;
         }
 
         public async Task<IPackage> FindLatestVersionAsync(IEnumerable<IPackageSource> packageSources, IPackage package, CancellationToken cancellationToken = default)
