@@ -42,13 +42,27 @@ namespace PackageManager.ViewModels.Commands
                 viewModel.Paging.CurrentIndex = 0;
             }
 
-            IEnumerable<IPackage> packages = await Task.Run(() => search.SearchAsync(packageSource.Sources, viewModel.SearchText, new SearchOptions(viewModel.Paging.CurrentIndex), cancellationToken));
-            viewModel.Packages.Clear();
-            viewModel.Packages.AddRange(packages);
+            List<IPackage> packages = await Task.Run(() => SearchAsync(cancellationToken));
+            if (packages.Count > 0)
+            {
+                viewModel.Packages.Clear();
+                viewModel.Packages.AddRange(packages);
 
-            viewModel.Paging.IsNextAvailable = viewModel.Packages.Count != 0;
+                viewModel.Paging.IsNextAvailable = viewModel.Packages.Count != 0;
+            }
+            else
+            {
+                viewModel.Paging.CurrentIndex--;
+                viewModel.Paging.IsNextAvailable = false;
+            }
 
             Completed?.Invoke();
+        }
+
+        private async Task<List<IPackage>> SearchAsync(CancellationToken cancellationToken)
+        {
+            IEnumerable<IPackage> packages = await search.SearchAsync(packageSource.Sources, viewModel.SearchText, new SearchOptions(viewModel.Paging.CurrentIndex), cancellationToken);
+            return packages.ToList();
         }
     }
 }
