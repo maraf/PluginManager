@@ -49,12 +49,19 @@ namespace PackageManager.Models
         /// </summary>
         Uri LicenseUrl { get; }
 
-        
+
         /// <summary>
         /// Gets a content of the package.
         /// </summary>
         /// <param name="cancellationToken">A cancellation token.</param>
-        /// <returns>A continuation task returning </returns>
+        /// <returns>A continuation task returning a content of the package.</returns>
         Task<IPackageContent> GetContentAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets an enumeration of all available package versions.
+        /// </summary>
+        /// <param name="cancellationToken">A cancellation token.</param>
+        /// <returns>A continutaion task returning an enumeration of all available package versions.</returns>
+        Task<IEnumerable<IPackage>> GetVersionsAsync(CancellationToken cancellationToken);
     }
 }

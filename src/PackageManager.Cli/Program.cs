@@ -61,10 +61,11 @@ namespace PackageManager.Cli
 
             var packageSources = new NuGetPackageSourceCollection(new PackageSourceProvider(new Settings(Environment.CurrentDirectory)));
             var packageSourceSelector = new AllPackageSourceSelector(packageSources);
+            var versionService = new NuGetPackageVersionService(log);
 
             var repositoryFactory = new NuGetSourceRepositoryFactory();
-            var installService = new NuGetInstallService(repositoryFactory, log, Args.Path);
-            var searchService = new NuGetSearchService(repositoryFactory, log);
+            var installService = new NuGetInstallService(repositoryFactory, log, Args.Path, versionService);
+            var searchService = new NuGetSearchService(repositoryFactory, log, versionService);
             var selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
             var selfUpdateService = new SelfUpdateService(this, new ProcessService(this, Array.Empty<string>()));
 

@@ -26,9 +26,22 @@ namespace PackageManager.Services
         {
             var frameworks = new List<NuGetFramework>() { NuGetFramework.AnyFramework };
 
+            var frameworkFilter = new NuGetFrameworkFilter(frameworks);
+            var packageFilter = new DependencyNuGetPackageFilter(
+                new List<Args.Dependency>()
+                {
+                    new Args.Dependency("GitExtensions.Plugins", null)
+                },
+                frameworks
+            );
             var search = new NuGetSearchService(
                 new NuGetSourceRepositoryFactory(),
                 new DefaultLog(),
+                new NuGetPackageVersionService(
+                    new DefaultLog(),
+                    packageFilter,
+                    frameworkFilter
+                ),
                 new DependencyNuGetPackageFilter(
                     new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Plugins", null) },
                     frameworks

@@ -23,6 +23,7 @@ namespace PackageManager.Services
     {
         private readonly IFactory<SourceRepository, IPackageSource> repositoryFactory;
         private readonly ILog log;
+        private readonly NuGetPackageVersionService versionService;
         private readonly ILogger nuGetLog;
         private readonly INuGetPackageFilter packageFilter;
         private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
@@ -30,15 +31,17 @@ namespace PackageManager.Services
         public string Path { get; }
         public string ConfigFilePath => System.IO.Path.Combine(Path, "packages.config");
 
-        public NuGetInstallService(IFactory<SourceRepository, IPackageSource> repositoryFactory, ILog log, string path, INuGetPackageFilter packageFilter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetInstallService(IFactory<SourceRepository, IPackageSource> repositoryFactory, ILog log, string path, NuGetPackageVersionService versionService, INuGetPackageFilter packageFilter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
             Ensure.NotNull(log, "log");
             Ensure.NotNull(path, "path");
+            Ensure.NotNull(versionService, "versionService");
             this.repositoryFactory = repositoryFactory;
             this.log = log;
             this.nuGetLog = new NuGetLogger(log);
             Path = path;
+            this.versionService = versionService;
             this.frameworkFilter = frameworkFilter;
 
             if (packageFilter == null)
@@ -121,7 +124,7 @@ namespace PackageManager.Services
 
                                 NuGetPackageFilterResult filterResult = packageFilter.IsPassed(metadata);
                                 result.Add(new NuGetInstalledPackage(
-                                    new NuGetPackage(metadata, repository, log, frameworkFilter),
+                                    new NuGetPackage(metadata, repository, log, versionService, frameworkFilter),
                                     filterResult == NuGetPackageFilterResult.Ok
                                 ));
 

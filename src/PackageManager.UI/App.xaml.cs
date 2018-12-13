@@ -74,17 +74,18 @@ namespace PackageManager
             if (Args.Monikers.Any())
                 frameworkFilter = new NuGetFrameworkFilter(frameworks);
 
-            SelfPackageConfiguration selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
+            var selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
 
             SelfPackageConverter.Configuration = selfPackageConfiguration;
 
-            NuGetSearchService searchService = new NuGetSearchService(repositoryFactory, LogFactory.Scope("Search"), packageFilter, frameworkFilter);
-            NuGetInstallService installService = new NuGetInstallService(repositoryFactory, LogFactory.Scope("Install"), Args.Path, packageFilter, frameworkFilter);
-            SelfUpdateService selfUpdateService = new SelfUpdateService(this, ProcessService);
+            var versionService = new NuGetPackageVersionService(log, packageFilter, frameworkFilter);
+            var searchService = new NuGetSearchService(repositoryFactory, LogFactory.Scope("Search"), versionService, packageFilter, frameworkFilter);
+            var installService = new NuGetInstallService(repositoryFactory, LogFactory.Scope("Install"), Args.Path, versionService, packageFilter, frameworkFilter);
+            var selfUpdateService = new SelfUpdateService(this, ProcessService);
 
             EnsureSelfPackageInstalled(installService);
 
-            MainViewModel viewModel = new MainViewModel(
+            var viewModel = new MainViewModel(
                 PackageSources,
                 searchService,
                 installService,
@@ -92,7 +93,7 @@ namespace PackageManager
                 selfUpdateService
             );
 
-            MainWindow wnd = new MainWindow(viewModel, ProcessService, Navigator);
+            var wnd = new MainWindow(viewModel, ProcessService, Navigator);
 
             wnd.Show();
 
