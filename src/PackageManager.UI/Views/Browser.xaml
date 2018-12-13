@@ -84,14 +84,37 @@
 
                             <Grid Margin="0,8">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                    <Button Content="Install" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Install}" CommandParameter="{Binding Model}" />
-                                    <Button Content="Uninstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Uninstall}" CommandParameter="{Binding Model}" Margin="8,0,0,0" />
-                                    <Button Content="Reinstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Reinstall}" CommandParameter="{Binding Model}" Margin="8,0,0,0" />
+                                    <Button Content="Install" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Install}">
+                                        <Button.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource FirstNotNullMultiConverter}">
+                                                <Binding Path="SelectedItem.Model" ElementName="cbxVersions" />
+                                                <Binding Path="Model" />
+                                            </MultiBinding>
+                                        </Button.CommandParameter>
+                                    </Button>
+                                    <Button Content="Uninstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Uninstall}" Margin="8,0,0,0">
+                                        <Button.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource FirstNotNullMultiConverter}">
+                                                <Binding Path="SelectedItem.Model" ElementName="cbxVersions" />
+                                                <Binding Path="Model" />
+                                            </MultiBinding>
+                                        </Button.CommandParameter>
+                                    </Button>
+                                    <Button Content="Reinstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Reinstall}" Margin="8,0,0,0">
+                                        <Button.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource FirstNotNullMultiConverter}">
+                                                <Binding Path="SelectedItem.Model" ElementName="cbxVersions" />
+                                                <Binding Path="Model" />
+                                            </MultiBinding>
+                                        </Button.CommandParameter>
+                                    </Button>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                     <Button Content="Other versions.." Command="{Binding LoadVersions}" Visibility="{Binding AreVersionsLoaded, Converter={StaticResource FalseToVisibleConverter}}" MinWidth="100" MaxWidth="100" />
-                                    <ComboBox x:Name="cbxVersions" ItemsSource="{Binding Versions}" SelectedItem="{Binding Mode=OneWay}" DisplayMemberPath="Version" ItemStringFormat="{}v{0}" Visibility="{Binding AreVersionsLoaded, Converter={StaticResource TrueToVisibleConverter}}" MinWidth="100" MaxWidth="100" />
+                                    <ComboBox x:Name="cbxVersions" ItemsSource="{Binding Versions}" SelectedItem="{Binding Mode=OneWay}" DisplayMemberPath="Version" ItemStringFormat="{}v{0}" 
+                                     SelectionChanged="cbxVersions_SelectionChanged"
+                                     Visibility="{Binding AreVersionsLoaded, Converter={StaticResource TrueToVisibleConverter}}" MinWidth="100" MaxWidth="100" />
                                 </StackPanel>
                             </Grid>
 

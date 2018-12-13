@@ -87,6 +87,9 @@ namespace PackageManager.Views
         private void lvwPackages_SelectionChanged(object sender, SelectionChangedEventArgs e)
             => RaiseCanExecuteChangedOnCommands();
 
+        private void cbxVersions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+            => RaiseCanExecuteChangedOnCommands();
+
         private void UpdateInitialMessage(bool isInitial)
         {
             if (isInitial)

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 
 namespace PackageManager.Views.Converters
@@ -14,7 +15,7 @@ namespace PackageManager.Views.Converters
         {
             for (int i = 0; i < values.Length; i++)
             {
-                if (values[i] != null)
+                if (values[i] != null && values[i] != DependencyProperty.UnsetValue)
                     return values[i];
             }
 
