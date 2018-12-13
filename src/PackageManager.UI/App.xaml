@@ -32,6 +32,7 @@
         <converters:SelfPackageConverter x:Key="SelfPackageToVisibleConverter" TrueValue="Visible" FalseValue="Collapsed" />
         <converters:CuttingConverter x:Key="GreaterThanZeroToVisibleConverter" EdgeValue="0" EqualValue="Collapsed" LowerValue="Collapsed" GreaterValue="Visible" />
         <converters:CuttingConverter x:Key="LowerOrZeroToVisibleConverter" EdgeValue="0" EqualValue="Visible" LowerValue="Visible" GreaterValue="Collapsed" />
+        <converters:FirstNotNullMultiConverter x:Key="FirstNotNullMultiConverter" />
 
         <Style TargetType="ListView">
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />

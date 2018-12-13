@@ -29,7 +29,7 @@ namespace PackageManager.ViewModels
         }
 
         public PagingViewModel Paging { get; }
-        public ObservableCollection<IPackage> Packages { get; }
+        public ObservableCollection<PackageViewModel> Packages { get; }
         public SearchCommand Search { get; }
         public InstallCommand Install { get; }
         public ReinstallCommand Reinstall { get; }
@@ -37,7 +37,7 @@ namespace PackageManager.ViewModels
 
         public BrowserViewModel(IPackageSourceSelector packageSource, ISearchService search, IInstallService install, SelfPackageConfiguration selfPackageConfiguration)
         {
-            Packages = new ObservableCollection<IPackage>();
+            Packages = new ObservableCollection<PackageViewModel>();
             Search = new SearchCommand(this, packageSource, search);
             Paging = new PagingViewModel(Search);
             Install = new InstallCommand(install);

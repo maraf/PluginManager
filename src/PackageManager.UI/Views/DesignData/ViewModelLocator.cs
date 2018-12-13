@@ -21,6 +21,7 @@ namespace PackageManager.Views.DesignData
         private static IInstalledPackage incompatiblePackage;
         private static PackageSourceViewModel packageSources;
         private static IPackageSourceCollection packageSourceCollection;
+        private static PackageViewModel packageViewModel;
 
         public static SelfPackageConfiguration SelfPackageConfiguration
         {
@@ -89,6 +90,17 @@ namespace PackageManager.Views.DesignData
                 }
 
                 return updates;
+            }
+        }
+
+        public static PackageViewModel PackageViewModel
+        {
+            get
+            {
+                if (packageViewModel == null)
+                    packageViewModel = new PackageViewModel(Package);
+
+                return packageViewModel;
             }
         }
 

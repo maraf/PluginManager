@@ -34,7 +34,7 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <TabControl x:Name="Tabs" controls:TabControl.IsAutoFocus="True" IsEnabled="{Binding PackageSourceUrl, Converter={StaticResource ValidUrlToTrueConverter}}">
+            <TabControl x:Name="Tabs" controls:TabControl.IsAutoFocus="True">
                 <TabItem Header="Browse" Padding="8,4">
                     <views:Browser x:Name="Browser" ViewModel="{Binding Browser}" />
                 </TabItem>

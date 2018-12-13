@@ -26,5 +26,10 @@ namespace PackageManager.Views.DesignData
         {
             throw new NotImplementedException();
         }
+
+        public Task<IEnumerable<IPackage>> GetVersionsAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
