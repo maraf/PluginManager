@@ -31,6 +31,9 @@
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <TextBlock Text="v" />
+                                        <TextBlock Text="{Binding Current.Version}" />
+                                        <TextBlock Text=" → " />
+                                        <TextBlock Text="v" />
                                         <TextBlock Text="{Binding Latest.Version}" />
                                     </StackPanel>
                                 </Grid>
