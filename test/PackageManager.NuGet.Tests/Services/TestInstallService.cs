@@ -52,7 +52,6 @@ namespace PackageManager.Services
         [TestMethod]
         public void Install()
         {
-
             install.Install(package.Object);
 
             Reader(reader =>

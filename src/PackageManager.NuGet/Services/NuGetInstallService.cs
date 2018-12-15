@@ -50,6 +50,20 @@ namespace PackageManager.Services
             this.packageFilter = packageFilter;
         }
 
+        public bool IsInstalled(string packageId)
+        {
+            Ensure.NotNull(packageId, "packageId");
+
+            if (!File.Exists(ConfigFilePath))
+                return false;
+
+            using (Stream fileContent = new FileStream(ConfigFilePath, FileMode.Open))
+            {
+                PackagesConfigReader reader = new PackagesConfigReader(fileContent);
+                return reader.GetPackages().Any(p => p.PackageIdentity.Id == packageId);
+            }
+        }
+
         public bool IsInstalled(IPackageIdentity package)
         {
             Ensure.NotNull(package, "package");
@@ -60,7 +74,7 @@ namespace PackageManager.Services
             using (Stream fileContent = new FileStream(ConfigFilePath, FileMode.Open))
             {
                 PackagesConfigReader reader = new PackagesConfigReader(fileContent);
-                return reader.GetPackages().Any(p => p.PackageIdentity.Id == package.Id);
+                return reader.GetPackages().Any(p => p.PackageIdentity.Id == package.Id && p.PackageIdentity.Version.ToFullString() == package.Version);
             }
         }
 

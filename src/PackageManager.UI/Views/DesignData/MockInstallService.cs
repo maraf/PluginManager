@@ -13,6 +13,9 @@ namespace PackageManager.Views.DesignData
     {
         public string Path => @"C:\Temp";
 
+        public bool IsInstalled(string packageId)
+            => false;
+
         public bool IsInstalled(IPackageIdentity package)
             => false;
 

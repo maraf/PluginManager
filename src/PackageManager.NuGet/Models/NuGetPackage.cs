@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace PackageManager.Models
 {
-    public class NuGetPackage : IPackage
+    public class NuGetPackage : NuGetPackageIdentity, IPackage
     {
         private readonly IPackageSearchMetadata source;
         private readonly ILog log;
@@ -24,8 +24,6 @@ namespace PackageManager.Models
         private readonly NuGetPackageVersionService versionService;
         private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
 
-        public string Id => source.Identity.Id;
-        public string Version => source.Identity.Version.ToFullString();
         public string Description => source.Description;
 
         public string Authors => source.Authors;
@@ -37,6 +35,7 @@ namespace PackageManager.Models
         public Uri LicenseUrl => source.LicenseUrl;
 
         public NuGetPackage(IPackageSearchMetadata source, SourceRepository repository, ILog log, NuGetPackageVersionService versionService, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+            : base(source?.Identity)
         {
             Ensure.NotNull(source, "source");
             Ensure.NotNull(repository, "repository");

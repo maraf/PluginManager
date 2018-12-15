@@ -12,6 +12,7 @@ namespace PackageManager.Services
     {
         string Path { get; }
 
+        bool IsInstalled(string packageId);
         bool IsInstalled(IPackageIdentity package);
 
         void Install(IPackageIdentity package);
