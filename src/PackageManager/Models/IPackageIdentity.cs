@@ -9,7 +9,7 @@ namespace PackageManager.Models
     /// <summary>
     /// A package identification (unique name and version).
     /// </summary>
-    public interface IPackageIdentity
+    public interface IPackageIdentity : IEquatable<IPackageIdentity>
     {
         /// <summary>
         /// Gets an unique package identifier.

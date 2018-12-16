@@ -19,5 +19,13 @@ namespace PackageManager.Models
             Id = id;
             Version = VersionInfo.Version;
         }
+
+        public bool Equals(IPackageIdentity other)
+        {
+            if (other == null)
+                return false;
+
+            return Id == other.Id && Version == other.Version;
+        }
     }
 }

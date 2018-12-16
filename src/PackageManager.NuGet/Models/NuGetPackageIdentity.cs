@@ -20,5 +20,13 @@ namespace PackageManager.Models
             Ensure.NotNull(identity, "identity");
             this.identity = identity;
         }
+
+        public bool Equals(IPackageIdentity other)
+        {
+            if (other == null)
+                return false;
+
+            return Id == other.Id && Version == other.Version;
+        }
     }
 }

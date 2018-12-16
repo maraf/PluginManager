@@ -22,6 +22,14 @@ namespace PackageManager.Views.DesignData
         public Uri ProjectUrl { get; set; }
         public Uri LicenseUrl { get; set; }
 
+        public bool Equals(IPackageIdentity other)
+        {
+            if (other == null)
+                return false;
+
+            return Id == other.Id && Version == other.Version;
+        }
+
         public Task<IPackageContent> GetContentAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
