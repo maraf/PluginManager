@@ -35,5 +35,10 @@ namespace PackageManager.Views.DesignData
                 }
             );
         }
+
+        public Task<IPackageIdentity> FindInstalledAsync(string packageId, CancellationToken cancellationToken)
+        {
+            return null;
+        }
     }
 }

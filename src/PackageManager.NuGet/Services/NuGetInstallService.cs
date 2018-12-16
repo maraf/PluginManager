@@ -106,14 +106,21 @@ namespace PackageManager.Services
             }
         }
 
-        public async Task<IReadOnlyCollection<IInstalledPackage>> GetInstalledAsync(IEnumerable<IPackageSource> packageSources, CancellationToken cancellationToken)
+        public void Uninstall(string packageId)
         {
-            log.Debug($"Getting list of installed packages from '{ConfigFilePath}'.");
+            Ensure.NotNullOrEmpty(packageId, "packageId");
 
+            using (PackagesConfigWriter writer = new PackagesConfigWriter(ConfigFilePath, !File.Exists(ConfigFilePath)))
+            {
+                log.Debug($"Removing entry '{packageId}' from packages.config.");
+                writer.RemovePackageEntry(packageId, null, null);
+            }
+        }
+
+        private async Task<bool> ReadPackageConfig(Func<PackageReference, SourceCacheContext, Task<bool>> handler, CancellationToken cancellationToken)
+        {
             if (!File.Exists(ConfigFilePath))
-                return new List<IInstalledPackage>(0);
-
-            List<IInstalledPackage> result = new List<IInstalledPackage>();
+                return false;
 
             using (Stream fileContent = new FileStream(ConfigFilePath, FileMode.Open))
             using (SourceCacheContext context = new SourceCacheContext())
@@ -123,6 +130,22 @@ namespace PackageManager.Services
                 {
                     log.Debug($"Installed package '{package.PackageIdentity}'.");
 
+                    if (await handler(package, context))
+                        break;
+                }
+            }
+
+            return true;
+        }
+
+        public async Task<IReadOnlyCollection<IInstalledPackage>> GetInstalledAsync(IEnumerable<IPackageSource> packageSources, CancellationToken cancellationToken)
+        {
+            log.Debug($"Getting list of installed packages from '{ConfigFilePath}'.");
+
+            List<IInstalledPackage> result = new List<IInstalledPackage>();
+            await ReadPackageConfig(
+                async (package, context) =>
+                {
                     foreach (IPackageSource packageSource in packageSources)
                     {
                         log.Debug($"Looking in repository '{packageSource.Uri}'.");
@@ -131,7 +154,7 @@ namespace PackageManager.Services
                         PackageMetadataResource metadataResource = await repository.GetResourceAsync<PackageMetadataResource>(cancellationToken);
                         if (metadataResource != null)
                         {
-                            var metadata = await metadataResource.GetMetadataAsync(package.PackageIdentity, context, nuGetLog, cancellationToken);
+                            IPackageSearchMetadata metadata = await metadataResource.GetMetadataAsync(package.PackageIdentity, context, nuGetLog, cancellationToken);
                             if (metadata != null)
                             {
                                 log.Debug($"Package '{package.PackageIdentity}' was found.");
@@ -141,15 +164,39 @@ namespace PackageManager.Services
                                     new NuGetPackage(metadata, repository, log, versionService, frameworkFilter),
                                     filterResult == NuGetPackageFilterResult.Ok
                                 ));
-
                                 break;
                             }
                         }
                     }
-                }
-            }
+
+                    return false;
+                },
+                cancellationToken
+            );
 
             log.Debug($"Returning '{result.Count}' installed packages.");
+            return result;
+        }
+
+        public async Task<IPackageIdentity> FindInstalledAsync(string packageId, CancellationToken cancellationToken)
+        {
+            log.Debug($"Finding installed packages with id '{packageId}'.");
+
+            IPackageIdentity result = null;
+            await ReadPackageConfig(
+                (package, context) =>
+                {
+                    if (package.PackageIdentity.Id == packageId)
+                    {
+                        result = new NuGetPackageIdentity(package.PackageIdentity);
+                        return Task.FromResult(true);
+                    }
+
+                    return Task.FromResult(false);
+                },
+                cancellationToken
+            );
+
             return result;
         }
     }

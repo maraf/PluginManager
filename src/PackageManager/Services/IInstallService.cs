@@ -19,5 +19,6 @@ namespace PackageManager.Services
         void Uninstall(IPackageIdentity package);
 
         Task<IReadOnlyCollection<IInstalledPackage>> GetInstalledAsync(IEnumerable<IPackageSource> packageSources, CancellationToken cancellationToken);
+        Task<IPackageIdentity> FindInstalledAsync(string packageId, CancellationToken cancellationToken);
     }
 }
