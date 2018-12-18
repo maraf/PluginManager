@@ -50,9 +50,9 @@ namespace PackageManager.ViewModels.Commands
                 if (latest.Version != current.Definition.Version)
                 {
                     viewModel.Packages.Add(new PackageUpdateViewModel(
-                        current.Definition, 
-                        latest, 
-                        selfPackageConfiguration.PackageId != null && current.Definition.Id == selfPackageConfiguration.PackageId
+                        current.Definition,
+                        latest,
+                        selfPackageConfiguration.Equals(current.Definition)
                     ));
                 }
             }

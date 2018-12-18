@@ -25,7 +25,7 @@ namespace PackageManager.ViewModels.Commands
         }
 
         protected override bool CanExecuteOverride(IPackage package)
-            => package != null && service.IsInstalled(package) && selfPackageConfiguration.PackageId != package.Id;
+            => package != null && service.IsInstalled(package) && !selfPackageConfiguration.Equals(package);
 
         protected override async Task ExecuteAsync(IPackage package, CancellationToken cancellationToken)
         {

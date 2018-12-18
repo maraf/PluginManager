@@ -34,14 +34,14 @@ namespace PackageManager.Views.Converters
             string packageId = value as string;
             if (packageId == null)
             {
-                IPackage package = value as IPackage;
+                var package = value as IPackageIdentity;
                 if (package == null)
                     return false;
 
                 packageId = package.Id;
             }
 
-            return Configuration.PackageId == packageId;
+            return Configuration.Equals(packageId);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
