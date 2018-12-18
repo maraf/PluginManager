@@ -17,6 +17,7 @@ namespace PackageManager.Views.DesignData
         private static InstalledViewModel installed;
         private static UpdatesViewModel updates;
         private static IPackage package;
+        private static IPackage newerPackage;
         private static IInstalledPackage compatiblePackage;
         private static IInstalledPackage incompatiblePackage;
         private static PackageSourceViewModel packageSources;
@@ -85,8 +86,9 @@ namespace PackageManager.Views.DesignData
             {
                 if (updates == null)
                 {
-                    updates = new UpdatesViewModel(new MockPackageSourceProvider(), new MockInstallService(), new MockSearchService(), SelfPackageConfiguration, new MockSelfUpdateService());
-                    updates.Refresh.Execute();
+                    updates = new UpdatesViewModel(new MockPackageSourceProvider(), new MockInstallService() { Installed = Package }, new MockSearchService(), SelfPackageConfiguration, new MockSelfUpdateService());
+                    updates.Packages.Add(new PackageUpdateViewModel(Package, NewerPackage, false));
+                    updates.Update.RaiseCanExecuteChanged();
                 }
 
                 return updates;
@@ -124,6 +126,29 @@ namespace PackageManager.Views.DesignData
                 }
 
                 return package;
+            }
+        }
+
+        public static IPackage NewerPackage
+        {
+            get
+            {
+                if (newerPackage == null)
+                {
+                    newerPackage = new MockPackage()
+                    {
+                        Id = "GitExtensions.BundleBackuper",
+                        Version = "2.0.0",
+                        Description = $"Branch backuping plugin for GitExtensions. {Environment.NewLine}GIT bundles is a great way to create backups of local branches. This extension for GitExtensions creates item in top menu containg all bundles at specified path. Clicking bundle item maps this bundle as remote. Beside this restore operation, it also contains button to create bundle/backup between current branch head and last commit pushed commit.",
+                        Authors = "maraf",
+                        Tags = "GitExtensions",
+                        ProjectUrl = new Uri("https://github.com/maraf/GitExtensions.BundleBackuper", UriKind.Absolute),
+                        LicenseUrl = new Uri("https://raw.githubusercontent.com/maraf/GitExtensions.BundleBackuper/master/LICENSE", UriKind.Absolute),
+                        Published = DateTime.Today
+                    };
+                }
+
+                return newerPackage;
             }
         }
 

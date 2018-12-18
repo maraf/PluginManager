@@ -12,12 +12,13 @@ namespace PackageManager.Views.DesignData
     internal class MockInstallService : IInstallService
     {
         public string Path => @"C:\Temp";
+        public IPackageIdentity Installed { get; set; }
 
         public bool IsInstalled(string packageId)
             => false;
 
         public bool IsInstalled(IPackageIdentity package)
-            => false;
+            => Installed?.Id == package?.Id && Installed?.Version == package?.Version;
 
         public void Install(IPackageIdentity package)
         { }
