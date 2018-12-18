@@ -38,15 +38,13 @@ namespace PackageManager.ViewModels
         {
             SourceSelector = new PackageSourceSelectorViewModel(sources);
 
-            Browser = new BrowserViewModel(SourceSelector, search, install, selfPackageConfiguration);
+            Browser = new BrowserViewModel(SourceSelector, search, install);
             Installed = new InstalledViewModel(SourceSelector, install, selfPackageConfiguration);
             Updates = new UpdatesViewModel(SourceSelector, install, search, selfPackageConfiguration, selfUpdate);
 
             Cancel = new CancelCommand(
                 Browser.Search, 
                 Browser.Install, 
-                Browser.Uninstall,
-                Browser.Reinstall,
                 Installed.Uninstall,
                 Installed.UninstallAll,
                 Installed.Reinstall,

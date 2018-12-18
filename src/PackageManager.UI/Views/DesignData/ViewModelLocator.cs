@@ -54,7 +54,7 @@ namespace PackageManager.Views.DesignData
             {
                 if (browser == null)
                 {
-                    browser = new BrowserViewModel(new MockPackageSourceProvider(), new MockSearchService(), new MockInstallService(), SelfPackageConfiguration)
+                    browser = new BrowserViewModel(new MockPackageSourceProvider(), new MockSearchService(), new MockInstallService())
                     {
                         SearchText = "GitExtensions"
                     };

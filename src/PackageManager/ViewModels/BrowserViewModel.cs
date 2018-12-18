@@ -32,17 +32,13 @@ namespace PackageManager.ViewModels
         public ObservableCollection<PackageViewModel> Packages { get; }
         public SearchCommand Search { get; }
         public InstallCommand Install { get; }
-        public ReinstallCommand Reinstall { get; }
-        public UninstallCommand Uninstall { get; }
 
-        public BrowserViewModel(IPackageSourceSelector packageSource, ISearchService search, IInstallService install, SelfPackageConfiguration selfPackageConfiguration)
+        public BrowserViewModel(IPackageSourceSelector packageSource, ISearchService search, IInstallService install)
         {
             Packages = new ObservableCollection<PackageViewModel>();
             Search = new SearchCommand(this, packageSource, search);
             Paging = new PagingViewModel(Search);
             Install = new InstallCommand(install);
-            Reinstall = new ReinstallCommand(install, selfPackageConfiguration);
-            Uninstall = new UninstallCommand(install, selfPackageConfiguration);
         }
     }
 }

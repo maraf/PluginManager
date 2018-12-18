@@ -47,17 +47,13 @@ namespace PackageManager.Views
         private void OnViewModelChanged(BrowserViewModel oldValue, BrowserViewModel newValue)
         {
             if (oldValue != null)
-            {
                 oldValue.Install.Completed -= RaiseCanExecuteChangedOnCommands;
-                oldValue.Uninstall.Completed -= RaiseCanExecuteChangedOnCommands;
-            }
 
             MainPanel.DataContext = newValue;
 
             if (newValue != null)
             {
                 newValue.Install.Completed += RaiseCanExecuteChangedOnCommands;
-                newValue.Uninstall.Completed += RaiseCanExecuteChangedOnCommands;
                 newValue.Search.Completed += OnSearchCompleted;
             }
         }
@@ -105,11 +101,7 @@ namespace PackageManager.Views
         }
 
         private void RaiseCanExecuteChangedOnCommands()
-        {
-            ViewModel.Install.RaiseCanExecuteChanged();
-            ViewModel.Uninstall.RaiseCanExecuteChanged();
-            ViewModel.Reinstall.RaiseCanExecuteChanged();
-        }
+            => ViewModel.Install.RaiseCanExecuteChanged();
 
         void IAutoFocus.Focus()
             => tbxSearch.Focus();

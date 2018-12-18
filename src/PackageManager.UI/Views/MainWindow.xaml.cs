@@ -42,7 +42,6 @@ namespace PackageManager.Views
         private void InitializeViewModel()
         {
             ViewModel.Browser.Install.Executing += OnBeforeChange;
-            ViewModel.Browser.Uninstall.Executing += OnBeforeChange;
             ViewModel.Installed.Uninstall.Executing += OnBeforeChange;
             ViewModel.Updates.Update.Executing += OnBeforeChange;
         }

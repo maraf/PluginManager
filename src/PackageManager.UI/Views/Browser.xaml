@@ -92,22 +92,6 @@
                                             </MultiBinding>
                                         </Button.CommandParameter>
                                     </Button>
-                                    <Button Content="Uninstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Uninstall}" Margin="8,0,0,0">
-                                        <Button.CommandParameter>
-                                            <MultiBinding Converter="{StaticResource FirstNotNullMultiConverter}">
-                                                <Binding Path="SelectedItem.Model" ElementName="cbxVersions" />
-                                                <Binding Path="Model" />
-                                            </MultiBinding>
-                                        </Button.CommandParameter>
-                                    </Button>
-                                    <Button Content="Reinstall" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Reinstall}" Margin="8,0,0,0">
-                                        <Button.CommandParameter>
-                                            <MultiBinding Converter="{StaticResource FirstNotNullMultiConverter}">
-                                                <Binding Path="SelectedItem.Model" ElementName="cbxVersions" />
-                                                <Binding Path="Model" />
-                                            </MultiBinding>
-                                        </Button.CommandParameter>
-                                    </Button>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
