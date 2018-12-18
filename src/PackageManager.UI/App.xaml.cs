@@ -78,9 +78,10 @@ namespace PackageManager
 
             SelfPackageConverter.Configuration = selfPackageConfiguration;
 
-            var versionService = new NuGetPackageVersionService(log, packageFilter, frameworkFilter);
-            var searchService = new NuGetSearchService(repositoryFactory, LogFactory.Scope("Search"), versionService, packageFilter, frameworkFilter);
-            var installService = new NuGetInstallService(repositoryFactory, LogFactory.Scope("Install"), Args.Path, versionService, packageFilter, frameworkFilter);
+            var contentService = new NuGetPackageContentService(log, frameworkFilter);
+            var versionService = new NuGetPackageVersionService(contentService, log, packageFilter, frameworkFilter);
+            var searchService = new NuGetSearchService(repositoryFactory, LogFactory.Scope("Search"), contentService, versionService, packageFilter, frameworkFilter);
+            var installService = new NuGetInstallService(repositoryFactory, LogFactory.Scope("Install"), Args.Path, contentService, versionService, packageFilter, frameworkFilter);
             var selfUpdateService = new SelfUpdateService(this, ProcessService);
 
             EnsureSelfPackageInstalled(installService);

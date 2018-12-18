@@ -37,7 +37,9 @@ namespace PackageManager.Services
             var search = new NuGetSearchService(
                 new NuGetSourceRepositoryFactory(),
                 new DefaultLog(),
+                new NuGetPackageContentService(new DefaultLog()),
                 new NuGetPackageVersionService(
+                    new NuGetPackageContentService(new DefaultLog()),
                     new DefaultLog(),
                     packageFilter,
                     frameworkFilter

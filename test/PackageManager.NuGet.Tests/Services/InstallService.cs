@@ -38,7 +38,9 @@ namespace PackageManager.Services
                 new NuGetSourceRepositoryFactory(),
                 new DefaultLog(),
                 extractPath,
+                new NuGetPackageContentService(new DefaultLog()),
                 new NuGetPackageVersionService(
+                    new NuGetPackageContentService(new DefaultLog()),
                     new DefaultLog(),
                     packageFilter,
                     frameworkFilter

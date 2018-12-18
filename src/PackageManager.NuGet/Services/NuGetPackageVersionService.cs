@@ -18,12 +18,15 @@ namespace PackageManager.Services
     {
         private readonly INuGetPackageFilter filter;
         private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
+        private readonly NuGetPackageContentService contentService;
         private readonly ILog log;
         private readonly ILogger nuGetLog;
 
-        public NuGetPackageVersionService(ILog log, INuGetPackageFilter filter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetPackageVersionService(NuGetPackageContentService contentService, ILog log, INuGetPackageFilter filter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
         {
+            Ensure.NotNull(contentService, "contentService");
             Ensure.NotNull(log, "log");
+            this.contentService = contentService;
             this.log = log;
             this.nuGetLog = new NuGetLogger(log);
 
@@ -34,7 +37,7 @@ namespace PackageManager.Services
             this.frameworkFilter = frameworkFilter;
         }
 
-        public async Task<IReadOnlyList<IPackage>> GetListAsync(int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter = null, CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<IPackage>> GetListAsync(int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter = null, bool isPrereleaseIncluded = false, CancellationToken cancellationToken = default)
         {
             if (versionFilter == null)
                 versionFilter = (source, target) => true;
@@ -42,10 +45,10 @@ namespace PackageManager.Services
             try
             {
                 List<IPackage> result = new List<IPackage>();
-                if (await SearchOlderVersionsDirectly(result, resultCount, package, repository, versionFilter))
+                if (await SearchOlderVersionsDirectly(result, resultCount, package, repository, versionFilter, isPrereleaseIncluded))
                     return result;
 
-                if (await SearchOlderVersionsUsingMetadataResource(result, resultCount, package, repository, versionFilter, cancellationToken))
+                if (await SearchOlderVersionsUsingMetadataResource(result, resultCount, package, repository, versionFilter, isPrereleaseIncluded, cancellationToken))
                     return result;
 
                 return new List<IPackage>();
@@ -57,15 +60,16 @@ namespace PackageManager.Services
             }
         }
 
-        private async Task<bool> SearchOlderVersionsDirectly(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter)
+        private async Task<bool> SearchOlderVersionsDirectly(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter, bool isPrereleaseIncluded)
         {
             bool isSuccess = false;
             IEnumerable<VersionInfo> versions = await package.GetVersionsAsync();
             foreach (VersionInfo version in versions)
             {
+                // TODO: Filter prelease on V2 feed.
                 if (version.PackageSearchMetadata != null && versionFilter(package, version.PackageSearchMetadata))
                 {
-                    IPackage item = ProcessOlderVersion(repository, version.PackageSearchMetadata);
+                    IPackage item = ProcessOlderVersion(repository, version.PackageSearchMetadata, isPrereleaseIncluded);
                     if (item != null)
                     {
                         result.Add(item);
@@ -80,7 +84,7 @@ namespace PackageManager.Services
             return isSuccess;
         }
 
-        private async Task<bool> SearchOlderVersionsUsingMetadataResource(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter, CancellationToken cancellationToken)
+        private async Task<bool> SearchOlderVersionsUsingMetadataResource(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter, bool isPrereleaseIncluded, CancellationToken cancellationToken)
         {
             PackageMetadataResource metadataResource = await repository.GetResourceAsync<PackageMetadataResource>(cancellationToken);
             if (metadataResource == null)
@@ -90,7 +94,7 @@ namespace PackageManager.Services
             {
                 IEnumerable<IPackageSearchMetadata> versions = await metadataResource?.GetMetadataAsync(
                     package.Identity.Id,
-                    false,
+                    isPrereleaseIncluded,
                     false,
                     sourceCacheContext,
                     nuGetLog,
@@ -102,7 +106,7 @@ namespace PackageManager.Services
                 {
                     if (versionFilter(package, version))
                     {
-                        IPackage item = ProcessOlderVersion(repository, version);
+                        IPackage item = ProcessOlderVersion(repository, version, isPrereleaseIncluded);
                         if (item != null)
                         {
                             result.Add(item);
@@ -116,7 +120,7 @@ namespace PackageManager.Services
             return true;
         }
 
-        private IPackage ProcessOlderVersion(SourceRepository repository, IPackageSearchMetadata version)
+        private IPackage ProcessOlderVersion(SourceRepository repository, IPackageSearchMetadata version, bool isPrereleaseIncluded)
         {
             log.Debug($"Found '{version.Identity}'.");
 
@@ -125,7 +129,7 @@ namespace PackageManager.Services
             {
                 case NuGetPackageFilterResult.Ok:
                     log.Debug("Package added.");
-                    return new NuGetPackage(version, repository, log, this, frameworkFilter);
+                    return new NuGetPackage(version, isPrereleaseIncluded, repository, contentService, this);
 
                 default:
                     log.Debug("Package skipped.");

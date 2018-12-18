@@ -23,6 +23,7 @@ namespace PackageManager.Services
     {
         private readonly IFactory<SourceRepository, IPackageSource> repositoryFactory;
         private readonly ILog log;
+        private readonly NuGetPackageContentService contentService;
         private readonly NuGetPackageVersionService versionService;
         private readonly ILogger nuGetLog;
         private readonly INuGetPackageFilter packageFilter;
@@ -31,16 +32,18 @@ namespace PackageManager.Services
         public string Path { get; }
         public string ConfigFilePath => System.IO.Path.Combine(Path, "packages.config");
 
-        public NuGetInstallService(IFactory<SourceRepository, IPackageSource> repositoryFactory, ILog log, string path, NuGetPackageVersionService versionService, INuGetPackageFilter packageFilter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetInstallService(IFactory<SourceRepository, IPackageSource> repositoryFactory, ILog log, string path, NuGetPackageContentService contentService, NuGetPackageVersionService versionService, INuGetPackageFilter packageFilter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
             Ensure.NotNull(log, "log");
             Ensure.NotNull(path, "path");
+            Ensure.NotNull(contentService, "contentService");
             Ensure.NotNull(versionService, "versionService");
             this.repositoryFactory = repositoryFactory;
             this.log = log;
             this.nuGetLog = new NuGetLogger(log);
             Path = path;
+            this.contentService = contentService;
             this.versionService = versionService;
             this.frameworkFilter = frameworkFilter;
 
@@ -161,7 +164,7 @@ namespace PackageManager.Services
 
                                 NuGetPackageFilterResult filterResult = packageFilter.IsPassed(metadata);
                                 result.Add(new NuGetInstalledPackage(
-                                    new NuGetPackage(metadata, repository, log, versionService, frameworkFilter),
+                                    new NuGetPackage(metadata, false, repository, contentService, versionService),
                                     filterResult == NuGetPackageFilterResult.Ok
                                 ));
                                 break;

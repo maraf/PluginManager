@@ -21,15 +21,17 @@ namespace PackageManager.Services
 
         private readonly IFactory<SourceRepository, IPackageSource> repositoryFactory;
         private readonly ILog log;
+        private readonly NuGetPackageContentService contentService;
         private readonly ILogger nuGetLog;
         private readonly NuGetPackageVersionService versionService;
         private readonly INuGetPackageFilter filter;
         private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
 
-        public NuGetSearchService(IFactory<SourceRepository, IPackageSource> repositoryFactory, ILog log, NuGetPackageVersionService versionService, INuGetPackageFilter filter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetSearchService(IFactory<SourceRepository, IPackageSource> repositoryFactory, ILog log, NuGetPackageContentService contentService, NuGetPackageVersionService versionService, INuGetPackageFilter filter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
             Ensure.NotNull(log, "log");
+            Ensure.NotNull(contentService, "contentService");
             Ensure.NotNull(versionService, "versionService");
 
             if (filter == null)
@@ -37,6 +39,7 @@ namespace PackageManager.Services
 
             this.repositoryFactory = repositoryFactory;
             this.log = log;
+            this.contentService = contentService;
             this.nuGetLog = new NuGetLogger(log);
             this.versionService = versionService;
             this.filter = filter;
@@ -58,7 +61,7 @@ namespace PackageManager.Services
         }
 
         private Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(PackageSearchResource search, string searchText, SearchOptions options, CancellationToken cancellationToken)
-            => search.SearchAsync(searchText, new SearchFilter(false), options.PageIndex * options.PageSize, options.PageSize, nuGetLog, cancellationToken);
+            => search.SearchAsync(searchText, new SearchFilter(options.IsPrereleaseIncluded), options.PageIndex * options.PageSize, options.PageSize, nuGetLog, cancellationToken);
 
         public async Task<IEnumerable<IPackage>> SearchAsync(IEnumerable<IPackageSource> packageSources, string searchText, SearchOptions options = default, CancellationToken cancellationToken = default)
         {
@@ -97,24 +100,7 @@ namespace PackageManager.Services
                         if (result.Count >= options.PageSize)
                             break;
 
-                        NuGetPackageFilterResult filterResult = filter.IsPassed(package);
-                        switch (filterResult)
-                        {
-                            case NuGetPackageFilterResult.Ok:
-                                log.Debug("Package added.");
-                                result.Add(new NuGetPackage(package, repository, log, versionService, frameworkFilter));
-                                break;
-
-                            case NuGetPackageFilterResult.NotCompatibleVersion:
-                                log.Debug("Loading order versions.");
-                                result.AddRange(await versionService.GetListAsync(1, package, repository, (source, target) => source.Identity.Version != target.Identity.Version));
-                                break;
-
-                            default:
-                                log.Debug("Package skipped.");
-                                break;
-                        }
-
+                        await AddPackage(result, repository, package, options.IsPrereleaseIncluded, cancellationToken);
                         sourceSearchPackageCount++;
                     }
 
@@ -138,6 +124,36 @@ namespace PackageManager.Services
 
             log.Debug($"Search completed. Found '{result.Count}' items.");
             return result;
+        }
+
+        private async Task AddPackage(List<IPackage> result, SourceRepository repository, IPackageSearchMetadata package, bool isPrereleaseIncluded, CancellationToken cancellationToken)
+        {
+            NuGetPackageFilterResult filterResult = filter.IsPassed(package);
+            switch (filterResult)
+            {
+                case NuGetPackageFilterResult.Ok:
+                    log.Debug("Package added.");
+                    result.Add(new NuGetPackage(package, isPrereleaseIncluded, repository, contentService, versionService));
+                    break;
+
+                case NuGetPackageFilterResult.NotCompatibleVersion:
+                    log.Debug("Loading order versions.");
+                    result.AddRange(
+                        await versionService.GetListAsync(
+                            1,
+                            package,
+                            repository,
+                            (source, target) => source.Identity.Version != target.Identity.Version,
+                            isPrereleaseIncluded,
+                            cancellationToken
+                        )
+                    );
+                    break;
+
+                default:
+                    log.Debug("Package skipped.");
+                    break;
+            }
         }
 
         public async Task<IPackage> FindLatestVersionAsync(IEnumerable<IPackageSource> packageSources, IPackage package, CancellationToken cancellationToken = default)

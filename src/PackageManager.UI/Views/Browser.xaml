@@ -15,7 +15,10 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBox x:Name="tbxSearch" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="tbxSearch_PreviewKeyDown" />
+                <Grid>
+                    <TextBox x:Name="tbxSearch" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="tbxSearch_PreviewKeyDown" />
+                    <CheckBox Content="Include _Prerelease" IsChecked="{Binding IsPrereleaseIncluded}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,8,0" />
+                </Grid>
                 <Button x:Name="btnSearch" controls:Button.Image="{StaticResource SearchIcon}" controls:Button.Text="Search" Command="{Binding Search}" Grid.Column="1" Margin="8,0,0,0" />
             </Grid>
         </StackPanel>

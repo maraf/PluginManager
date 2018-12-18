@@ -64,6 +64,7 @@ namespace PackageManager.ViewModels.Commands
         private async Task<(List<IPackage> packages, int pageSize)> SearchAsync(CancellationToken cancellationToken)
         {
             SearchOptions options = new SearchOptions(viewModel.Paging.CurrentIndex);
+            options.IsPrereleaseIncluded = viewModel.IsPrereleaseIncluded;
             IEnumerable<IPackage> packages = await search.SearchAsync(packageSource.Sources, viewModel.SearchText, options, cancellationToken);
             return (packages.ToList(), options.PageSize);
         }

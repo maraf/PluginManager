@@ -28,6 +28,20 @@ namespace PackageManager.ViewModels
             }
         }
 
+        private bool isPrereleaseIncluded;
+        public bool IsPrereleaseIncluded
+        {
+            get { return isPrereleaseIncluded; }
+            set
+            {
+                if (isPrereleaseIncluded != value)
+                {
+                    isPrereleaseIncluded = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
         public PagingViewModel Paging { get; }
         public ObservableCollection<PackageViewModel> Packages { get; }
         public SearchCommand Search { get; }

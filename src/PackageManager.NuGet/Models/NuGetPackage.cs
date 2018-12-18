@@ -18,11 +18,10 @@ namespace PackageManager.Models
     public class NuGetPackage : NuGetPackageIdentity, IPackage
     {
         private readonly IPackageSearchMetadata source;
-        private readonly ILog log;
-        private readonly ILogger nuGetLog;
+        private readonly bool isPrereleaseIncluded;
         private readonly SourceRepository repository;
+        private readonly NuGetPackageContentService contentService;
         private readonly NuGetPackageVersionService versionService;
-        private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
 
         public string Description => source.Description;
 
@@ -34,41 +33,24 @@ namespace PackageManager.Models
         public Uri ProjectUrl => source.ProjectUrl;
         public Uri LicenseUrl => source.LicenseUrl;
 
-        public NuGetPackage(IPackageSearchMetadata source, SourceRepository repository, ILog log, NuGetPackageVersionService versionService, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetPackage(IPackageSearchMetadata source, bool isPrereleaseIncluded, SourceRepository repository, NuGetPackageContentService contentService, NuGetPackageVersionService versionService)
             : base(source?.Identity)
         {
             Ensure.NotNull(source, "source");
             Ensure.NotNull(repository, "repository");
-            Ensure.NotNull(log, "log");
+            Ensure.NotNull(contentService, "contentService");
             Ensure.NotNull(versionService, "versionService");
             this.source = source;
+            this.isPrereleaseIncluded = isPrereleaseIncluded;
             this.repository = repository;
+            this.contentService = contentService;
             this.versionService = versionService;
-            this.log = log.Factory.Scope("Package");
-            this.nuGetLog = new NuGetLogger(this.log);
-            this.frameworkFilter = frameworkFilter;
         }
 
         public async Task<IPackageContent> GetContentAsync(CancellationToken cancellationToken)
-        {
-            DownloadResource download = await repository.GetResourceAsync<DownloadResource>();
-            if (download == null)
-                throw Ensure.Exception.InvalidOperation($"Unnable to resolve '{nameof(DownloadResource)}'.");
-
-            using (var sourceCacheContext = new SourceCacheContext())
-            {
-                var context = new PackageDownloadContext(sourceCacheContext, Path.GetTempPath(), true);
-                var result = await download.GetDownloadResourceResultAsync(source.Identity, context, String.Empty, nuGetLog, cancellationToken);
-                if (result.Status == DownloadResourceResultStatus.Cancelled)
-                    throw new OperationCanceledException();
-                else if (result.Status == DownloadResourceResultStatus.NotFound)
-                    throw Ensure.Exception.InvalidOperation($"Package '{source.Identity.Id}-v{source.Identity.Version}' not found");
-
-                return new NuGetPackageContent(new PackageArchiveReader(result.PackageStream), log, frameworkFilter);
-            }
-        }
+            => await contentService.DownloadAsync(repository, source, cancellationToken);
 
         public async Task<IEnumerable<IPackage>> GetVersionsAsync(CancellationToken cancellationToken)
-            => await versionService.GetListAsync(Int32.MaxValue, source, repository, cancellationToken: cancellationToken);
+            => await versionService.GetListAsync(Int32.MaxValue, source, repository, isPrereleaseIncluded: isPrereleaseIncluded, cancellationToken: cancellationToken);
     }
 }
