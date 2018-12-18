@@ -78,6 +78,13 @@
                     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                         <StackPanel Margin="8" DataContext="{Binding SelectedItem, ElementName=lvwPackages}" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.PackageViewModel}}" Visibility="{Binding Converter={StaticResource NullToCollapsedConverter}}">
                             <StackPanel Orientation="Horizontal">
+                                <StackPanel.DataContext>
+                                    <MultiBinding Converter="{StaticResource FirstNotNullMultiConverter}">
+                                        <Binding Path="SelectedItem" ElementName="cbxVersions" />
+                                        <Binding />
+                                    </MultiBinding>
+                                </StackPanel.DataContext>
+                                
                                 <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
                                 <TextBox Text="{Binding Id, Mode=OneWay}" Style="{StaticResource ReadOnlyTextBoxStyle}" FontSize="20" VerticalAlignment="Center" />
                             </StackPanel>
