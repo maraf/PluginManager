@@ -19,7 +19,7 @@ namespace PackageManager.Views.DesignData
             });
         }
 
-        public Task<IPackage> FindLatestVersionAsync(IEnumerable<IPackageSource> packageSources, IPackage package, CancellationToken cancellationToken = default)
+        public Task<IPackage> FindLatestVersionAsync(IEnumerable<IPackageSource> packageSources, IPackage package, bool isPrereleaseIncluded, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(ViewModelLocator.Package);
         }

@@ -9,6 +9,7 @@
         <Grid DockPanel.Dock="Top">
             <StackPanel Margin="8" Orientation="Horizontal">
                 <Button Command="{Binding Refresh}" Style="{StaticResource RefreshButtonStyle}" />
+                <CheckBox Content="Include _Prerelease" IsChecked="{Binding IsPrereleaseIncluded}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="8,0,0,0" />
             </StackPanel>
             <StackPanel Margin="8" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="Update All" Command="{Binding UpdateAll}" Margin="8,0,0,0" />

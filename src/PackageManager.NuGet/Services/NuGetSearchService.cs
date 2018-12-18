@@ -156,13 +156,13 @@ namespace PackageManager.Services
             }
         }
 
-        public async Task<IPackage> FindLatestVersionAsync(IEnumerable<IPackageSource> packageSources, IPackage package, CancellationToken cancellationToken = default)
+        public async Task<IPackage> FindLatestVersionAsync(IEnumerable<IPackageSource> packageSources, IPackage package, bool isPrereleaseIncluded, CancellationToken cancellationToken = default)
         {
             Ensure.NotNull(package, "package");
 
             log.Debug($"Finding latest version of '{package.Id}'.");
 
-            IEnumerable<IPackage> packages = await SearchAsync(packageSources, package.Id, new SearchOptions() { PageSize = 1 }, cancellationToken);
+            IEnumerable<IPackage> packages = await SearchAsync(packageSources, package.Id, new SearchOptions() { PageSize = 1, IsPrereleaseIncluded = isPrereleaseIncluded }, cancellationToken);
             IPackage latest = packages.FirstOrDefault();
             if (latest != null && latest.Id == package.Id)
             {

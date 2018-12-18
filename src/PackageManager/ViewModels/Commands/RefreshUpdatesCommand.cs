@@ -44,7 +44,7 @@ namespace PackageManager.ViewModels.Commands
 
             foreach (IInstalledPackage current in await installService.GetInstalledAsync(packageSource.Sources, cancellationToken))
             {
-                IPackage latest = await searchService.FindLatestVersionAsync(packageSource.Sources, current.Definition, cancellationToken);
+                IPackage latest = await searchService.FindLatestVersionAsync(packageSource.Sources, current.Definition, viewModel.IsPrereleaseIncluded, cancellationToken);
 
                 // TODO: Compare versions.
                 if (latest.Version != current.Definition.Version)

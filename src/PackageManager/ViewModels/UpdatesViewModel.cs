@@ -15,6 +15,20 @@ namespace PackageManager.ViewModels
 {
     public class UpdatesViewModel : ObservableModel, UpdateAllCommand.IViewModel
     {
+        private bool isPrereleaseIncluded;
+        public bool IsPrereleaseIncluded
+        {
+            get { return isPrereleaseIncluded; }
+            set
+            {
+                if (isPrereleaseIncluded != value)
+                {
+                    isPrereleaseIncluded = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
         public ObservableCollection<PackageUpdateViewModel> Packages { get; }
         public RefreshUpdatesCommand Refresh { get; }
         public UpdateCommand Update { get; }
