@@ -1,4 +1,5 @@
 ﻿using Neptuo;
+using Neptuo.Observables;
 using PackageManager.Models;
 using System;
 using System.Collections.Generic;
@@ -8,18 +9,31 @@ using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels
 {
-    public class PackageUpdateViewModel
+    public class PackageUpdateViewModel : ObservableModel
     {
-        public IPackage Current { get; }
-        public IPackage Latest { get; }
+        public PackageViewModel Current { get; }
         public bool IsSelf { get; }
+
+        private IPackage target;
+        public IPackage Target
+        {
+            get { return target; }
+            set
+            {
+                if (target != value)
+                {
+                    target = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
         public PackageUpdateViewModel(IPackage current, IPackage latest, bool isSelf)
         {
             Ensure.NotNull(current, "current");
             Ensure.NotNull(latest, "latest");
-            Current = current;
-            Latest = latest;
+            Current = new PackageViewModel(current);
+            Target = latest;
             IsSelf = isSelf;
         }
     }

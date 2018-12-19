@@ -64,6 +64,9 @@ namespace PackageManager.Services
         {
             bool isSuccess = false;
             IEnumerable<VersionInfo> versions = await package.GetVersionsAsync();
+            if (versions == null)
+                return false;
+
             foreach (VersionInfo version in versions)
             {
                 // TODO: Filter prelease on V2 feed.

@@ -81,8 +81,7 @@ namespace PackageManager.ViewModels
         public override int GetHashCode()
         {
             int hash = 13 * 2;
-            hash += 7 * Id.GetHashCode();
-            hash += 7 * Version.GetHashCode();
+            hash += 7 * Model.GetHashCode();
             return hash;
         }
     }

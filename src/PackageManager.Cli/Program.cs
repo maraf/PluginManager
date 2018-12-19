@@ -40,11 +40,11 @@ namespace PackageManager.Cli
                 UpdatesViewModel viewModel = CreateUpdatesViewModel();
                 await viewModel.Refresh.ExecuteAsync();
 
-                PackageUpdateViewModel packageModel = viewModel.Packages.FirstOrDefault(p => p.Latest.Id == Args.PackageId);
+                PackageUpdateViewModel packageModel = viewModel.Packages.FirstOrDefault(p => p.Target.Id == Args.PackageId);
                 if (packageModel != null && viewModel.Update.CanExecute(packageModel))
                 {
                     await viewModel.Update.ExecuteAsync(packageModel);
-                    Console.WriteLine($"Updated '{packageModel.Latest.Id}' to version '{packageModel.Latest.Version}'.");
+                    Console.WriteLine($"Updated '{packageModel.Target.Id}' to version '{packageModel.Target.Version}'.");
                     Environment.ExitCode = 0;
                 }
                 else

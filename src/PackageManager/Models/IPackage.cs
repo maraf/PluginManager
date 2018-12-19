@@ -10,7 +10,7 @@ namespace PackageManager.Models
     /// <summary>
     /// A package.
     /// </summary>
-    public interface IPackage : IPackageIdentity
+    public interface IPackage : IPackageIdentity, IEquatable<IPackage>
     {
         /// <summary>
         /// Gets a package description.

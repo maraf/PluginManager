@@ -28,7 +28,7 @@ namespace PackageManager.ViewModels.Commands
         }
 
         protected override bool CanExecuteOverride(PackageUpdateViewModel package)
-            => package != null && install.IsInstalled(package.Current);
+            => package != null && install.IsInstalled(package.Current.Model) && package.Target != null;
 
         protected override async Task ExecuteAsync(PackageUpdateViewModel package, CancellationToken cancellationToken)
         {
@@ -41,20 +41,20 @@ namespace PackageManager.ViewModels.Commands
             {
                 if (package.IsSelf && !selfUpdate.IsSelfUpdate)
                 {
-                    selfUpdate.Update(package.Latest);
+                    selfUpdate.Update(package.Target);
                     return;
                 }
 
-                IPackageContent packageContent = await package.Current.GetContentAsync(cancellationToken);
+                IPackageContent packageContent = await package.Current.Model.GetContentAsync(cancellationToken);
                 await packageContent.RemoveFromAsync(install.Path, cancellationToken);
-                install.Uninstall(package.Current);
+                install.Uninstall(package.Current.Model);
 
-                packageContent = await package.Latest.GetContentAsync(cancellationToken);
+                packageContent = await package.Target.GetContentAsync(cancellationToken);
                 await packageContent.ExtractToAsync(install.Path, cancellationToken);
-                install.Install(package.Latest);
+                install.Install(package.Target);
 
                 if (package.IsSelf)
-                    selfUpdate.RunNewInstance(package.Latest);
+                    selfUpdate.RunNewInstance(package.Target);
             }
 
             Completed?.Invoke();

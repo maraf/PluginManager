@@ -30,6 +30,9 @@ namespace PackageManager.Views.DesignData
             return Id == other.Id && Version == other.Version;
         }
 
+        public bool Equals(IPackage other)
+            => Equals((IPackageIdentity)other);
+
         public Task<IPackageContent> GetContentAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();

@@ -21,13 +21,18 @@
                 <DataTemplate>
                     <Border Padding="8">
                         <DockPanel>
-                            <Image Source="{Binding Latest.IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
-                            <Button Content="Update" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.Update}" CommandParameter="{Binding}"
-                             VerticalAlignment="Center" Margin="8,0,0,0" DockPanel.Dock="Right" />
+                            <Image Source="{Binding Target.IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="8,0,0,0" DockPanel.Dock="Right">
+                                <Button Content="Update" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.Update}" CommandParameter="{Binding}" Margin="0,0,8,0" />
+
+                                <Button Content="Other versions.." Command="{Binding Current.LoadVersions}" Visibility="{Binding Current.AreVersionsLoaded, Converter={StaticResource FalseToVisibleConverter}}" MinWidth="100" MaxWidth="100" />
+                                <ComboBox x:Name="cbxVersions" ItemsSource="{Binding Current.Versions}" SelectedValue="{Binding Target, Mode=TwoWay}" SelectedValuePath="Model" DisplayMemberPath="Version" ItemStringFormat="{}v{0}" 
+                                 Visibility="{Binding Current.AreVersionsLoaded, Converter={StaticResource TrueToVisibleConverter}}" MinWidth="100" MaxWidth="100" />
+                            </StackPanel>
                             <StackPanel>
                                 <Grid>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Latest.Id}" FontWeight="Bold" />
+                                        <TextBlock Text="{Binding Target.Id}" FontWeight="Bold" />
                                         <TextBlock Text=" (PackageManager update)" Visibility="{Binding IsSelf, Converter={StaticResource TrueToVisibleConverter}}" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -35,10 +40,10 @@
                                         <TextBlock Text="{Binding Current.Version}" />
                                         <TextBlock Text=" → " />
                                         <TextBlock Text="v" />
-                                        <TextBlock Text="{Binding Latest.Version}" />
+                                        <TextBlock Text="{Binding Target.Version}" />
                                     </StackPanel>
                                 </Grid>
-                                <TextBlock Text="{Binding Latest.Description, Converter={StaticResource DropNewLineConverter}}" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding Target.Description, Converter={StaticResource DropNewLineConverter}}" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
                             </StackPanel>
                         </DockPanel>
                     </Border>
