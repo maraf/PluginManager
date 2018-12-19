@@ -3,7 +3,8 @@ NuGet based plugin manager for GitExtensions
 
 ![Preview](/assets/screenshot-search.png)
 
-Repository with some example plugins - https://www.myget.org/F/neptuo-gitextensions/api/v2.
+Repository with some example plugins - https://www.myget.org/F/neptuo-gitextensions/api/v2.<br>
+Nightly builds of PluginManager available at Appveyor - https://ci.appveyor.com/nuget/gitextensions-pluginmanager.
 
 ### Appveyor
 
