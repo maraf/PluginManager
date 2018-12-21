@@ -94,7 +94,7 @@
 
                             <Grid Margin="0,8">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                    <Button Content="Install" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Install}">
+                                    <Button Content="Install" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Install}" Margin="0,0,8,0">
                                         <Button.CommandParameter>
                                             <MultiBinding Converter="{StaticResource FirstNotNullMultiConverter}">
                                                 <Binding Path="SelectedItem.Model" ElementName="cbxVersions" />
@@ -102,9 +102,7 @@
                                             </MultiBinding>
                                         </Button.CommandParameter>
                                     </Button>
-                                </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                     <Button Content="Other versions.." Command="{Binding LoadVersions}" Visibility="{Binding AreVersionsLoaded, Converter={StaticResource FalseToVisibleConverter}}" MinWidth="100" MaxWidth="100" />
                                     <ComboBox x:Name="cbxVersions" ItemsSource="{Binding Versions}" SelectedItem="{Binding Mode=OneWay}" DisplayMemberPath="Version" ItemStringFormat="{}v{0}" 
                                      SelectionChanged="cbxVersions_SelectionChanged"
