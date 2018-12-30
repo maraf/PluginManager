@@ -12,7 +12,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin/$configuration$/net461/GitExtensions.PluginManager.dll" target="/" />
-    <file src="bin/$configuration$/net461/PackageManager/PackageManager.UI.exe" target="PackageManager/" />
+    <file src="bin/$configuration$/net461/GitExtensions.PluginManager.dll" target="lib/" />
+    <file src="bin/$configuration$/net461/PackageManager/PackageManager.UI.exe" target="lib/PackageManager/" />
   </files>
 </package>
