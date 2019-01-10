@@ -13,7 +13,7 @@ $name = "GitExtensions.PluginManager-" + $Version;
 $target = $sourceBasePath + "\GitExtensions.PluginManager." + $Version + ".zip";
 
 $tempPath = Join-Path $env:TEMP -ChildPath $name;
-$tempPmPath = Join-Path $tempPath -ChildPath "PackageMananger";
+$tempPmPath = Join-Path $tempPath -ChildPath "PackageManager";
 New-Item -Force -ItemType Directory $tempPath | Out-Null;
 New-Item -Force -ItemType Directory $tempPmPath | Out-Null;
 
