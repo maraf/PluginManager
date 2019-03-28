@@ -135,6 +135,9 @@ namespace PackageManager
                 .Handler<PackageFileRemovalException>(packageContent);
 
             exceptionBuilder
+                .Handler(new RestartAsAdministratorCancelledExceptionHandler(Navigator, this));
+
+            exceptionBuilder
                 .Handler(new MessageExceptionHandler(Navigator))
                 .Handler(new ShutdownExceptionHandler(this));
 

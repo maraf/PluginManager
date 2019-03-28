@@ -1,6 +1,7 @@
 ﻿using Neptuo;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,8 @@ namespace PackageManager.Services
 {
     internal partial class ProcessService
     {
+        private const int ErrorCancelled = 1223;
+
         private readonly IApplication application;
         private readonly IReadOnlyCollection<string> toKillNames;
 
@@ -30,7 +33,15 @@ namespace PackageManager.Services
             );
 
             processStart.Verb = "runas";
-            Process.Start(processStart);
+
+            try
+            {
+                Process.Start(processStart);
+            }
+            catch (Win32Exception e) when (e.NativeErrorCode == ErrorCancelled)
+            {
+                throw new RestartAsAdministratorCancelledException(e);
+            }
 
             application.Shutdown();
         }

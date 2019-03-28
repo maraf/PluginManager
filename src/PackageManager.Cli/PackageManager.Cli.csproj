@@ -11,6 +11,7 @@
     <Compile Include="..\PackageManager.UI\Services\ProcessService.cs" Link="Services\ProcessService.cs" />
     <Compile Include="..\PackageManager.UI\Services\ProcessService.IApplication.cs" Link="Services\ProcessService.IApplication.cs" />
     <Compile Include="..\PackageManager.UI\Services\ProcessService.ProcessKillContext.cs" Link="Services\ProcessService.ProcessKillContext.cs" />
+    <Compile Include="..\PackageManager.UI\Services\RestartAsAdministratorCancelledException.cs" Link="Services\RestartAsAdministratorCancelledException.cs" />
     <Compile Include="..\PackageManager.UI\Services\SelfUpdateService.cs" Link="Services\SelfUpdateService.cs" />
   </ItemGroup>
 
