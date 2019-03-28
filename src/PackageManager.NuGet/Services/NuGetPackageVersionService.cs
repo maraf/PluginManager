@@ -63,7 +63,16 @@ namespace PackageManager.Services
         private async Task<bool> SearchOlderVersionsDirectly(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter, bool isPrereleaseIncluded)
         {
             bool isSuccess = false;
-            IEnumerable<VersionInfo> versions = await package.GetVersionsAsync();
+            IEnumerable<VersionInfo> versions = null;
+
+            try
+            {
+                versions = await package.GetVersionsAsync();
+            }
+            catch (NullReferenceException)
+            {
+            }
+
             if (versions == null)
                 return false;
 
