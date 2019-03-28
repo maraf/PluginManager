@@ -47,7 +47,7 @@ namespace PackageManager.ViewModels.Commands
                 IPackage latest = await searchService.FindLatestVersionAsync(packageSource.Sources, current.Definition, viewModel.IsPrereleaseIncluded, cancellationToken);
 
                 // TODO: Compare versions.
-                if (latest.Version != current.Definition.Version)
+                if (latest != null && latest.Version != current.Definition.Version)
                 {
                     viewModel.Packages.Add(new PackageUpdateViewModel(
                         current.Definition,
