@@ -6,7 +6,7 @@
     <RepositoryUrl>https://github.com/maraf/GitExtensions.PluginManager</RepositoryUrl>
     <LangVersion>latest</LangVersion>
 
-    <VersionPrefix>0.8.0</VersionPrefix>
+    <VersionPrefix>0.8.1</VersionPrefix>
     <VersionSuffix></VersionSuffix>
   </PropertyGroup>
 
