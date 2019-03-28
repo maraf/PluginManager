@@ -1,5 +1,6 @@
 ﻿using Neptuo;
 using Neptuo.Exceptions.Handlers;
+using NuGet.Configuration;
 using NuGet.Packaging;
 using PackageManager.Services;
 using System;
@@ -12,6 +13,7 @@ namespace PackageManager.Exceptions
 {
     internal class UnauthorizedExceptionHandler : 
         IExceptionHandler<IExceptionHandlerContext<UnauthorizedAccessException>>, 
+        IExceptionHandler<IExceptionHandlerContext<NuGetConfigurationException>>, 
         IExceptionHandler<IExceptionHandlerContext<PackagesConfigWriterException>>
     {
         private readonly ProcessService processService;
@@ -31,5 +33,6 @@ namespace PackageManager.Exceptions
 
         void IExceptionHandler<IExceptionHandlerContext<UnauthorizedAccessException>>.Handle(IExceptionHandlerContext<UnauthorizedAccessException> context) => HandleInternal(context);
         void IExceptionHandler<IExceptionHandlerContext<PackagesConfigWriterException>>.Handle(IExceptionHandlerContext<PackagesConfigWriterException> context) => HandleInternal(context);
+        void IExceptionHandler<IExceptionHandlerContext<NuGetConfigurationException>>.Handle(IExceptionHandlerContext<NuGetConfigurationException> context) => HandleInternal(context);
     }
 }

@@ -121,6 +121,11 @@ namespace PackageManager
                 .Handler(unauthorized);
 
             exceptionBuilder
+                .Filter<NuGetConfigurationException>()
+                .Filter(e => e.InnerException is UnauthorizedAccessException)
+                .Handler(unauthorized);
+
+            exceptionBuilder
                 .Filter<FatalProtocolException>()
                 .Handler(new NuGetFatalProtocolExceptionHandler(Navigator));
 
