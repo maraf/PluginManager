@@ -150,7 +150,12 @@ namespace PackageManager
             {
                 SelfPackage package = new SelfPackage(Args.SelfPackageId);
                 if (!installService.IsInstalled(package))
+                {
+                    if (installService.IsInstalled(package.Id))
+                        installService.Uninstall(package.Id);
+
                     installService.Install(package);
+                }
             }
         }
 

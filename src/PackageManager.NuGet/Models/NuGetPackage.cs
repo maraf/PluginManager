@@ -18,7 +18,6 @@ namespace PackageManager.Models
     public class NuGetPackage : NuGetPackageIdentity, IPackage
     {
         private readonly IPackageSearchMetadata source;
-        private readonly bool isPrereleaseIncluded;
         private readonly SourceRepository repository;
         private readonly NuGetPackageContentService contentService;
         private readonly NuGetPackageVersionService versionService;
@@ -33,7 +32,7 @@ namespace PackageManager.Models
         public Uri ProjectUrl => source.ProjectUrl;
         public Uri LicenseUrl => source.LicenseUrl;
 
-        public NuGetPackage(IPackageSearchMetadata source, bool isPrereleaseIncluded, SourceRepository repository, NuGetPackageContentService contentService, NuGetPackageVersionService versionService)
+        public NuGetPackage(IPackageSearchMetadata source, SourceRepository repository, NuGetPackageContentService contentService, NuGetPackageVersionService versionService)
             : base(source?.Identity)
         {
             Ensure.NotNull(source, "source");
@@ -41,7 +40,6 @@ namespace PackageManager.Models
             Ensure.NotNull(contentService, "contentService");
             Ensure.NotNull(versionService, "versionService");
             this.source = source;
-            this.isPrereleaseIncluded = isPrereleaseIncluded;
             this.repository = repository;
             this.contentService = contentService;
             this.versionService = versionService;
@@ -50,7 +48,7 @@ namespace PackageManager.Models
         public async Task<IPackageContent> GetContentAsync(CancellationToken cancellationToken)
             => await contentService.DownloadAsync(repository, source, cancellationToken);
 
-        public async Task<IEnumerable<IPackage>> GetVersionsAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<IPackage>> GetVersionsAsync(bool isPrereleaseIncluded, CancellationToken cancellationToken)
             => await versionService.GetListAsync(Int32.MaxValue, source, repository, isPrereleaseIncluded: isPrereleaseIncluded, cancellationToken: cancellationToken);
 
         public bool Equals(IPackage other)

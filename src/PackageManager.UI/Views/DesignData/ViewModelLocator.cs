@@ -87,7 +87,7 @@ namespace PackageManager.Views.DesignData
                 if (updates == null)
                 {
                     updates = new UpdatesViewModel(new MockPackageSourceProvider(), new MockInstallService() { Installed = Package }, new MockSearchService(), SelfPackageConfiguration, new MockSelfUpdateService());
-                    updates.Packages.Add(new PackageUpdateViewModel(Package, NewerPackage, false));
+                    updates.Packages.Add(new PackageUpdateViewModel(Package, NewerPackage, Browser, false));
                     updates.Update.RaiseCanExecuteChanged();
                 }
 
@@ -100,7 +100,7 @@ namespace PackageManager.Views.DesignData
             get
             {
                 if (packageViewModel == null)
-                    packageViewModel = new PackageViewModel(Package);
+                    packageViewModel = new PackageViewModel(Package, Browser);
 
                 return packageViewModel;
             }

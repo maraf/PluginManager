@@ -103,8 +103,9 @@ namespace PackageManager.ViewModels.Commands
         [TestMethod]
         public void Update()
         {
+            var packageOptions = new PackageOptions();
             var package = new Package(ExtractPath, "Test");
-            var viewModel = new PackageUpdateViewModel(package.Object, package.Object, false);
+            var viewModel = new PackageUpdateViewModel(package.Object, package.Object, packageOptions.Object, false);
             var install = new InstallService(ExtractPath, package, package, package);
             var selfUpdate = new SelfUpdateService(false, null);
 
@@ -123,8 +124,9 @@ namespace PackageManager.ViewModels.Commands
         [TestMethod]
         public void Update_Self()
         {
+            var packageOptions = new PackageOptions();
             var package = new Package(ExtractPath, "Test");
-            var viewModel = new PackageUpdateViewModel(package.Object, package.Object, true);
+            var viewModel = new PackageUpdateViewModel(package.Object, package.Object, packageOptions.Object, true);
             var install = new InstallService(ExtractPath, package, package, package);
             var selfUpdate = new SelfUpdateService(false, package);
 
@@ -144,8 +146,9 @@ namespace PackageManager.ViewModels.Commands
         [TestMethod]
         public void Update_SelfComplete()
         {
+            var packageOptions = new PackageOptions();
             var package = new Package(ExtractPath, "Test");
-            var viewModel = new PackageUpdateViewModel(package.Object, package.Object, true);
+            var viewModel = new PackageUpdateViewModel(package.Object, package.Object, packageOptions.Object, true);
             var install = new InstallService(ExtractPath, package, package, package);
             var selfUpdate = new SelfUpdateService(true, package);
 
@@ -165,11 +168,12 @@ namespace PackageManager.ViewModels.Commands
         [TestMethod]
         public void UpdateAll()
         {
+            var packageOptions = new PackageOptions();
             var packageA = new Package(ExtractPath, "A");
             var packageB = new Package(ExtractPath, "B");
             var packageC = new Package(ExtractPath, "C");
 
-            PackageUpdateViewModel ToUpdate(Package package) => new PackageUpdateViewModel(package.Object, package.Object, false);
+            PackageUpdateViewModel ToUpdate(Package package) => new PackageUpdateViewModel(package.Object, package.Object, packageOptions.Object, false);
 
             var install = new InstallService(ExtractPath, packageA, packageA, packageA);
             install.InstallPackages.Add(packageB.Object);

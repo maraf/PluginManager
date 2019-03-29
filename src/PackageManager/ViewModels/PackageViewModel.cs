@@ -15,6 +15,7 @@ namespace PackageManager.ViewModels
     public class PackageViewModel : ObservableModel
     {
         private readonly IPackage model;
+        private readonly IPackageOptions packageOptions;
 
         // TODO: Remove...
         public IPackage Model => model;
@@ -47,11 +48,12 @@ namespace PackageManager.ViewModels
             }
         }
 
-        public PackageViewModel(IPackage model)
+        public PackageViewModel(IPackage model, IPackageOptions packageOptions)
         {
             Ensure.NotNull(model, "model");
+            Ensure.NotNull(packageOptions, "packageOptions");
             this.model = model;
-
+            this.packageOptions = packageOptions;
             LoadVersions = new AsyncDelegateCommand(OnLoadVersionsAsync, CanLoadVersions);
         }
 
@@ -59,9 +61,9 @@ namespace PackageManager.ViewModels
         {
             Versions.Clear();
 
-            IEnumerable<IPackage> versions = await model.GetVersionsAsync(cancellationToken);
+            IEnumerable<IPackage> versions = await model.GetVersionsAsync(packageOptions.IsPrereleaseIncluded, cancellationToken);
             foreach (IPackage version in versions)
-                Versions.Add(new PackageViewModel(version));
+                Versions.Add(new PackageViewModel(version, packageOptions));
 
             AreVersionsLoaded = true;
         }

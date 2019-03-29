@@ -52,6 +52,7 @@ namespace PackageManager.ViewModels.Commands
                     viewModel.Packages.Add(new PackageUpdateViewModel(
                         current.Definition,
                         latest,
+                        viewModel,
                         selfPackageConfiguration.Equals(current.Definition)
                     ));
                 }

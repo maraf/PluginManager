@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace PackageManager.ViewModels
 {
-    public class BrowserViewModel : ObservableModel
+    public class BrowserViewModel : ObservableModel, IPackageOptions
     {
         private string searchText;
         public string SearchText

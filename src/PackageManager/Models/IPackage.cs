@@ -60,8 +60,9 @@ namespace PackageManager.Models
         /// <summary>
         /// Gets an enumeration of all available package versions.
         /// </summary>
+        /// <param name="isPrereleaseIncluded">Whehter to include pre-release versions.</param>
         /// <param name="cancellationToken">A cancellation token.</param>
         /// <returns>A continutaion task returning an enumeration of all available package versions.</returns>
-        Task<IEnumerable<IPackage>> GetVersionsAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<IPackage>> GetVersionsAsync(bool isPrereleaseIncluded, CancellationToken cancellationToken);
     }
 }

@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace PackageManager.ViewModels
 {
-    public class UpdatesViewModel : ObservableModel, UpdateAllCommand.IViewModel
+    public class UpdatesViewModel : ObservableModel, UpdateAllCommand.IViewModel, IPackageOptions
     {
         private bool isPrereleaseIncluded;
         public bool IsPrereleaseIncluded

@@ -48,7 +48,7 @@ namespace PackageManager.ViewModels.Commands
                 viewModel.Packages.Clear();
 
                 foreach (IPackage package in packages)
-                    viewModel.Packages.Add(new PackageViewModel(package));
+                    viewModel.Packages.Add(new PackageViewModel(package, viewModel));
 
                 viewModel.Paging.IsNextAvailable = viewModel.Packages.Count == pageSize;
             }

@@ -113,10 +113,30 @@ namespace PackageManager.Services
         {
             Ensure.NotNullOrEmpty(packageId, "packageId");
 
+            NuGetVersion version = null;
+            NuGetFramework framework = null;
+            ReadPackageConfig(
+                (p, cache) => 
+                {
+                    if (p.PackageIdentity.Id == packageId)
+                    {
+                        version = p.PackageIdentity.Version;
+                        framework = p.TargetFramework;
+                        return Task.FromResult(true);
+                    }
+
+                    return Task.FromResult(false);
+                }, 
+                default
+            ).Wait();
+
+            if (version == null)
+                return;
+
             using (PackagesConfigWriter writer = new PackagesConfigWriter(ConfigFilePath, !File.Exists(ConfigFilePath)))
             {
                 log.Debug($"Removing entry '{packageId}' from packages.config.");
-                writer.RemovePackageEntry(packageId, null, null);
+                writer.RemovePackageEntry(packageId, version, framework);
             }
         }
 
@@ -164,7 +184,7 @@ namespace PackageManager.Services
 
                                 NuGetPackageFilterResult filterResult = packageFilter.IsPassed(metadata);
                                 result.Add(new NuGetInstalledPackage(
-                                    new NuGetPackage(metadata, false, repository, contentService, versionService),
+                                    new NuGetPackage(metadata, repository, contentService, versionService),
                                     filterResult == NuGetPackageFilterResult.Ok
                                 ));
                                 break;

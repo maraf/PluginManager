@@ -45,7 +45,7 @@ namespace PackageManager.Services
             try
             {
                 List<IPackage> result = new List<IPackage>();
-                if (await SearchOlderVersionsDirectly(result, resultCount, package, repository, versionFilter, isPrereleaseIncluded))
+                if (await SearchOlderVersionsDirectly(result, resultCount, package, repository, versionFilter))
                     return result;
 
                 if (await SearchOlderVersionsUsingMetadataResource(result, resultCount, package, repository, versionFilter, isPrereleaseIncluded, cancellationToken))
@@ -60,7 +60,7 @@ namespace PackageManager.Services
             }
         }
 
-        private async Task<bool> SearchOlderVersionsDirectly(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter, bool isPrereleaseIncluded)
+        private async Task<bool> SearchOlderVersionsDirectly(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter)
         {
             bool isSuccess = false;
             IEnumerable<VersionInfo> versions = null;
@@ -81,7 +81,7 @@ namespace PackageManager.Services
                 // TODO: Filter prelease on V2 feed.
                 if (version.PackageSearchMetadata != null && versionFilter(package, version.PackageSearchMetadata))
                 {
-                    IPackage item = ProcessOlderVersion(repository, version.PackageSearchMetadata, isPrereleaseIncluded);
+                    IPackage item = ProcessOlderVersion(repository, version.PackageSearchMetadata);
                     if (item != null)
                     {
                         result.Add(item);
@@ -118,7 +118,7 @@ namespace PackageManager.Services
                 {
                     if (versionFilter(package, version))
                     {
-                        IPackage item = ProcessOlderVersion(repository, version, isPrereleaseIncluded);
+                        IPackage item = ProcessOlderVersion(repository, version);
                         if (item != null)
                         {
                             result.Add(item);
@@ -132,7 +132,7 @@ namespace PackageManager.Services
             return true;
         }
 
-        private IPackage ProcessOlderVersion(SourceRepository repository, IPackageSearchMetadata version, bool isPrereleaseIncluded)
+        private IPackage ProcessOlderVersion(SourceRepository repository, IPackageSearchMetadata version)
         {
             log.Debug($"Found '{version.Identity}'.");
 
@@ -141,7 +141,7 @@ namespace PackageManager.Services
             {
                 case NuGetPackageFilterResult.Ok:
                     log.Debug("Package added.");
-                    return new NuGetPackage(version, isPrereleaseIncluded, repository, contentService, this);
+                    return new NuGetPackage(version, repository, contentService, this);
 
                 default:
                     log.Debug("Package skipped.");

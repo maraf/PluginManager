@@ -28,11 +28,11 @@ namespace PackageManager.ViewModels
             }
         }
 
-        public PackageUpdateViewModel(IPackage current, IPackage latest, bool isSelf)
+        public PackageUpdateViewModel(IPackage current, IPackage latest, IPackageOptions packageOptions, bool isSelf)
         {
             Ensure.NotNull(current, "current");
             Ensure.NotNull(latest, "latest");
-            Current = new PackageViewModel(current);
+            Current = new PackageViewModel(current, packageOptions);
             Target = latest;
             IsSelf = isSelf;
         }

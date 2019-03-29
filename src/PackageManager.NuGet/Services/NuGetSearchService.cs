@@ -133,7 +133,7 @@ namespace PackageManager.Services
             {
                 case NuGetPackageFilterResult.Ok:
                     log.Debug("Package added.");
-                    result.Add(new NuGetPackage(package, isPrereleaseIncluded, repository, contentService, versionService));
+                    result.Add(new NuGetPackage(package, repository, contentService, versionService));
                     break;
 
                 case NuGetPackageFilterResult.NotCompatibleVersion:
