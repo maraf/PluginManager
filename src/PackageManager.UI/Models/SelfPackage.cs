@@ -18,6 +18,10 @@ namespace PackageManager.Models
             Ensure.NotNull(id, "id");
             Id = id;
             Version = VersionInfo.Version;
+
+            int indexOfPlus = Version.IndexOf('+');
+            if (indexOfPlus > 0)
+                Version = Version.Substring(0, indexOfPlus);
         }
 
         public bool Equals(IPackageIdentity other)
