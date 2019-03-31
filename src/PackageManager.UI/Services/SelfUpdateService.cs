@@ -30,20 +30,29 @@ namespace PackageManager.Services
 
         public void Update(IPackage latest)
         {
-            // Copy to temp.
             string current = Assembly.GetExecutingAssembly().Location;
+            string temp = CopySelfToTemp(current);
+            RerunFromTemp(current, temp);
+        }
+
+        private string CopySelfToTemp(string current)
+        {
             string tempDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString().Replace("-", string.Empty));
             string temp = Path.Combine(tempDirectory, CurrentFileName);
-
             if (!Directory.Exists(tempDirectory))
                 Directory.CreateDirectory(tempDirectory);
 
             File.Copy(current, temp, true);
+            return temp;
+        }
 
-            // Rerun with self update.
-            application.Args.IsSelfUpdate = true;
-            application.Args.SelfOriginalPath = current;
-            string arguments = application.Args.ToString();
+        private void RerunFromTemp(string current, string temp)
+        {
+            IArgs args = application.Args.Clone();
+
+            args.IsSelfUpdate = true;
+            args.SelfOriginalPath = current;
+            string arguments = args.ToString();
 
             processes.Run(temp, arguments);
             application.Shutdown();

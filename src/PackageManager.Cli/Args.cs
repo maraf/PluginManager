@@ -1,4 +1,5 @@
-﻿using PackageManager.Services;
+﻿using Neptuo;
+using PackageManager.Services;
 using PackageManager.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PackageManager
 {
-    public partial class Args : SelfUpdateService.IArgs
+    public partial class Args : SelfUpdateService.IArgs, ICloneable<Args>, ICloneable<SelfUpdateService.IArgs>
     {
         public string Path { get; set; }
         public string SelfPackageId { get; set; }
@@ -20,6 +21,10 @@ namespace PackageManager
 
         public bool IsSelfUpdate { get; set; }
         public string SelfOriginalPath { get; set; }
+
+        private Args()
+        {
+        }
 
         public Args(string[] args)
         {
@@ -51,7 +56,7 @@ namespace PackageManager
                     IsUpdateCount = true;
                     skipped++;
                 }
-                else if(args[1] == "--package")
+                else if (args[1] == "--package")
                 {
                     IsUpdatePackage = true;
                     PackageId = args[2];
@@ -110,5 +115,22 @@ namespace PackageManager
 
             return result.ToString();
         }
+
+        public Args Clone()
+        {
+            return new Args()
+            {
+                Path = Path,
+                SelfPackageId = SelfPackageId,
+                IsUpdateCount = IsUpdateCount,
+                IsUpdatePackage = IsUpdatePackage,
+                PackageId = PackageId,
+                IsSelfUpdate = IsSelfUpdate,
+                SelfOriginalPath = SelfOriginalPath
+            };
+        }
+
+        SelfUpdateService.IArgs ICloneable<SelfUpdateService.IArgs>.Clone() 
+            => Clone();
     }
 }

@@ -1,8 +1,10 @@
-﻿namespace PackageManager.Services
+﻿using Neptuo;
+
+namespace PackageManager.Services
 {
     internal partial class SelfUpdateService
     {
-        public interface IArgs
+        public interface IArgs : ICloneable<IArgs>
         {
             string Path { get; }
 

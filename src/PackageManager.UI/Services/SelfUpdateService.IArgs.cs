@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Neptuo;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -10,7 +11,7 @@ namespace PackageManager.Services
 {
     partial class SelfUpdateService
     {
-        public interface IArgs
+        public interface IArgs : ICloneable<IArgs>
         {
             string Path { get; }
 
