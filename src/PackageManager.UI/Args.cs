@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Neptuo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PackageManager
 {
-    public partial class Args
+    public partial class Args : ICloneable<Args>
     {
         public string Path { get; set; }
         public IReadOnlyCollection<string> Monikers { get; set; }
@@ -15,6 +16,7 @@ namespace PackageManager
 
         public bool IsSelfUpdate { get; set; }
         public string SelfOriginalPath { get; set; }
+        public string SelfUpdateVersion { get; set; }
 
         public IReadOnlyCollection<string> ProcessNamesToKillBeforeChange { get; set; }
 
@@ -78,6 +80,9 @@ namespace PackageManager
                 case "--selforiginalpath":
                     SelfOriginalPath = value;
                     return true;
+                case "--selfupdateversion":
+                    SelfUpdateVersion = value;
+                    return true;
                 case "--processnamestokillbeforechange":
                     ProcessNamesToKillBeforeChange = value.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                     return true;
@@ -135,10 +140,28 @@ namespace PackageManager
             if (!String.IsNullOrEmpty(SelfOriginalPath))
                 result.Append($" --selforiginalpath \"{SelfOriginalPath}\"");
 
+            if (!String.IsNullOrEmpty(SelfUpdateVersion))
+                result.Append($" --selfupdateversion \"{SelfUpdateVersion}\"");
+
             if (ProcessNamesToKillBeforeChange != null && ProcessNamesToKillBeforeChange.Count > 0)
                 result.Append($" --processnamestokillbeforechange \"{String.Join(",", ProcessNamesToKillBeforeChange)}\"");
 
             return result.ToString();
+        }
+
+        public Args Clone()
+        {
+            return new Args()
+            {
+                Path = Path,
+                Monikers = Monikers,
+                Dependencies = Dependencies,
+                SelfPackageId = SelfPackageId,
+                IsSelfUpdate = IsSelfUpdate,
+                SelfOriginalPath = SelfOriginalPath,
+                SelfUpdateVersion = SelfUpdateVersion,
+                ProcessNamesToKillBeforeChange = ProcessNamesToKillBeforeChange
+            };
         }
 
         public class Dependency

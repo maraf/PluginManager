@@ -19,8 +19,7 @@ namespace PackageManager
             return new Args(parts);
         }
 
-        [TestMethod]
-        public void All()
+        private void TestAndCompare(Func<Args, Args> handler)
         {
             string path = @"C:\Temp";
             string moniker1 = "A";
@@ -32,6 +31,7 @@ namespace PackageManager
             string processToKill2 = "E.exe";
             string selfOriginalPath = @"C:\F.exe";
             bool isSelfUpdate = true;
+            string selfUpdateVersion = "1.0.0";
 
             var args = new Args();
             args.Path = path;
@@ -41,8 +41,9 @@ namespace PackageManager
             args.ProcessNamesToKillBeforeChange = new List<string>() { processToKill1, processToKill2 };
             args.SelfOriginalPath = selfOriginalPath;
             args.IsSelfUpdate = isSelfUpdate;
+            args.SelfUpdateVersion = selfUpdateVersion;
 
-            args = SerializeAndDeserialize(args);
+            args = handler(args);
             Assert.AreEqual(path, args.Path);
 
             Assert.AreEqual(2, args.Monikers.Count);
@@ -61,6 +62,13 @@ namespace PackageManager
 
             Assert.AreEqual(selfOriginalPath, args.SelfOriginalPath);
             Assert.AreEqual(isSelfUpdate, args.IsSelfUpdate);
+            Assert.AreEqual(selfUpdateVersion, args.SelfUpdateVersion);
         }
+
+        [TestMethod]
+        public void All() => TestAndCompare(SerializeAndDeserialize);
+
+        [TestMethod]
+        public void Clone() => TestAndCompare(args => args.Clone());
     }
 }
