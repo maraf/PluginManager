@@ -161,13 +161,42 @@ namespace PackageManager
 
         private void RunSelfUpdate(MainWindow wnd)
         {
-            wnd.ViewModel.Updates.Refresh.Completed += async () =>
+            UpdatesViewModel updates = wnd.ViewModel.Updates;
+            updates.IsPrereleaseIncluded = true;
+            updates.Refresh.Completed += async () =>
             {
-                PackageUpdateViewModel package = wnd.ViewModel.Updates.Packages.FirstOrDefault(p => p.Current.Id == Args.SelfPackageId);
+                bool canUpdate = false;
+                PackageUpdateViewModel package = updates.Packages.FirstOrDefault(p => p.Current.Id == Args.SelfPackageId);
                 if (package != null)
-                    await wnd.ViewModel.Updates.Update.ExecuteAsync(package);
+                {
+                    if (package.Target.Version == Args.SelfUpdateVersion)
+                    {
+                        canUpdate = true;
+                    }
+                    else
+                    {
+                        if (package.Current.LoadVersions.CanExecute())
+                            package.Current.LoadVersions.Execute();
+
+                        PackageViewModel version = package.Current.Versions.FirstOrDefault(p => p.Version == Args.SelfUpdateVersion);
+                        if (version != null)
+                        {
+                            package.Target = version.Model;
+                            canUpdate = true;
+                        }
+                        else
+                        {
+                            Navigator.Notify("Self Update Error", $"Unnable to find update package (version {Args.SelfUpdateVersion}) for PackageManager.", Navigator.MessageType.Error);
+                        }
+                    }
+                }
                 else
+                {
                     Navigator.Notify("Self Update Error", $"Unnable to find update package for PackageManager.", Navigator.MessageType.Error);
+                }
+
+                if (canUpdate)
+                    await updates.Update.ExecuteAsync(package);
 
                 Shutdown();
             };

@@ -21,6 +21,7 @@ namespace PackageManager
 
         public bool IsSelfUpdate { get; set; }
         public string SelfOriginalPath { get; set; }
+        public string SelfUpdateVersion { get; set; }
 
         private Args()
         {
@@ -90,6 +91,9 @@ namespace PackageManager
                 case "--selforiginalpath":
                     SelfOriginalPath = value;
                     return true;
+                case "--selfupdateversion":
+                    SelfUpdateVersion = value;
+                    return true;
                 default:
                     return false;
             }
@@ -126,7 +130,8 @@ namespace PackageManager
                 IsUpdatePackage = IsUpdatePackage,
                 PackageId = PackageId,
                 IsSelfUpdate = IsSelfUpdate,
-                SelfOriginalPath = SelfOriginalPath
+                SelfOriginalPath = SelfOriginalPath,
+                SelfUpdateVersion = SelfUpdateVersion
             };
         }
 

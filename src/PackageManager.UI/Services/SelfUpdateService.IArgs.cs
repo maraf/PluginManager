@@ -17,6 +17,7 @@ namespace PackageManager.Services
 
             bool IsSelfUpdate { get; set; }
             string SelfOriginalPath { get; set; }
+            string SelfUpdateVersion { get; set; }
         }
     }
 }

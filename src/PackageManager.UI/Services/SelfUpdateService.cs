@@ -32,7 +32,8 @@ namespace PackageManager.Services
         {
             string current = Assembly.GetExecutingAssembly().Location;
             string temp = CopySelfToTemp(current);
-            RerunFromTemp(current, temp);
+            IArgs arguments = CreateArguments(current, latest);
+            RerunFromTemp(temp, arguments);
         }
 
         private string CopySelfToTemp(string current)
@@ -46,16 +47,21 @@ namespace PackageManager.Services
             return temp;
         }
 
-        private void RerunFromTemp(string current, string temp)
+        private void RerunFromTemp(string temp, IArgs arguments)
+        {
+            processes.Run(temp, arguments.ToString());
+            application.Shutdown();
+        }
+
+        private IArgs CreateArguments(string current, IPackageIdentity package)
         {
             IArgs args = application.Args.Clone();
 
             args.IsSelfUpdate = true;
             args.SelfOriginalPath = current;
-            string arguments = args.ToString();
+            args.SelfUpdateVersion = package.Version;
 
-            processes.Run(temp, arguments);
-            application.Shutdown();
+            return args;
         }
 
         public void RunNewInstance(IPackage package)
@@ -74,9 +80,12 @@ namespace PackageManager.Services
 
             if (target != null)
             {
-                application.Args.IsSelfUpdate = false;
-                string arguments = application.Args.ToString();
+                IArgs args = application.Args.Clone();
 
+                args.IsSelfUpdate = false;
+                args.SelfUpdateVersion = null;
+
+                string arguments = args.ToString();
                 processes.Run(target, arguments);
             }
         }
