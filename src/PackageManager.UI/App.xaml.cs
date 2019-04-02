@@ -92,7 +92,8 @@ namespace PackageManager
                 searchService,
                 installService,
                 selfPackageConfiguration,
-                selfUpdateService
+                selfUpdateService,
+                NuGetPackageVersionComparer.Instance
             );
 
             var wnd = new MainWindow(viewModel, ProcessService, Navigator);

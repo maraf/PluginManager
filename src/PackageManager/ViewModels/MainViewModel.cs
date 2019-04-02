@@ -34,13 +34,13 @@ namespace PackageManager.ViewModels
             }
         }
 
-        public MainViewModel(IPackageSourceCollection sources, ISearchService search, IInstallService install, SelfPackageConfiguration selfPackageConfiguration, ISelfUpdateService selfUpdate)
+        public MainViewModel(IPackageSourceCollection sources, ISearchService search, IInstallService install, SelfPackageConfiguration selfPackageConfiguration, ISelfUpdateService selfUpdate, IComparer<IPackageIdentity> packageVersionComparer)
         {
             SourceSelector = new PackageSourceSelectorViewModel(sources);
 
             Browser = new BrowserViewModel(SourceSelector, search, install);
             Installed = new InstalledViewModel(SourceSelector, install, selfPackageConfiguration);
-            Updates = new UpdatesViewModel(SourceSelector, install, search, selfPackageConfiguration, selfUpdate);
+            Updates = new UpdatesViewModel(SourceSelector, install, search, selfPackageConfiguration, selfUpdate, packageVersionComparer);
 
             Cancel = new CancelCommand(
                 Browser.Search, 

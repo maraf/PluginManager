@@ -41,7 +41,7 @@ namespace PackageManager.Views.DesignData
             {
                 if (main == null)
                 {
-                    main = new MainViewModel(PackageSourceCollection, new MockSearchService(), new MockInstallService(), SelfPackageConfiguration, new MockSelfUpdateService());
+                    main = new MainViewModel(PackageSourceCollection, new MockSearchService(), new MockInstallService(), SelfPackageConfiguration, new MockSelfUpdateService(), Comparer<IPackageIdentity>.Default);
                     main.Browser.Search.Execute();
                 }
 
@@ -86,7 +86,7 @@ namespace PackageManager.Views.DesignData
             {
                 if (updates == null)
                 {
-                    updates = new UpdatesViewModel(new MockPackageSourceProvider(), new MockInstallService() { Installed = Package }, new MockSearchService(), SelfPackageConfiguration, new MockSelfUpdateService());
+                    updates = new UpdatesViewModel(new MockPackageSourceProvider(), new MockInstallService() { Installed = Package }, new MockSearchService(), SelfPackageConfiguration, new MockSelfUpdateService(), Comparer<IPackageIdentity>.Default);
                     updates.Packages.Add(new PackageUpdateViewModel(Package, NewerPackage, Browser, false));
                     updates.Update.RaiseCanExecuteChanged();
                 }

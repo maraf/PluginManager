@@ -18,21 +18,24 @@ namespace PackageManager.ViewModels.Commands
         private readonly IInstallService installService;
         private readonly ISearchService searchService;
         private readonly SelfPackageConfiguration selfPackageConfiguration;
+        private readonly IComparer<IPackageIdentity> packageVersionComparer;
 
         public event Action Completed;
 
-        public RefreshUpdatesCommand(UpdatesViewModel viewModel, IPackageSourceSelector packageSource, IInstallService installService, ISearchService searchService, SelfPackageConfiguration selfPackageConfiguration)
+        public RefreshUpdatesCommand(UpdatesViewModel viewModel, IPackageSourceSelector packageSource, IInstallService installService, ISearchService searchService, SelfPackageConfiguration selfPackageConfiguration, IComparer<IPackageIdentity> packageVersionComparer)
         {
             Ensure.NotNull(viewModel, "viewModel");
             Ensure.NotNull(packageSource, "packageSource");
             Ensure.NotNull(installService, "installService");
             Ensure.NotNull(searchService, "searchService");
             Ensure.NotNull(selfPackageConfiguration, "selfPackageConfiguration");
+            Ensure.NotNull(packageVersionComparer, "packageVersionComparer");
             this.viewModel = viewModel;
             this.packageSource = packageSource;
             this.installService = installService;
             this.searchService = searchService;
             this.selfPackageConfiguration = selfPackageConfiguration;
+            this.packageVersionComparer = packageVersionComparer;
         }
 
         protected override bool CanExecuteOverride()
@@ -46,8 +49,7 @@ namespace PackageManager.ViewModels.Commands
             {
                 IPackage latest = await searchService.FindLatestVersionAsync(packageSource.Sources, current.Definition, viewModel.IsPrereleaseIncluded, cancellationToken);
 
-                // TODO: Compare versions.
-                if (latest != null && latest.Version != current.Definition.Version)
+                if (latest != null && packageVersionComparer.Compare(latest, current.Definition) > 0)
                 {
                     viewModel.Packages.Add(new PackageUpdateViewModel(
                         current.Definition,
