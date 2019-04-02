@@ -46,6 +46,7 @@ namespace PackageManager
 
             ILog log = LogFactory.Scope("Startup");
             log.Debug($"Startup arguments: {Environment.NewLine}{String.Join(" ", e.Args)}");
+            log.Debug($"Current version: {VersionInfo.Version}");
 
             Args = new Args(e.Args);
 
