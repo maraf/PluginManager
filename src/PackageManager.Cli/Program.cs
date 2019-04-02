@@ -70,7 +70,7 @@ namespace PackageManager.Cli
             var selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
             var selfUpdateService = new SelfUpdateService(this, new ProcessService(this, Array.Empty<string>()));
 
-            UpdatesViewModel viewModel = new UpdatesViewModel(packageSourceSelector, installService, searchService, selfPackageConfiguration, selfUpdateService);
+            UpdatesViewModel viewModel = new UpdatesViewModel(packageSourceSelector, installService, searchService, selfPackageConfiguration, selfUpdateService, NuGetPackageVersionComparer.Instance);
             return viewModel;
         }
 
