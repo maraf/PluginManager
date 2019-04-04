@@ -1,4 +1,4 @@
-Push-Location '.\tools';
+Push-Location $PSScriptRoot;
 
 $targetPath = '..\';
 
@@ -32,6 +32,10 @@ Else
 dotnet restore ..\GitExtensions.PluginManager.sln
 
 msbuild ..\GitExtensions.PluginManager.sln /p:Configuration=Release -property:VersionSuffix=$versionSuffix -verbosity:minimal
+if (!($LastExitCode -eq 0))
+{
+    Write-Error -Message "MSBuild failed with $LastExitCode" -ErrorAction Stop
+}
 
 $packPath = Join-Path ".." $targetPath;
 dotnet pack ..\src\PackageManager.UI -c Release -o $packPath --no-build /p:VersionSuffix=$versionSuffix
