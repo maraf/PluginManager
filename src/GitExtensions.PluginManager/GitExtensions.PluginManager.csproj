@@ -52,7 +52,7 @@
   
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFolder="$(TargetDir)PackageManager" />
-    <Exec Command="powershell.exe ..\..\tools\Download-GitExtensions.ps1" />
+    <Exec Command="powershell.exe -ExecutionPolicy Unrestricted ..\..\tools\Download-GitExtensions.ps1" />
   </Target>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="$(TargetDir)$(PackageManagerTargetPath)" DestinationFolder="$(GitExtensionsDebugPluginsPath)PackageManager" />
@@ -84,6 +84,6 @@
   </Target>
   
   <Target Name="Zip" AfterTargets="Pack">
-    <Exec Command="powershell $(MSBuildProjectDirectory)\..\..\tools\Zip-GitExtensionsPlugin.ps1 -Version $(PackageVersion) -Configuration $(Configuration)" />
+    <Exec Command="powershell -ExecutionPolicy Unrestricted $(MSBuildProjectDirectory)\..\..\tools\Zip-GitExtensionsPlugin.ps1 -Version $(PackageVersion) -Configuration $(Configuration)" />
   </Target>
 </Project>
