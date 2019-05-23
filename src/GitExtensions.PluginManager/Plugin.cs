@@ -47,7 +47,7 @@ namespace GitExtensions.PluginManager
         public override bool Execute(GitUIEventArgs gitUiCommands)
         {
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
-            string pluginsPath = Path.Combine(basePath, "Plugins");
+            string pluginsPath = ManagedExtensibility.UserPluginsPath;
 
             Args args = new Args();
             args.Path = pluginsPath;
