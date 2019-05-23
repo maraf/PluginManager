@@ -14,6 +14,7 @@
     <PackageManagerTargetPath>PackageManager\PackageManager.UI.exe</PackageManagerTargetPath>
     <PackageManagerSourcePath>$(SolutionDir)src\PackageManager.UI\bin\$(Configuration)\$(TargetFramework)\PackageManager.UI.exe</PackageManagerSourcePath>
     <GitExtensionsDebugPluginsPath>..\..\references\GitExtensions\Plugins\</GitExtensionsDebugPluginsPath>
+    <GitExtensionsReferenceVersion>v3.2.0.5938</GitExtensionsReferenceVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -52,7 +53,7 @@
   
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFolder="$(TargetDir)PackageManager" />
-    <Exec Command="powershell.exe -ExecutionPolicy Unrestricted ..\..\tools\Download-GitExtensions.ps1" />
+    <Exec Command="powershell.exe -ExecutionPolicy Unrestricted ..\..\tools\Download-GitExtensions.ps1 -Version $(GitExtensionsReferenceVersion)" />
   </Target>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="$(TargetDir)$(PackageManagerTargetPath)" DestinationFolder="$(GitExtensionsDebugPluginsPath)PackageManager" />
