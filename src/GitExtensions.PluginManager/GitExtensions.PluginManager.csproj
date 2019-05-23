@@ -13,7 +13,7 @@
   <PropertyGroup>
     <PackageManagerTargetPath>PackageManager\PackageManager.UI.exe</PackageManagerTargetPath>
     <PackageManagerSourcePath>$(SolutionDir)src\PackageManager.UI\bin\$(Configuration)\$(TargetFramework)\PackageManager.UI.exe</PackageManagerSourcePath>
-    <GitExtensionsDebugPluginsPath>..\..\references\GitExtensions\Plugins\</GitExtensionsDebugPluginsPath>
+    <GitExtensionsDebugPluginsPath>..\..\references\GitExtensions\UserPlugins\</GitExtensionsDebugPluginsPath>
     <GitExtensionsReferenceVersion>v3.2.0.5938</GitExtensionsReferenceVersion>
   </PropertyGroup>
 
