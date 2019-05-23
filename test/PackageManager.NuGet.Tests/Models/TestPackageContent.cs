@@ -14,7 +14,7 @@ namespace PackageManager.Models
     public class TestPackageContent
     {
         public const string ConfigFilePath = "PackageSource_Content.config";
-        public static string ExtractPath => Path.Combine(Environment.CurrentDirectory, "Plugins");
+        public static string ExtractPath => Path.Combine(Environment.CurrentDirectory, "UserPlugins");
 
         private ISearchService search;
         private IPackageSourceCollection sources;
