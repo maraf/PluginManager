@@ -14,6 +14,7 @@
     <PackageManagerTargetPath>PackageManager\PackageManager.UI.exe</PackageManagerTargetPath>
     <PackageManagerSourcePath>$(SolutionDir)src\PackageManager.UI\bin\$(Configuration)\$(TargetFramework)\PackageManager.UI.exe</PackageManagerSourcePath>
     <GitExtensionsDebugPluginsPath>..\..\references\GitExtensions\UserPlugins\</GitExtensionsDebugPluginsPath>
+    <GitExtensionsReferenceSource>appveyor</GitExtensionsReferenceSource>
     <GitExtensionsReferenceVersion>v3.2.0.5938</GitExtensionsReferenceVersion>
   </PropertyGroup>
 
@@ -53,7 +54,7 @@
   
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFolder="$(TargetDir)PackageManager" />
-    <Exec Command="powershell.exe -ExecutionPolicy Unrestricted ..\..\tools\Download-GitExtensions.ps1 -Version $(GitExtensionsReferenceVersion)" />
+    <Exec Command="powershell.exe -ExecutionPolicy Unrestricted ..\..\tools\Download-GitExtensions.ps1 -Version $(GitExtensionsReferenceVersion) -Source $(GitExtensionsReferenceSource)" />
   </Target>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="$(TargetDir)$(PackageManagerTargetPath)" DestinationFolder="$(GitExtensionsDebugPluginsPath)PackageManager" />
