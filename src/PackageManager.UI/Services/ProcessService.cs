@@ -53,7 +53,6 @@ namespace PackageManager.Services
                 arguments
             );
 
-            processStart.Verb = "runas";
             Process.Start(processStart);
         }
 
