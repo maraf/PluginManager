@@ -59,9 +59,8 @@ namespace GitExtensions.PluginManager
             ProcessStartInfo info = new ProcessStartInfo()
             {
                 FileName = Path.Combine(pluginsPath, PluginManagerRelativePath),
-                Arguments = String.Join(" ", args),
+                Arguments = args.ToString(),
                 UseShellExecute = false,
-                Verb = "runas"
             };
             Process.Start(info);
 
