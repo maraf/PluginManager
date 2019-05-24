@@ -30,11 +30,24 @@ namespace PackageManager.ViewModels.Commands
 
         protected async override Task ExecuteAsync(CancellationToken cancellationToken)
         {
+            PackageUpdateViewModel selfUpdate = null;
+
             foreach (PackageUpdateViewModel package in viewModel.Packages.ToList())
             {
-                if (viewModel.Update.CanExecute(package))
-                    await viewModel.Update.ExecuteAsync(package);
+                if (package.IsSelf)
+                    selfUpdate = package;
+                else
+                    await UpdateAsync(package);
             }
+
+            if (selfUpdate != null)
+                await UpdateAsync(selfUpdate);
+        }
+
+        private async Task UpdateAsync(PackageUpdateViewModel package)
+        {
+            if (viewModel.Update.CanExecute(package))
+                await viewModel.Update.ExecuteAsync(package);
         }
     }
 }
