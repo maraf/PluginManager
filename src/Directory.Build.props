@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Authors>Maraf</Authors>
     <Company>Neptuo</Company>
-    <RepositoryUrl>https://github.com/maraf/GitExtensions.PluginManager</RepositoryUrl>
+    <RepositoryUrl>https://github.com/maraf/PluginManager</RepositoryUrl>
     <LangVersion>latest</LangVersion>
 
     <VersionPrefix>0.9.0</VersionPrefix>

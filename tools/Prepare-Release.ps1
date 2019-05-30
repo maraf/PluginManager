@@ -29,9 +29,9 @@ Else
     $versionSuffix = $null;
 }
 
-dotnet restore ..\GitExtensions.PluginManager.sln
+dotnet restore ..\PluginManager.sln
 
-msbuild ..\GitExtensions.PluginManager.sln /p:Configuration=Release -property:VersionSuffix=$versionSuffix -verbosity:minimal
+msbuild ..\PluginManager.sln /p:Configuration=Release -property:VersionSuffix=$versionSuffix -verbosity:minimal
 if (!($LastExitCode -eq 0))
 {
     Write-Error -Message "MSBuild failed with $LastExitCode" -ErrorAction Stop
@@ -39,9 +39,7 @@ if (!($LastExitCode -eq 0))
 
 $packPath = Join-Path ".." $targetPath;
 dotnet pack ..\src\PackageManager.UI -c Release -o $packPath --no-build /p:VersionSuffix=$versionSuffix
-dotnet pack ..\src\GitExtensions.PluginManager -c Release -o $packPath --no-build /p:VersionSuffix=$versionSuffix
 
 Copy-Item ..\src\PackageManager.UI\bin\Release\*.zip $targetPath
-Copy-Item ..\src\GitExtensions.PluginManager\bin\Release\*.zip $targetPath
 
 Pop-Location;
